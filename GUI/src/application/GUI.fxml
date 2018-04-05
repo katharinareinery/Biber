@@ -1,1 +1,73 @@
-applications
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
+   <center>
+      <BorderPane fx:id="borderpane" minHeight="400.0" minWidth="500.0" prefHeight="432.0" prefWidth="646.0" BorderPane.alignment="CENTER">
+         <top>
+            <MenuBar fx:id="menubar" BorderPane.alignment="CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </top>
+         <center>
+            <Label fx:id="label" prefHeight="201.0" prefWidth="323.0" text="Label" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+         </center>
+         <right>
+            <VBox fx:id="vbox" layoutX="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="weichzeichnen" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Weichzeichnen" BorderPane.alignment="CENTER">
+                     <VBox.margin>
+                        <Insets left="10.0" top="60.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="schwellwerte" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Schwellwerte">
+                     <VBox.margin>
+                        <Insets left="10.0" right="20.0" top="50.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="schwarzweiss" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Schwarz-Weiß">
+                     <VBox.margin>
+                        <Insets left="10.0" top="50.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="20.0" top="20.0" />
+                     </padding>
+                  </Button>
+               </children>
+            </VBox>
+         </right>
+      </BorderPane>
+   </center>
+</BorderPane>
