@@ -3,6 +3,7 @@ package application;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,7 +19,12 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("GUI.fxml"));
+			//BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("GUI.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI.fxml"));
+			Parent root = loader.load();
+			FXController controller = (FXController)loader.getController();
+			controller.init(primaryStage);
+			
 			Scene scene = new Scene(root,950,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setTitle("Biber");
