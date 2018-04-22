@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
@@ -14,30 +16,41 @@
          <top>
             <MenuBar fx:id="menubar" BorderPane.alignment="CENTER">
               <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu id="datei" mnemonicParsing="false" text="Datei">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                    <MenuItem id="oeffnen" fx:id="oefnnen" onAction="#openFile" text="Öffnen">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem id="speichern" fx:id="speichern" text="Speichern">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem id="beenden" fx:id="beenden" onAction="#doExit" text="Beenden">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu id="bearbeiten" mnemonicParsing="false" text="Bearbeiten">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
+                    <MenuItem id="rueckgaengig" fx:id="rueckgaengig" text="Rückgängig">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu id="hilfe" text="Hilfe">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem id="ueber" fx:id="ueber" mnemonicParsing="false" text="Über Biber">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
          </top>
-         <center>
-            <Label fx:id="label" prefHeight="201.0" prefWidth="323.0" text="Label" BorderPane.alignment="CENTER">
-               <font>
-                  <Font size="24.0" />
-               </font></Label>
-         </center>
          <right>
             <VBox fx:id="vbox" layoutX="10.0" BorderPane.alignment="CENTER">
                <children>
@@ -68,6 +81,9 @@
                </children>
             </VBox>
          </right>
+         <center>
+            <ImageView fx:id="imageView" fitHeight="270.0" fitWidth="406.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </center>
 </BorderPane>
