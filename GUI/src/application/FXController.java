@@ -66,10 +66,10 @@ public class FXController implements Initializable{
 	 */
 	public void openFile() {
 		fileChooser = new FileChooser();
-		/*fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("PNG", ".png"),
-				new FileChooser.ExtensionFilter("JPG2000", ".jpg2")
-			);*/
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("PNG", "*.png"),
+				new FileChooser.ExtensionFilter("JPG2000", "*.jpg2")
+			);
 		File file = fileChooser.showOpenDialog(stage);
 		
 		/*
