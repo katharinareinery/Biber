@@ -36,9 +36,11 @@ public class FXController implements Initializable{
 	private FileChooser fileChooser;
 	private Stage stage;
 	private Image image;
+	Blur blur = new Blur();
+	String filepath;
 	
 	public void handleButton(ActionEvent event) {
-	//	label.setText("Weichzeichnen.");
+		blur.imageMan(filepath);
 	}
 	
 	public void handleButtonSch(ActionEvent event) {
@@ -71,7 +73,7 @@ public class FXController implements Initializable{
 				new FileChooser.ExtensionFilter("JPG2000", "*.jpg2")
 			);
 		File file = fileChooser.showOpenDialog(stage);
-		
+		filepath = file.getAbsolutePath();
 		/*
 		 * Loading the image
 		 */
