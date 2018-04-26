@@ -8,7 +8,8 @@ public class Blur{
 	int DELAY_CAPTION = 1500;
 	int DELAY_BLUR = 100;
 	int MAX_KERNEL_LENGHT = 31;
-	Mat src = new Mat(), dst = new Mat();
+	Mat src = new Mat();
+	Mat dst = new Mat();
 	
 	public Mat imageMan(String filename) {
 		src = Imgcodecs.imread(filename, Imgcodecs.IMREAD_COLOR);
@@ -24,7 +25,6 @@ public class Blur{
 				Imgproc.GaussianBlur(src, dst, new Size(i , i), 0, 0);
 				displayDst(DELAY_BLUR);
 			}
-		HighGui.imshow("Window", dst);	
 		return dst;
 	}
 

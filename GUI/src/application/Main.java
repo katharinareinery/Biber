@@ -1,5 +1,7 @@
 package application;
 	
+import org.opencv.core.Core;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
@@ -35,6 +37,7 @@ public class Main extends Application {
 
 	
 	public static void main(String[] args) {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		launch(args);
 	}
 }

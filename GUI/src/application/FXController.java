@@ -1,11 +1,14 @@
 package application;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
+
+import org.opencv.core.Mat;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
@@ -40,7 +43,13 @@ public class FXController implements Initializable{
 	String filepath;
 	
 	public void handleButton(ActionEvent event) {
-		blur.imageMan(filepath);
+		try {
+			BufferedImage neu = toBufferedImage(blur.imageMan(filepath));
+			image = SwingFXUtils.toFXImage(neu, null);
+			imageView.setImage(image);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void handleButtonSch(ActionEvent event) {
@@ -54,7 +63,7 @@ public class FXController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		//weichzeichnen.setOnAction(this::handleButton);
+		weichzeichnen.setOnAction(this::handleButton);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		//schwarzweiss.setOnAction(this::handleButtonSchWe);
 	}
@@ -103,6 +112,24 @@ public class FXController implements Initializable{
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	}
 	
+	/*helper*/
+
+
+    public BufferedImage toBufferedImage(Mat m){
+          int type = BufferedImage.TYPE_BYTE_GRAY;
+          if ( m.channels() > 1 ) {
+              type = BufferedImage.TYPE_3BYTE_BGR;
+          }
+          int bufferSize = m.channels()*m.cols()*m.rows();
+          byte [] b = new byte[bufferSize];
+          m.get(0,0,b); // get all the pixels
+          BufferedImage img = new BufferedImage(m.cols(),m.rows(), type);
+          final byte[] targetPixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+          System.arraycopy(b, 0, targetPixels, 0, b.length);  
+          return img;
+      }
+
+
 	
 	
 }
