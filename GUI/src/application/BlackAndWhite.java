@@ -1,5 +1,5 @@
 package application;
 
-public class BlackAndWhite {
+public class BlackAndWhite implements ImageManipulation{
 
 }
