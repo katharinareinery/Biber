@@ -1,5 +1,5 @@
 package application;
 
-public class Blur {
+public class Blur implements ImageManipulation{
 
 }
