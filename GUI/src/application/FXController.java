@@ -102,7 +102,7 @@ public class FXController implements Initializable{
 	 */
 	 public void doExit() {
 		 Platform.exit();
-		 System.exit(0);;
+		 System.exit(0);
 	 }
 	 
 	/**
