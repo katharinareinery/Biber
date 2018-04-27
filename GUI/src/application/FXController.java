@@ -40,6 +40,7 @@ public class FXController implements Initializable{
 	private Stage stage;
 	private Image image;
 	Blur blur = new Blur();
+	BlackAndWhite blackAndwhite = new BlackAndWhite();
 	String filepath;
 	
 	public void handleButton(ActionEvent event) {
@@ -58,6 +59,14 @@ public class FXController implements Initializable{
 	
 	public void handleButtonSchWe(ActionEvent event) {
 	//	label.setText("Schwarz-Weiß.");
+		try {
+			BufferedImage neu = toBufferedImage(blackAndwhite.imageMan(filepath));
+			image = SwingFXUtils.toFXImage(neu, null);
+			imageView.setImage(image);
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -65,7 +74,7 @@ public class FXController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		weichzeichnen.setOnAction(this::handleButton);
 		//schwellwerte.setOnAction(this::handleButtonSch);
-		//schwarzweiss.setOnAction(this::handleButtonSchWe);
+		schwarzweiss.setOnAction(this::handleButtonSchWe);
 	}
 	
 	public void init(Stage stage) {
