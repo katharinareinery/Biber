@@ -1,2 +1,8 @@
 /.metadata/
 /.recommenders/
+
+#files/directories
+.classpath
+.project
+.settings
+.metadata
