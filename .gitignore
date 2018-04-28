@@ -6,3 +6,8 @@
 .project
 .settings
 .metadata
+
+#.class files
+*.class
+
+!.gitignore
