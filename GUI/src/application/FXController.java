@@ -14,10 +14,14 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -35,14 +39,20 @@ public class FXController implements Initializable{
 	private Label label;
 	@FXML
 	private ImageView imageView;
+	@FXML
+	private MenuItem ueber;
 	
 	private FileChooser fileChooser;
 	private Stage stage;
 	private Image image;
+	
 	Blur blur = new Blur();
 	BlackAndWhite blackAndwhite = new BlackAndWhite();
 	String filepath;
 	
+	/**
+	 * Blur.
+	 */
 	public void handleButton(ActionEvent event) {
 		try {
 			BufferedImage neu = toBufferedImage(blur.imageMan(filepath));
@@ -53,10 +63,17 @@ public class FXController implements Initializable{
 		}
 	}
 	
+	/**
+	 * Threshold.
+	 */
 	public void handleButtonSch(ActionEvent event) {
 	//	label.setText("Schwellwert.");
 	}
 	
+	
+	/**
+	 * Black and White.
+	 */
 	public void handleButtonSchWe(ActionEvent event) {
 	//	label.setText("Schwarz-Weiß.");
 		try {
@@ -69,12 +86,32 @@ public class FXController implements Initializable{
 		}
 	}
 	
+	/**
+	 * About Biber.
+	 */
+	public void handleAbout(ActionEvent event) {
+		label = new Label("Biber ist ein Bildbearbeitungsprogramm, das die Bildbearbeitung"
+				+ "von einem technischen Standpunkt aus betrachtet. "
+				+ "\n"
+				+ "Dem Anwender soll die Möglichkeite gegeben werden, die Veränderungen an "
+				+ "einem Bild mittels Filter nachvollziehen zu können.");
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("GUI2.fxml"));
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+		}catch(Exception e) {
+			e.printStackTrace();			
+		}
+	}
+	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		weichzeichnen.setOnAction(this::handleButton);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		schwarzweiss.setOnAction(this::handleButtonSchWe);
+		ueber.setOnAction(this::handleAbout);
 	}
 	
 	public void init(Stage stage) {
