@@ -38,20 +38,24 @@ public class BlackAndWhite implements ImageManipulation{
 		 */
 		double[] data;
 		for(int i = 0; i<dst.rows();i++) {
-			
-			for(int j = 0; j <dst.cols();i++) {
+			for(int j = 0; j <dst.cols();j++) {
+				System.out.print("row: "+i+"\t");
+				System.out.println("col: "+j);
 				data = dst.get(i, j);
+				//System.out.println("data[0]: "+data[0]);
+				//System.out.println("data[1]: "+data[1]);
+				//System.out.println("data[2]: "+data[2]);
+				
 				//luminosity
-				data[0]=data[0]*0.21;
-				data[1]=data[1]*0.72;
-				data[2]=data[2]*0.07;
+				data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+
 				dst.put(i, j, data);
+				return dst;
 				
 			}
 		}
-		
-		System.out.println(dst.channels());
-	
 		return dst;
 	}
 }
