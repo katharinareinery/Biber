@@ -52,7 +52,7 @@ public class BlackAndWhite implements ImageManipulation{
 				data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 
 				dst.put(i, j, data);
-				return dst;
+				//return dst;
 				
 			}
 		}
