@@ -156,6 +156,27 @@ public class FXController implements Initializable{
 	 */
 	public void chooseImage(ActionEvent event) {
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		
+	}
+	
+	/**
+	 * This method will save an file.
+	 */
+	public void saveFile() {
+		fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("PNG", "*.png"),
+				new FileChooser.ExtensionFilter("JPG2000", "*.jpg2")
+			);
+		File file = fileChooser.showSaveDialog(stage);
+	
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(imageView.getImage(), null), "png", file);
+			
+		}catch(Exception e) {
+			System.err.println(e.getMessage());
+		}
+		
 	}
 	
 	/*helper*/

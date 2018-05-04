@@ -9,7 +9,7 @@
    <center>
       <BorderPane prefHeight="369.0" prefWidth="587.0" BorderPane.alignment="CENTER">
          <center>
-            <Label fx:id="label" prefHeight="208.0" prefWidth="420.0" BorderPane.alignment="CENTER" />
+            <Label fx:id="label" prefHeight="208.0" prefWidth="420.0" text="Biber ist ein Bildbearbeitungsprogramm, dass die &#10;Bildbearbeitung von einem technischen Standpunkt &#10;aus betrachtet.&#10;&#10;Dem Anwender soll so die Möglichkeit gegeben werden, &#10;die Veränderungen an einem Bild mittels Filter &#10;nachvollziehen zu können." BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </center>
