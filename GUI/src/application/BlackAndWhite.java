@@ -58,4 +58,10 @@ public class BlackAndWhite implements ImageManipulation{
 		}
 		return dst;
 	}
+
+	public Mat imageManPixel(int i ,int j){
+
+		return dst;
+	}
+	
 }

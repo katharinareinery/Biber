@@ -2,13 +2,17 @@ package application;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
@@ -45,6 +49,8 @@ public class FXController implements Initializable{
 	private FileChooser fileChooser;
 	private Stage stage;
 	private Image image;
+	private BufferedImage bufferedImage;
+	private Mat mat;
 	
 	Blur blur = new Blur();
 	BlackAndWhite blackAndwhite = new BlackAndWhite();
@@ -133,7 +139,7 @@ public class FXController implements Initializable{
 		 * Loading the image
 		 */
 		try {
-			BufferedImage bufferedImage = ImageIO.read(file);
+			bufferedImage = ImageIO.read(file);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			imageView.setImage(image);
 			
@@ -195,8 +201,12 @@ public class FXController implements Initializable{
           System.arraycopy(b, 0, targetPixels, 0, b.length);  
           return img;
       }
-
-
-	
+    
+   public Mat bufferedImageToMat(BufferedImage image) throws IOException{
+		    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		    ImageIO.write(image, "jpg", byteArrayOutputStream);
+		    byteArrayOutputStream.flush();
+		    return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
+   }
 	
 }
