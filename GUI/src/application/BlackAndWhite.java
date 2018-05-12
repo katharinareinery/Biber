@@ -4,7 +4,7 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-public class BlackAndWhite implements ImageManipulation{
+public class BlackAndWhite{
 	private Mat src = new Mat();
 	private Mat dst = new Mat();
 	

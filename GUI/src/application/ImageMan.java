@@ -1,5 +1,5 @@
 package application;
 
-public class Threshold{
+public class ImageMan {
 
 }
