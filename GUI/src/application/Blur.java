@@ -8,19 +8,12 @@ public class Blur{
 	int DELAY_CAPTION = 1500;
 	int DELAY_BLUR = 100;
 	int MAX_KERNEL_LENGHT = 31;
-	Mat src = new Mat();
 	Mat dst = new Mat();
+	Mat src = new Mat();
 	
-	public Mat imageMan(String filename) {
-		src = Imgcodecs.imread(filename, Imgcodecs.IMREAD_COLOR);
-		if(src.empty()) {
-			System.out.println("Error opening image");
-			System.out.println("Usage: filechooserPath");
-			System.exit(-1);
-		}
-	
-		dst = src.clone();
-		
+	public Mat imageMan(Mat src) {
+		this.src=src;
+		dst = src.clone();		
 			for(int i = 1; i < MAX_KERNEL_LENGHT; i = i + 2) {
 				Imgproc.GaussianBlur(src, dst, new Size(i , i), 0, 0);
 				displayDst(DELAY_BLUR);

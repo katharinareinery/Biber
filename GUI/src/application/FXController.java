@@ -62,7 +62,7 @@ public class FXController implements Initializable{
 	 */
 	public void handleButton(ActionEvent event) {
 		try {
-			mat = blur.imageMan(filepath);
+			mat = blur.imageMan(mat);
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
