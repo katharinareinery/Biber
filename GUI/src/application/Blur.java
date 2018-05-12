@@ -12,8 +12,7 @@ public class Blur{
 	Mat src = new Mat();
 	
 	public Mat imageMan(Mat src) {
-		this.src=src;
-		dst = src.clone();		
+		this.src=src;		
 			for(int i = 1; i < MAX_KERNEL_LENGHT; i = i + 2) {
 				Imgproc.GaussianBlur(src, dst, new Size(i , i), 0, 0);
 				displayDst(DELAY_BLUR);

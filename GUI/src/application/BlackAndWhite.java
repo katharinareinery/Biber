@@ -8,7 +8,6 @@ public class BlackAndWhite extends ImageMan{
 	private Mat dst = new Mat();
 	
 	public Mat imageMan(Mat src) {
-		 
 		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
 		
 		
@@ -31,10 +30,10 @@ public class BlackAndWhite extends ImageMan{
 		double[] data;
 		for(int i = 0; i<dst.rows();i++) {
 			for(int j = 0; j <dst.cols();j++) {
-				System.out.print("row: "+i+"\t");
-				System.out.println("col: "+j);
-				data = dst.get(i, j);
-				//System.out.println("data[0]: "+data[0]);
+				//System.out.print("row: "+i+"\t");
+				//System.out.println("col: "+j);
+				data = src.get(i, j);
+				System.out.println("data[0]: "+data[0]);
 				//System.out.println("data[1]: "+data[1]);
 				//System.out.println("data[2]: "+data[2]);
 				
@@ -43,11 +42,21 @@ public class BlackAndWhite extends ImageMan{
 				data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 				data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 
-				dst.put(i, j, data);
+				src.put(i, j, data);
 				//return dst;
 				
 			}
 		}
+		return src;
+	}
+	
+	public Mat bWPixel(int row, int col, Mat mat) {
+		double[] data = mat.get(row, col);
+		data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+		data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+		data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+
+		dst.put(row, col, data);
 		return dst;
-	}	
+	}
 }
