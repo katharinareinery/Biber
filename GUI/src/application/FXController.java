@@ -15,6 +15,9 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +27,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -45,6 +49,12 @@ public class FXController implements Initializable{
 	private ImageView imageView;
 	@FXML
 	private MenuItem ueber;
+	@FXML
+	private ComboBox<String> cbox_filters;
+	@FXML
+	private Button anwenden;
+	@FXML
+	private Button dragndrop;
 	
 	private FileChooser fileChooser;
 	private Stage stage;
@@ -57,6 +67,7 @@ public class FXController implements Initializable{
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
 	
+	Service<Void> backgroundThread;
 	/**
 	 * Blur.
 	 */
@@ -117,6 +128,9 @@ public class FXController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Schwarz-Weiß Pixelweise","Weichzeichnen");
+		cbox_filters.getItems().addAll(options);
+		anwenden.setOnAction(this::handleAnwenden);
 		weichzeichnen.setOnAction(this::handleButton);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		schwarzweiss.setOnAction(this::handleButtonSchWe);
@@ -192,5 +206,8 @@ public class FXController implements Initializable{
 			System.err.println(e.getMessage());
 		}
 		
+	}
+	public void handleAnwenden(ActionEvent event) {
+		System.out.println(cbox_filters.getValue());
 	}
 }

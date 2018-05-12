@@ -54,6 +54,9 @@
          <right>
             <VBox fx:id="vbox" layoutX="10.0" BorderPane.alignment="CENTER">
                <children>
+                  <ComboBox fx:id="cbox_filters" prefWidth="150.0" />
+                  <Button fx:id="anwenden" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
+                  <Button fx:id="dragndrop" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag" />
                   <Button fx:id="weichzeichnen" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Weichzeichnen" BorderPane.alignment="CENTER">
                      <VBox.margin>
                         <Insets left="10.0" top="60.0" />
