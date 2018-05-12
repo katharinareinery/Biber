@@ -32,7 +32,7 @@ public class BlackAndWhite extends ImageMan{
 			for(int j = 0; j <dst.cols();j++) {
 				//System.out.print("row: "+i+"\t");
 				//System.out.println("col: "+j);
-				data = src.get(i, j);
+				data = dst.get(i, j);
 				System.out.println("data[0]: "+data[0]);
 				//System.out.println("data[1]: "+data[1]);
 				//System.out.println("data[2]: "+data[2]);
@@ -42,21 +42,22 @@ public class BlackAndWhite extends ImageMan{
 				data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 				data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 
-				src.put(i, j, data);
+				dst.put(i, j, data);
 				//return dst;
 				
 			}
 		}
-		return src;
+		return dst;
 	}
 	
 	public Mat bWPixel(int row, int col, Mat mat) {
 		double[] data = mat.get(row, col);
+		//System.out.println(data.length);
 		data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 		data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 		data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-
-		dst.put(row, col, data);
-		return dst;
+		//System.out.println("row: "+row+"\tcol: "+col);
+		mat.put(row, col, data);
+		return mat;
 	}
 }

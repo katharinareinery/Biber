@@ -18,6 +18,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,6 +57,7 @@ public class FXController implements Initializable{
 	@FXML
 	private Button dragndrop;
 	
+	private boolean isOpen = false;
 	private FileChooser fileChooser;
 	private Stage stage;
 	private Image image;
@@ -130,11 +132,15 @@ public class FXController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Schwarz-Weiß Pixelweise","Weichzeichnen");
 		cbox_filters.getItems().addAll(options);
-		anwenden.setOnAction(this::handleAnwenden);
+		//anwenden.setOnAction(this::handleAnwenden);
 		weichzeichnen.setOnAction(this::handleButton);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		schwarzweiss.setOnAction(this::handleButtonSchWe);
 		ueber.setOnAction(this::handleAbout);
+		weichzeichnen.setDisable(true);
+		schwarzweiss.setDisable(true);
+		anwenden.setDisable(true);
+		dragndrop.setDisable(true);
 	}
 	
 	public void init(Stage stage) {
@@ -165,7 +171,10 @@ public class FXController implements Initializable{
 			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			imageView.setImage(image);
-			
+			weichzeichnen.setDisable(false);
+			schwarzweiss.setDisable(false);
+			anwenden.setDisable(false);
+			dragndrop.setDisable(false);
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -209,5 +218,89 @@ public class FXController implements Initializable{
 	}
 	public void handleAnwenden(ActionEvent event) {
 		System.out.println(cbox_filters.getValue());
+		switch(cbox_filters.getValue().toString()) {
+			case "Schwarz-Weiß":
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							@Override
+							protected Void call() throws Exception {
+								// TODO Auto-generated method stub
+								try {
+									mat = blackAndwhite.imageMan(mat);
+									BufferedImage neu = imageMan.matToBuffImage(mat);
+									image = SwingFXUtils.toFXImage(neu, null);
+									imageView.setImage(image);
+									//System.out.println(mat.cols());
+								}catch (Exception e) {
+									// TODO: handle exception
+									e.printStackTrace();
+								}
+								return null;
+							}
+						};
+					}
+				};
+				backgroundThread.restart();
+				break;
+			case "Schwarz-Weiß Pixelweise":
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							@Override
+							protected Void call() throws Exception {
+								// TODO Auto-generated method stub
+								try {
+									for(int i = 0;i < mat.rows();i++) {
+										for(int j = 0;j< mat.cols();j++) {
+											mat = blackAndwhite.bWPixel(i, j, mat);
+											BufferedImage neu = imageMan.matToBuffImage(mat);
+											image = SwingFXUtils.toFXImage(neu, null);
+											imageView.setImage(image);
+											Thread.sleep(1);
+										}
+									}
+									
+								}catch (Exception e) {
+									// TODO: handle exception
+									e.printStackTrace();
+								}
+								return null;
+							}
+						};
+					}
+				};
+				backgroundThread.restart();
+				break;
+			case "Weichzeichnen":
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							
+							@Override
+							protected Void call() throws Exception {
+								// TODO Auto-generated method stub
+								try {
+									mat = blur.imageMan(mat);
+									BufferedImage neu = imageMan.matToBuffImage(mat);
+									image = SwingFXUtils.toFXImage(neu, null);
+									imageView.setImage(image);
+								}catch(Exception e) {
+									e.printStackTrace();
+								}
+								return null;
+							}
+						};
+					}
+				};
+				backgroundThread.restart();
+				break;
+		}
 	}
 }
