@@ -52,16 +52,18 @@ public class FXController implements Initializable{
 	private BufferedImage bufferedImage;
 	private Mat mat;
 	
-	Blur blur = new Blur();
-	BlackAndWhite blackAndwhite = new BlackAndWhite();
-	String filepath;
+	private Blur blur = new Blur();
+	private BlackAndWhite blackAndwhite = new BlackAndWhite();
+	private String filepath;
+	private ImageMan imageMan = new ImageMan();
 	
 	/**
 	 * Blur.
 	 */
 	public void handleButton(ActionEvent event) {
 		try {
-			BufferedImage neu = toBufferedImage(blur.imageMan(filepath));
+			mat = blur.imageMan(filepath);
+			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 		}catch(Exception e) {
@@ -83,7 +85,8 @@ public class FXController implements Initializable{
 	public void handleButtonSchWe(ActionEvent event) {
 	//	label.setText("Schwarz-Weiß.");
 		try {
-			BufferedImage neu = toBufferedImage(blackAndwhite.imageMan(filepath));
+			mat = blackAndwhite.imageMan(mat);
+			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 		}catch (Exception e) {
@@ -139,7 +142,13 @@ public class FXController implements Initializable{
 		 * Loading the image
 		 */
 		try {
-			bufferedImage = ImageIO.read(file);
+			mat = Imgcodecs.imread(filepath, Imgcodecs.CV_LOAD_IMAGE_COLOR);
+			if(mat.empty()) {
+				System.out.println("Error opening image");
+				System.out.println("Usage: filechooserPath");
+				System.exit(-1);
+				}
+			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			imageView.setImage(image);
 			
@@ -184,29 +193,4 @@ public class FXController implements Initializable{
 		}
 		
 	}
-	
-	/*helper*/
-
-
-    public BufferedImage toBufferedImage(Mat m){
-          int type = BufferedImage.TYPE_BYTE_GRAY;
-          if ( m.channels() > 1 ) {
-              type = BufferedImage.TYPE_3BYTE_BGR;
-          }
-          int bufferSize = m.channels()*m.cols()*m.rows();
-          byte [] b = new byte[bufferSize];
-          m.get(0,0,b); // get all the pixels
-          BufferedImage img = new BufferedImage(m.cols(),m.rows(), type);
-          final byte[] targetPixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
-          System.arraycopy(b, 0, targetPixels, 0, b.length);  
-          return img;
-      }
-    
-   public Mat bufferedImageToMat(BufferedImage image) throws IOException{
-		    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		    ImageIO.write(image, "jpg", byteArrayOutputStream);
-		    byteArrayOutputStream.flush();
-		    return Imgcodecs.imdecode(new MatOfByte(byteArrayOutputStream.toByteArray()), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
-   }
-	
 }

@@ -4,19 +4,11 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-public class BlackAndWhite{
-	private Mat src = new Mat();
+public class BlackAndWhite extends ImageMan{
 	private Mat dst = new Mat();
 	
-	public Mat imageMan(String filepath) {
-		//lädt das Bild mit RGB
-		src = Imgcodecs.imread(filepath, Imgcodecs.CV_LOAD_IMAGE_COLOR);
-		if(src.empty()) {
-			System.out.println("Error opening image");
-			System.out.println("Usage: filechooserPath");
-			System.exit(-1);
-		}
-		//Umwandeln 
+	public Mat imageMan(Mat src) {
+		 
 		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
 		
 		
@@ -57,11 +49,5 @@ public class BlackAndWhite{
 			}
 		}
 		return dst;
-	}
-
-	public Mat imageManPixel(int i ,int j){
-
-		return dst;
-	}
-	
+	}	
 }
