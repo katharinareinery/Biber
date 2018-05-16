@@ -24,9 +24,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -34,12 +37,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class FXController implements Initializable{
 
+	
 	@FXML
 	private VBox vbox;
 	@FXML
@@ -63,9 +69,13 @@ public class FXController implements Initializable{
 	private Image image;
 	private BufferedImage bufferedImage;
 	private Mat mat;
+
+	private GridPane itembox = new GridPane();
+	
 	
 	private Blur blur = new Blur();
 	private BlackAndWhite blackAndwhite = new BlackAndWhite();
+	private Threshold thold = new Threshold();
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
 	
@@ -74,14 +84,14 @@ public class FXController implements Initializable{
 	 * Blur.
 	 */
 	public void handleButton(ActionEvent event) {
-		try {
+		/*try {
 			mat = blur.imageMan(mat);
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	/**
@@ -97,7 +107,7 @@ public class FXController implements Initializable{
 	 */
 	public void handleButtonSchWe(ActionEvent event) {
 	//	label.setText("Schwarz-Weiß.");
-		try {
+		/*try {
 			mat = blackAndwhite.imageMan(mat);
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -105,7 +115,7 @@ public class FXController implements Initializable{
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	/**
@@ -137,13 +147,21 @@ public class FXController implements Initializable{
 		ueber.setOnAction(this::handleAbout);
 		anwenden.setDisable(true);
 		dragndrop.setDisable(true);
+		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
-				txt_fld.setPrefWidth(anwenden.getPrefWidth());
-				vbox.getChildren().add(txt_fld);
+				itembox.getChildren().clear();
+				itembox.setHgap(10);						//GridPane Horizontaler Gap
+				itembox.setVgap(10);						//GridPane Vertikaler Gap
+				itembox.setPadding(new Insets(5, 0, 5, 0));	//Padding Oben/Unten 5px
+				itembox.setPrefWidth(anwenden.getPrefWidth());
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				itembox.add(txt_fld,0,0);					//txt_fld an Stelle 0,0
+				itembox.add(new Label("Threshold"),1,0);	//label an stelle 1,0(rechts neben 0,0)
+				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
 			}
 			else if(newVal!= null && !newVal.equals("Schwellwert")) {
-				vbox.getChildren().removeAll(txt_fld);
+				vbox.getChildren().removeAll(itembox);		
 			}
 		});
 	}
@@ -305,8 +323,39 @@ public class FXController implements Initializable{
 					backgroundThread.restart();
 					break;
 			case "Schwellwert":
+				int t = (txt_fld.getText().isEmpty() ? 1 : Integer.parseInt(txt_fld.getText()));
+				System.out.println(t);
+				if(t >= 0 && t < 255) {
+					backgroundThread = new Service<Void>() {
+						@Override
+						protected Task<Void> createTask() {
+							// TODO Auto-generated method stub
+							return new Task<Void>() {
+								@Override
+								protected Void call() throws Exception {
+									// TODO Auto-generated method stub
+									try {
+										mat = thold.binarisieren(t, Imgcodecs.imread(filepath, Imgcodecs.CV_LOAD_IMAGE_COLOR));
+										BufferedImage neu = imageMan.matToBuffImage(mat);
+										image = SwingFXUtils.toFXImage(neu, null);
+										imageView.setImage(image);
+									}
+									catch(Exception e) {e.printStackTrace();}
+									return null;
+								}
+							};
+						}
+					};
+				}
+				else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText(null);
+					alert.setContentText("Nur Werte von 0-255 erlaubt!");
+					alert.showAndWait();
+				}
+				backgroundThread.restart();
 				break;
-				
 		}
 	}
 }
