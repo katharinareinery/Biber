@@ -31,19 +31,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class FXController implements Initializable{
 
 	@FXML
-	private Button weichzeichnen;
-	@FXML
-	private Button schwellwerte;
-	@FXML
-	private Button schwarzweiss;
+	private VBox vbox;
 	@FXML
 	private Label label;
 	@FXML
@@ -56,6 +54,8 @@ public class FXController implements Initializable{
 	private Button anwenden;
 	@FXML
 	private Button dragndrop;
+	
+	TextField txt_fld = new TextField();
 	
 	private boolean isOpen = false;
 	private FileChooser fileChooser;
@@ -130,17 +130,22 @@ public class FXController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Schwarz-Weiß Pixelweise","Weichzeichnen");
+		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Schwarz-Weiß Pixelweise","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
 		//anwenden.setOnAction(this::handleAnwenden);
-		weichzeichnen.setOnAction(this::handleButton);
 		//schwellwerte.setOnAction(this::handleButtonSch);
-		schwarzweiss.setOnAction(this::handleButtonSchWe);
 		ueber.setOnAction(this::handleAbout);
-		weichzeichnen.setDisable(true);
-		schwarzweiss.setDisable(true);
 		anwenden.setDisable(true);
 		dragndrop.setDisable(true);
+		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
+			if(newVal!= null && newVal.equals("Schwellwert")) {
+				txt_fld.setPrefWidth(anwenden.getPrefWidth());
+				vbox.getChildren().add(txt_fld);
+			}
+			else if(newVal!= null && !newVal.equals("Schwellwert")) {
+				vbox.getChildren().removeAll(txt_fld);
+			}
+		});
 	}
 	
 	public void init(Stage stage) {
@@ -171,8 +176,6 @@ public class FXController implements Initializable{
 			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			imageView.setImage(image);
-			weichzeichnen.setDisable(false);
-			schwarzweiss.setDisable(false);
 			anwenden.setDisable(false);
 			dragndrop.setDisable(false);
 		}catch(Exception e) {
@@ -299,8 +302,11 @@ public class FXController implements Initializable{
 						};
 					}
 				};
-				backgroundThread.restart();
+					backgroundThread.restart();
+					break;
+			case "Schwellwert":
 				break;
+				
 		}
 	}
 }
