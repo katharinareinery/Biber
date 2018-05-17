@@ -15,6 +15,8 @@ import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -34,6 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -62,6 +65,7 @@ public class FXController implements Initializable{
 	private Button dragndrop;
 	
 	TextField txt_fld = new TextField();
+	ScrollBar sc = new ScrollBar();
 	
 	private boolean isOpen = false;
 	private FileChooser fileChooser;
@@ -156,9 +160,22 @@ public class FXController implements Initializable{
 				itembox.setPadding(new Insets(5, 0, 5, 0));	//Padding Oben/Unten 5px
 				itembox.setPrefWidth(anwenden.getPrefWidth());
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
 				itembox.add(txt_fld,0,0);					//txt_fld an Stelle 0,0
 				itembox.add(new Label("Threshold"),1,0);	//label an stelle 1,0(rechts neben 0,0)
+				itembox.add(sc,0,1);
 				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
+				sc.valueProperty().addListener(new ChangeListener<Number>() {
+
+					@Override
+					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+						// TODO Auto-generated method stub
+						txt_fld.setText(Integer.toString(arg2.intValue()));
+					}
+					
+				});
 			}
 			else if(newVal!= null && !newVal.equals("Schwellwert")) {
 				vbox.getChildren().removeAll(itembox);		

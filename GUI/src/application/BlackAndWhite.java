@@ -5,11 +5,11 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 public class BlackAndWhite extends ImageMan{
-	private Mat dst = new Mat();
+	private Mat dst;
 	
 	public Mat imageMan(Mat src) {
-		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		
+		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		dst = new Mat(src.size(),CvType.CV_8U);
 		
 		/*The lightness method 
 		 * averages the most prominent and least prominent colors:
@@ -28,21 +28,21 @@ public class BlackAndWhite extends ImageMan{
 		 * he formula for luminosity is 0.21 R + 0.72 G + 0.07 B.
 		 */
 		double[] data;
-		for(int i = 0; i<dst.rows();i++) {
-			for(int j = 0; j <dst.cols();j++) {
+		for(int i = 0; i<src.rows();i++) {
+			for(int j = 0; j <src.cols();j++) {
 				//System.out.print("row: "+i+"\t");
 				//System.out.println("col: "+j);
-				data = dst.get(i, j);
-				System.out.println("data[0]: "+data[0]);
+				data = src.get(i, j);
+				//System.out.println("data[0]: "+data[0]);
 				//System.out.println("data[1]: "+data[1]);
 				//System.out.println("data[2]: "+data[2]);
 				
 				//luminosity
-				data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-				data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 				data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 
-				dst.put(i, j, data);
+				dst.put(i, j, data[1]);
 				//return dst;
 				
 			}
