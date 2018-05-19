@@ -7,18 +7,14 @@ import org.opencv.imgproc.Imgproc;
 public class BlackAndWhite extends ImageMan{
 	private Mat dst;
 	
-	public Mat imageMan(Mat src) {
-		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+	public Mat luminosity(Mat src) {
+		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8U);
 		
 		/*The lightness method 
 		 * averages the most prominent and least prominent colors:
 		 *  (max(R, G, B) + min(R, G, B)) / 2.
 		 * 
-		*/
-		
-		/*The average method
-		 * simply averages the values: (R + G + B) / 3.
 		*/
 		
 		/*The luminosity method 
@@ -30,21 +26,13 @@ public class BlackAndWhite extends ImageMan{
 		double[] data;
 		for(int i = 0; i<src.rows();i++) {
 			for(int j = 0; j <src.cols();j++) {
-				//System.out.print("row: "+i+"\t");
-				//System.out.println("col: "+j);
-				data = src.get(i, j);
-				//System.out.println("data[0]: "+data[0]);
-				//System.out.println("data[1]: "+data[1]);
-				//System.out.println("data[2]: "+data[2]);
-				
+				data = src.get(i, j);	
 				//luminosity
-				data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-				data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 				data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-
-				dst.put(i, j, data[1]);
-				//return dst;
-				
+				//data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				//data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				dst.put(i, j, data[0]);
+				//return dst;				
 			}
 		}
 		return dst;
@@ -59,5 +47,23 @@ public class BlackAndWhite extends ImageMan{
 		//System.out.println("row: "+row+"\tcol: "+col);
 		mat.put(row, col, data);
 		return mat;
+	}
+	
+	
+	/*The average method
+	 * simply averages the values: (R + G + B) / 3.
+	*/
+	public Mat average(Mat src) {
+		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
+		dst = new Mat(src.size(),CvType.CV_8U);
+		double[] data;
+		for(int i = 0; i<src.rows(); i++) {
+			for(int j = 0; j<src.cols(); j++) {
+				data = src.get(i, j);
+				data[0]=((data[0]+data[1]+data[2])/3);
+				dst.put(i, j, data[0]);
+			}
+		}
+		return dst;
 	}
 }

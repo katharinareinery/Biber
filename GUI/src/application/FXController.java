@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -36,8 +37,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -65,6 +68,11 @@ public class FXController implements Initializable{
 	private Button dragndrop;
 	
 	TextField txt_fld = new TextField();
+	private RadioButton rad_button_blackwhite_average = new RadioButton("Average");
+	private RadioButton rad_button_blackwhite_lumi = new RadioButton("Lumi");
+	private RadioButton rad_button_blackwhite_pixelwise = new RadioButton("Pixelwise");
+	private final ToggleGroup group_rad_blackwhite = new ToggleGroup();
+	
 	ScrollBar sc = new ScrollBar();
 	
 	private boolean isOpen = false;
@@ -144,7 +152,7 @@ public class FXController implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Schwarz-Weiß Pixelweise","Weichzeichnen","Schwellwert");
+		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
@@ -154,6 +162,7 @@ public class FXController implements Initializable{
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
+				vbox.getChildren().removeAll(itembox);
 				itembox.getChildren().clear();
 				itembox.setHgap(10);						//GridPane Horizontaler Gap
 				itembox.setVgap(10);						//GridPane Vertikaler Gap
@@ -177,8 +186,28 @@ public class FXController implements Initializable{
 					
 				});
 			}
-			else if(newVal!= null && !newVal.equals("Schwellwert")) {
-				vbox.getChildren().removeAll(itembox);		
+			else if(newVal!=null && newVal.equals("Schwarz-Weiß")) {
+				vbox.getChildren().removeAll(itembox);
+				itembox.getChildren().clear();
+				itembox.setHgap(10);
+				itembox.setVgap(10);
+				itembox.setPadding(new Insets(5, 0, 5, 0));
+				itembox.setPrefWidth(anwenden.getPrefWidth());
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+				rad_button_blackwhite_average.setToggleGroup(group_rad_blackwhite);
+				rad_button_blackwhite_lumi.setToggleGroup(group_rad_blackwhite);
+				rad_button_blackwhite_pixelwise.setToggleGroup(group_rad_blackwhite);
+				rad_button_blackwhite_average.setSelected(true);
+				itembox.add(rad_button_blackwhite_average,0,0);					//Radiobutton1 an Stelle 0,0
+				itembox.add(rad_button_blackwhite_lumi,0,1);	//Radiobutton2 1,0(rechts neben 0,0)
+				itembox.add(rad_button_blackwhite_pixelwise,0,2);
+				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
+			}
+			else if (newVal!=null && newVal.equals("Weichzeichnen")) {
+				vbox.getChildren().removeAll(itembox);
 			}
 		});
 	}
@@ -267,42 +296,25 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									mat = blackAndwhite.imageMan(mat);
+									if(rad_button_blackwhite_average.isSelected()) {
+										mat = blackAndwhite.average(mat);
+									}else if (rad_button_blackwhite_lumi.isSelected()) {
+										mat = blackAndwhite.luminosity(mat);
+									}else {
+										for(int i = 0;i < mat.rows();i++) {
+											for(int j = 0;j< mat.cols();j++) {
+												mat = blackAndwhite.bWPixel(i, j, mat);
+											}
+											BufferedImage neu = imageMan.matToBuffImage(mat);
+											image = SwingFXUtils.toFXImage(neu, null);
+											imageView.setImage(image);
+											Thread.sleep(2);
+										}
+									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
 									imageView.setImage(image);
 									//System.out.println(mat.cols());
-								}catch (Exception e) {
-									// TODO: handle exception
-									e.printStackTrace();
-								}
-								return null;
-							}
-						};
-					}
-				};
-				backgroundThread.restart();
-				break;
-			case "Schwarz-Weiß Pixelweise":
-				backgroundThread = new Service<Void>() {
-					@Override
-					protected Task<Void> createTask() {
-						// TODO Auto-generated method stub
-						return new Task<Void>() {
-							@Override
-							protected Void call() throws Exception {
-								// TODO Auto-generated method stub
-								try {
-									for(int i = 0;i < mat.rows();i++) {
-										for(int j = 0;j< mat.cols();j++) {
-											mat = blackAndwhite.bWPixel(i, j, mat);
-										}
-									BufferedImage neu = imageMan.matToBuffImage(mat);
-									image = SwingFXUtils.toFXImage(neu, null);
-									imageView.setImage(image);
-									Thread.sleep(1);
-									}
-									
 								}catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();
