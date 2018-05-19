@@ -24,6 +24,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,6 +49,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.input.MouseEvent;
 
 public class FXController implements Initializable{
 
@@ -156,6 +158,13 @@ public class FXController implements Initializable{
 		cbox_filters.getItems().addAll(options);
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
+		
+		imageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
+		@Override public void handle(MouseEvent event) {
+			System.out.println(event.getX());
+		}
+		});
+		
 		ueber.setOnAction(this::handleAbout);
 		anwenden.setDisable(true);
 		dragndrop.setDisable(true);
@@ -387,4 +396,6 @@ public class FXController implements Initializable{
 				break;
 		}
 	}
+
 }
+
