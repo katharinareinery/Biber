@@ -35,6 +35,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
@@ -45,6 +46,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 
 public class FXController implements Initializable{
 
@@ -54,7 +56,9 @@ public class FXController implements Initializable{
 	@FXML
 	private Label label;
 	@FXML
-	private ImageView imageView;
+	private ImageView imageView, imageView2;
+	@FXML
+	private MenuBar menubar;
 	@FXML
 	private MenuItem ueber;
 	@FXML
@@ -63,6 +67,10 @@ public class FXController implements Initializable{
 	private Button anwenden;
 	@FXML
 	private Button dragndrop;
+	@FXML
+	private Button next;
+	@FXML
+	private Button back;
 	
 	TextField txt_fld = new TextField();
 	ScrollBar sc = new ScrollBar();
@@ -75,8 +83,7 @@ public class FXController implements Initializable{
 	private Mat mat;
 
 	private GridPane itembox = new GridPane();
-	
-	
+		
 	private Blur blur = new Blur();
 	private BlackAndWhite blackAndwhite = new BlackAndWhite();
 	private Threshold thold = new Threshold();
@@ -110,7 +117,7 @@ public class FXController implements Initializable{
 	 * Black and White.
 	 */
 	public void handleButtonSchWe(ActionEvent event) {
-	//	label.setText("Schwarz-Weiß.");
+	//	label.setText("Schwarz-WeiÃŸ.");
 		/*try {
 			mat = blackAndwhite.imageMan(mat);
 			BufferedImage neu = imageMan.matToBuffImage(mat);
@@ -126,29 +133,29 @@ public class FXController implements Initializable{
 	 * About Biber.
 	 */
 	public void handleAbout(ActionEvent event) {
-		label = new Label("Biber ist ein Bildbearbeitungsprogramm, das die Bildbearbeitung"
-				+ "von einem technischen Standpunkt aus betrachtet. "
-				+ "\n"
-				+ "Dem Anwender soll die Möglichkeite gegeben werden, die Veränderungen an "
-				+ "einem Bild mittels Filter nachvollziehen zu können.");
 		try {
+			//stage = (Stage) menubar.getScene().getWindow();
+			
 			Parent root = FXMLLoader.load(getClass().getResource("GUI2.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
+			stage = new Stage();
+			stage.setTitle("About");
 			stage.show();
 		}catch(Exception e) {
 			e.printStackTrace();			
 		}
 	}
 	
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Schwarz-Weiß Pixelweise","Weichzeichnen","Schwellwert");
+		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-WeiÃŸ","Schwarz-WeiÃŸ Pixelweise","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		ueber.setOnAction(this::handleAbout);
+		dragndrop.setOnAction(this::handleWindow);
 		anwenden.setDisable(true);
 		dragndrop.setDisable(true);
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
@@ -180,12 +187,14 @@ public class FXController implements Initializable{
 			else if(newVal!= null && !newVal.equals("Schwellwert")) {
 				vbox.getChildren().removeAll(itembox);		
 			}
-		});
+		});		
+		
 	}
 	
 	public void init(Stage stage) {
 		this.stage = stage;
 	}
+
 	
 	/**
 	 * This method will open an file.
@@ -198,6 +207,9 @@ public class FXController implements Initializable{
 			);
 		File file = fileChooser.showOpenDialog(stage);
 		filepath = file.getAbsolutePath();
+		String localURL = file.toURI().toString();
+		Image image2 = new Image(localURL);
+		
 		/*
 		 * Loading the image
 		 */
@@ -254,10 +266,11 @@ public class FXController implements Initializable{
 		}
 		
 	}
+	
 	public void handleAnwenden(ActionEvent event) {
 		System.out.println(cbox_filters.getValue());
 		switch(cbox_filters.getValue().toString()) {
-			case "Schwarz-Weiß":
+			case "Schwarz-WeiÃŸ":
 				backgroundThread = new Service<Void>() {
 					@Override
 					protected Task<Void> createTask() {
@@ -283,7 +296,7 @@ public class FXController implements Initializable{
 				};
 				backgroundThread.restart();
 				break;
-			case "Schwarz-Weiß Pixelweise":
+			case "Schwarz-WeiÃŸ Pixelweise":
 				backgroundThread = new Service<Void>() {
 					@Override
 					protected Task<Void> createTask() {
@@ -375,4 +388,34 @@ public class FXController implements Initializable{
 				break;
 		}
 	}
+	
+	
+	/**
+	 * This method contains the second window to see the changes in the image.
+	 */
+	public void handleWindow(ActionEvent event2) {
+		try {
+		//	Parent root = FXMLLoader.load(getClass().getResource("GUI3.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI3.fxml"));
+			Parent root = loader.load();
+			//FXController controller = (FXController)loader.getController();
+			//controller.init(stage);
+			
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage = new Stage();
+			stage.setTitle("Biber");
+		
+			//imageView2 = new ImageView("file:///D:/Git/SWPraktSS18/GUI/lena.png");
+					
+			//imageView2 = new ImageView (getClass().getResource("").toExternalForm());
+			//fxc2 = new FXController2();
+			//root.getChildrenUnmodifiable().add(imageView2);
+		//next, back
+			
+		}catch(Exception e) {
+			e.printStackTrace();			
+		}		
+	}
+	
 }
