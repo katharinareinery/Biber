@@ -375,37 +375,6 @@ public class FXController implements Initializable{
 				};
 				backgroundThread.restart();
 				break;
-			case "Schwarz-WeiÃŸ Pixelweise":
-				backgroundThread = new Service<Void>() {
-					@Override
-					protected Task<Void> createTask() {
-						// TODO Auto-generated method stub
-						return new Task<Void>() {
-							@Override
-							protected Void call() throws Exception {
-								// TODO Auto-generated method stub
-								try {
-									for(int i = 0;i < mat.rows();i++) {
-										for(int j = 0;j< mat.cols();j++) {
-											mat = blackAndwhite.bWPixel(i, j, mat);
-										}
-									BufferedImage neu = imageMan.matToBuffImage(mat);
-									image = SwingFXUtils.toFXImage(neu, null);
-									imageView.setImage(image);
-									Thread.sleep(1);
-									}
-									
-								}catch (Exception e) {
-									// TODO: handle exception
-									e.printStackTrace();
-								}
-								return null;
-							}
-						};
-					}
-				};
-				backgroundThread.restart();
-				break;
 			case "Weichzeichnen":
 				backgroundThread = new Service<Void>() {
 					@Override
