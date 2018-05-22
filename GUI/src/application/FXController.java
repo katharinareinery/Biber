@@ -69,13 +69,19 @@ public class FXController implements Initializable{
 	@FXML
 	private Button dragndrop;
 	
-	TextField txt_fld = new TextField();
+	private TextField txt_fld = new TextField();
 	private RadioButton rad_button_blackwhite_average = new RadioButton("Average");
 	private RadioButton rad_button_blackwhite_lumi = new RadioButton("Lumi");
 	private RadioButton rad_button_blackwhite_pixelwise = new RadioButton("Pixelwise");
 	private final ToggleGroup group_rad_blackwhite = new ToggleGroup();
 	
-	ScrollBar sc = new ScrollBar();
+	private RadioButton rad_button_blur_homogen = new RadioButton("Homogen");
+	private RadioButton rad_button_blur_gaussian = new RadioButton("Gaussian");
+	private RadioButton rad_button_blur_median = new RadioButton("Median");
+	private RadioButton rad_button_blur_bilateral = new RadioButton("Biliteral");
+	private final ToggleGroup group_rad_blur = new ToggleGroup();
+	
+	private ScrollBar sc = new ScrollBar();
 	
 	private boolean isOpen = false;
 	private FileChooser fileChooser;
@@ -159,9 +165,11 @@ public class FXController implements Initializable{
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		
-		imageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
+		//Event wenn Maus sich innerhalb ImageView bewwegt, später für Detailauswahl
+		imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
 		@Override public void handle(MouseEvent event) {
 			System.out.println(event.getX());
+			System.out.println(event.getY());
 		}
 		});
 		
@@ -211,12 +219,31 @@ public class FXController implements Initializable{
 				rad_button_blackwhite_pixelwise.setToggleGroup(group_rad_blackwhite);
 				rad_button_blackwhite_average.setSelected(true);
 				itembox.add(rad_button_blackwhite_average,0,0);					//Radiobutton1 an Stelle 0,0
-				itembox.add(rad_button_blackwhite_lumi,0,1);	//Radiobutton2 1,0(rechts neben 0,0)
-				itembox.add(rad_button_blackwhite_pixelwise,0,2);
+				itembox.add(rad_button_blackwhite_lumi,0,1);	//Radiobutton2 0,1(drunter)
+				itembox.add(rad_button_blackwhite_pixelwise,0,2); //Radiobutton3 0,2(drunter)
 				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
 			}
 			else if (newVal!=null && newVal.equals("Weichzeichnen")) {
 				vbox.getChildren().removeAll(itembox);
+				itembox.getChildren().clear();
+				itembox.setHgap(10);
+				itembox.setVgap(10);
+				itembox.setPadding(new Insets(5, 0, 5, 0));
+				itembox.setPrefWidth(anwenden.getPrefWidth());
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+				rad_button_blur_homogen.setToggleGroup(group_rad_blur);
+				rad_button_blur_gaussian.setToggleGroup(group_rad_blur);
+				rad_button_blur_median.setToggleGroup(group_rad_blur);
+				rad_button_blur_bilateral.setToggleGroup(group_rad_blur);
+				rad_button_blur_homogen.setSelected(true);
+				itembox.add(rad_button_blur_homogen,0,0);					//Radiobutton1 an Stelle 0,0
+				itembox.add(rad_button_blur_gaussian,0,1);	//Radiobutton2 0,1(drunter)
+				itembox.add(rad_button_blur_median,0,2); //Radiobutton3 0,2(drunter)
+				itembox.add(rad_button_blur_bilateral, 0, 3);
+				vbox.getChildren().add(itembox);			
 			}
 		});
 	}
@@ -346,7 +373,16 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									mat = blur.imageMan(mat);
+									if(rad_button_blur_homogen.isSelected()) {
+										//HomogenFunktion
+									}else if (rad_button_blur_gaussian.isSelected()) {
+										mat = blur.imageMan(mat);
+									}else if(rad_button_blur_median.isSelected()) {
+										//MedianFunktion
+									}else {
+										//BiliteralFunktion
+									}
+									
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
 									imageView.setImage(image);
