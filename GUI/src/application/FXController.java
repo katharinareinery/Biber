@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -23,6 +24,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,8 +39,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -47,6 +51,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.input.MouseEvent;
 
 public class FXController implements Initializable{
 
@@ -72,8 +77,19 @@ public class FXController implements Initializable{
 	@FXML
 	private Button back;
 	
-	TextField txt_fld = new TextField();
-	ScrollBar sc = new ScrollBar();
+	private TextField txt_fld = new TextField();
+	private RadioButton rad_button_blackwhite_average = new RadioButton("Average");
+	private RadioButton rad_button_blackwhite_lumi = new RadioButton("Lumi");
+	private RadioButton rad_button_blackwhite_pixelwise = new RadioButton("Pixelwise");
+	private final ToggleGroup group_rad_blackwhite = new ToggleGroup();
+	
+	private RadioButton rad_button_blur_homogen = new RadioButton("Homogen");
+	private RadioButton rad_button_blur_gaussian = new RadioButton("Gaussian");
+	private RadioButton rad_button_blur_median = new RadioButton("Median");
+	private RadioButton rad_button_blur_bilateral = new RadioButton("Biliteral");
+	private final ToggleGroup group_rad_blur = new ToggleGroup();
+	
+	private ScrollBar sc = new ScrollBar();
 	
 	private boolean isOpen = false;
 	private FileChooser fileChooser;
@@ -150,10 +166,19 @@ public class FXController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-WeiÃŸ","Schwarz-WeiÃŸ Pixelweise","Weichzeichnen","Schwellwert");
+		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
+		
+		//Event wenn Maus sich innerhalb ImageView bewwegt, sp�ter f�r Detailauswahl
+		imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
+		@Override public void handle(MouseEvent event) {
+			System.out.println(event.getX());
+			System.out.println(event.getY());
+		}
+		});
+		
 		ueber.setOnAction(this::handleAbout);
 		dragndrop.setOnAction(this::handleWindow);
 		anwenden.setDisable(true);
@@ -161,6 +186,7 @@ public class FXController implements Initializable{
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
+				vbox.getChildren().removeAll(itembox);
 				itembox.getChildren().clear();
 				itembox.setHgap(10);						//GridPane Horizontaler Gap
 				itembox.setVgap(10);						//GridPane Vertikaler Gap
@@ -184,8 +210,47 @@ public class FXController implements Initializable{
 					
 				});
 			}
-			else if(newVal!= null && !newVal.equals("Schwellwert")) {
-				vbox.getChildren().removeAll(itembox);		
+			else if(newVal!=null && newVal.equals("Schwarz-Weiß")) {
+				vbox.getChildren().removeAll(itembox);
+				itembox.getChildren().clear();
+				itembox.setHgap(10);
+				itembox.setVgap(10);
+				itembox.setPadding(new Insets(5, 0, 5, 0));
+				itembox.setPrefWidth(anwenden.getPrefWidth());
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+				rad_button_blackwhite_average.setToggleGroup(group_rad_blackwhite);
+				rad_button_blackwhite_lumi.setToggleGroup(group_rad_blackwhite);
+				rad_button_blackwhite_pixelwise.setToggleGroup(group_rad_blackwhite);
+				rad_button_blackwhite_average.setSelected(true);
+				itembox.add(rad_button_blackwhite_average,0,0);					//Radiobutton1 an Stelle 0,0
+				itembox.add(rad_button_blackwhite_lumi,0,1);	//Radiobutton2 0,1(drunter)
+				itembox.add(rad_button_blackwhite_pixelwise,0,2); //Radiobutton3 0,2(drunter)
+				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
+			}
+			else if (newVal!=null && newVal.equals("Weichzeichnen")) {
+				vbox.getChildren().removeAll(itembox);
+				itembox.getChildren().clear();
+				itembox.setHgap(10);
+				itembox.setVgap(10);
+				itembox.setPadding(new Insets(5, 0, 5, 0));
+				itembox.setPrefWidth(anwenden.getPrefWidth());
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+				rad_button_blur_homogen.setToggleGroup(group_rad_blur);
+				rad_button_blur_gaussian.setToggleGroup(group_rad_blur);
+				rad_button_blur_median.setToggleGroup(group_rad_blur);
+				rad_button_blur_bilateral.setToggleGroup(group_rad_blur);
+				rad_button_blur_homogen.setSelected(true);
+				itembox.add(rad_button_blur_homogen,0,0);					//Radiobutton1 an Stelle 0,0
+				itembox.add(rad_button_blur_gaussian,0,1);	//Radiobutton2 0,1(drunter)
+				itembox.add(rad_button_blur_median,0,2); //Radiobutton3 0,2(drunter)
+				itembox.add(rad_button_blur_bilateral, 0, 3);
+				vbox.getChildren().add(itembox);			
 			}
 		});		
 		
@@ -280,7 +345,21 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									mat = blackAndwhite.imageMan(mat);
+									if(rad_button_blackwhite_average.isSelected()) {
+										mat = blackAndwhite.average(mat);
+									}else if (rad_button_blackwhite_lumi.isSelected()) {
+										mat = blackAndwhite.luminosity(mat);
+									}else {
+										for(int i = 0;i < mat.rows();i++) {
+											for(int j = 0;j< mat.cols();j++) {
+												mat = blackAndwhite.bWPixel(i, j, mat);
+											}
+											BufferedImage neu = imageMan.matToBuffImage(mat);
+											image = SwingFXUtils.toFXImage(neu, null);
+											imageView.setImage(image);
+											Thread.sleep(2);
+										}
+									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
 									imageView.setImage(image);
@@ -338,7 +417,16 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									mat = blur.imageMan(mat);
+									if(rad_button_blur_homogen.isSelected()) {
+										//HomogenFunktion
+									}else if (rad_button_blur_gaussian.isSelected()) {
+										mat = blur.imageMan(mat);
+									}else if(rad_button_blur_median.isSelected()) {
+										//MedianFunktion
+									}else {
+										//BiliteralFunktion
+									}
+									
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
 									imageView.setImage(image);
@@ -388,8 +476,6 @@ public class FXController implements Initializable{
 				break;
 		}
 	}
-	
-	
 	/**
 	 * This method contains the second window to see the changes in the image.
 	 */
@@ -417,5 +503,5 @@ public class FXController implements Initializable{
 			e.printStackTrace();			
 		}		
 	}
-	
 }
+
