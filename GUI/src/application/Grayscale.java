@@ -29,10 +29,11 @@ public class Grayscale extends ImageMan{
 	
 	public Mat grayPixel(int row, int col, Mat mat) {
 		double[] data = mat.get(row, col);
+		double grayValue = (data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 		//System.out.println(data.length);
-		data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-		data[1]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-		data[2]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+		data[0]=grayValue;
+		data[1]=grayValue;
+		data[2]=grayValue;
 		//System.out.println("row: "+row+"\tcol: "+col);
 		mat.put(row, col, data);
 		return mat;
