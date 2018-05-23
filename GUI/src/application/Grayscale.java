@@ -27,7 +27,7 @@ public class Grayscale extends ImageMan{
 		return dst;
 	}
 	
-	public Mat bWPixel(int row, int col, Mat mat) {
+	public Mat grayPixel(int row, int col, Mat mat) {
 		double[] data = mat.get(row, col);
 		//System.out.println(data.length);
 		data[0]=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
@@ -67,10 +67,10 @@ public class Grayscale extends ImageMan{
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;
+		double max,min;
 		for(int i = 0; i < src.rows(); i++) {
 			for(int j = 0; j < src.cols(); j++) {
 				data = src.get(i, j);
-				double max,min;
 				if(data[0]>data[1] && data[0]>data[2]) {
 					max = data[0];
 				}else {

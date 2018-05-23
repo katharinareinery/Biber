@@ -349,6 +349,15 @@ public class FXController implements Initializable{
 										mat = grayscale.luminosity(src);
 									}else if(rad_button_grayscale_lightness.isSelected()){
 										mat = grayscale.lightness(src);
+									}else {
+										for(int i = 0; i <mat.rows();i++) {
+											for(int j = 0; j < mat.cols(); j++) {
+												mat = grayscale.grayPixel(i, j, mat);
+											}
+											BufferedImage neu = imageMan.matToBuffImage(mat);
+											image = SwingFXUtils.toFXImage(neu, null);
+											imageView.setImage(image);
+										}
 									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
