@@ -1,20 +1,14 @@
 package application;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -45,12 +39,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 
 public class FXController implements Initializable{
@@ -78,10 +70,11 @@ public class FXController implements Initializable{
 	private Button back;
 	
 	private TextField txt_fld = new TextField();
-	private RadioButton rad_button_blackwhite_average = new RadioButton("Average");
-	private RadioButton rad_button_blackwhite_lumi = new RadioButton("Lumi");
-	private RadioButton rad_button_blackwhite_pixelwise = new RadioButton("Pixelwise");
-	private final ToggleGroup group_rad_blackwhite = new ToggleGroup();
+	private RadioButton rad_button_grayscale_average = new RadioButton("Average");
+	private RadioButton rad_button_grayscale_lumi = new RadioButton("Lumi");
+	private RadioButton rad_button_grayscale_lightness = new RadioButton("Lightness");
+	private RadioButton rad_button_grayscale_pixelwise = new RadioButton("Pixelwise");
+	private final ToggleGroup group_rad_grayscale = new ToggleGroup();
 	
 	private RadioButton rad_button_blur_homogen = new RadioButton("Homogen");
 	private RadioButton rad_button_blur_gaussian = new RadioButton("Gaussian");
@@ -96,12 +89,14 @@ public class FXController implements Initializable{
 	private Stage stage;
 	private Image image;
 	private BufferedImage bufferedImage;
+	
+	private Mat src;
 	private Mat mat;
 
 	private GridPane itembox = new GridPane();
 		
 	private Blur blur = new Blur();
-	private Grayscale blackAndwhite = new Grayscale();
+	private Grayscale grayscale = new Grayscale();
 	private Threshold thold = new Threshold();
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
@@ -221,13 +216,15 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
-				rad_button_blackwhite_average.setToggleGroup(group_rad_blackwhite);
-				rad_button_blackwhite_lumi.setToggleGroup(group_rad_blackwhite);
-				rad_button_blackwhite_pixelwise.setToggleGroup(group_rad_blackwhite);
-				rad_button_blackwhite_average.setSelected(true);
-				itembox.add(rad_button_blackwhite_average,0,0);					//Radiobutton1 an Stelle 0,0
-				itembox.add(rad_button_blackwhite_lumi,0,1);	//Radiobutton2 0,1(drunter)
-				itembox.add(rad_button_blackwhite_pixelwise,0,2); //Radiobutton3 0,2(drunter)
+				rad_button_grayscale_average.setToggleGroup(group_rad_grayscale);
+				rad_button_grayscale_lumi.setToggleGroup(group_rad_grayscale);
+				rad_button_grayscale_pixelwise.setToggleGroup(group_rad_grayscale);
+				rad_button_grayscale_lightness.setToggleGroup(group_rad_grayscale);
+				rad_button_grayscale_average.setSelected(true);
+				itembox.add(rad_button_grayscale_average, 0, 0);					//Radiobutton1 an Stelle 0,0
+				itembox.add(rad_button_grayscale_lumi, 0, 1);	//Radiobutton2 0,1(drunter)
+				itembox.add(rad_button_grayscale_lightness, 0, 2);
+				itembox.add(rad_button_grayscale_pixelwise, 0, 3); //Radiobutton3 0,2(drunter)
 				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
 			}
 			else if (newVal!=null && newVal.equals("Weichzeichnen")) {
@@ -280,6 +277,7 @@ public class FXController implements Initializable{
 		 */
 		try {
 			mat = Imgcodecs.imread(filepath, Imgcodecs.CV_LOAD_IMAGE_COLOR);
+			src = mat.clone();
 			if(mat.empty()) {
 				System.out.println("Error opening image");
 				System.out.println("Usage: filechooserPath");
@@ -345,20 +343,12 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									if(rad_button_blackwhite_average.isSelected()) {
-										mat = blackAndwhite.average(mat);
-									}else if (rad_button_blackwhite_lumi.isSelected()) {
-										mat = blackAndwhite.luminosity(mat);
-									}else {
-										for(int i = 0;i < mat.rows();i++) {
-											for(int j = 0;j< mat.cols();j++) {
-												mat = blackAndwhite.bWPixel(i, j, mat);
-											}
-											BufferedImage neu = imageMan.matToBuffImage(mat);
-											image = SwingFXUtils.toFXImage(neu, null);
-											imageView.setImage(image);
-											Thread.sleep(2);
-										}
+									if(rad_button_grayscale_average.isSelected()) {
+										mat = grayscale.average(src);
+									}else if (rad_button_grayscale_lumi.isSelected()) {
+										mat = grayscale.luminosity(src);
+									}else if(rad_button_grayscale_lightness.isSelected()){
+										mat = grayscale.lightness(src);
 									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
