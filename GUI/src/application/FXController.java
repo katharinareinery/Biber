@@ -101,7 +101,7 @@ public class FXController implements Initializable{
 	private GridPane itembox = new GridPane();
 		
 	private Blur blur = new Blur();
-	private BlackAndWhite blackAndwhite = new BlackAndWhite();
+	private Grayscale blackAndwhite = new Grayscale();
 	private Threshold thold = new Threshold();
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
@@ -166,7 +166,7 @@ public class FXController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Schwarz-Weiß","Weichzeichnen","Schwellwert");
+		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
@@ -210,7 +210,7 @@ public class FXController implements Initializable{
 					
 				});
 			}
-			else if(newVal!=null && newVal.equals("Schwarz-Weiß")) {
+			else if(newVal!=null && newVal.equals("Grayscale")) {
 				vbox.getChildren().removeAll(itembox);
 				itembox.getChildren().clear();
 				itembox.setHgap(10);
@@ -335,7 +335,7 @@ public class FXController implements Initializable{
 	public void handleAnwenden(ActionEvent event) {
 		System.out.println(cbox_filters.getValue());
 		switch(cbox_filters.getValue().toString()) {
-			case "Schwarz-WeiÃŸ":
+			case "Grayscale":
 				backgroundThread = new Service<Void>() {
 					@Override
 					protected Task<Void> createTask() {

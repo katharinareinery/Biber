@@ -4,7 +4,7 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-public class BlackAndWhite extends ImageMan{
+public class Grayscale extends ImageMan{
 	private Mat dst;
 	
 	public Mat luminosity(Mat src) {
