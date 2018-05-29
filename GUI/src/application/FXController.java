@@ -39,15 +39,27 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 
 public class FXController implements Initializable{
-
 	
+	private final DataFormat buttonFormat = new DataFormat("com.example.myapp.formats.button");
+	private Button draggingButton;
+	private Button srcButton;
+	
+	@FXML
+	private FlowPane flowpane;
 	@FXML
 	private VBox vbox;
 	@FXML
@@ -166,18 +178,22 @@ public class FXController implements Initializable{
 		//anwenden.setOnAction(this::handleAnwenden);
 		//schwellwerte.setOnAction(this::handleButtonSch);
 		
-		//Event wenn Maus sich innerhalb ImageView bewwegt, später für Detailauswahl
+		//Event wenn Maus sich innerhalb ImageView bewwegt, spï¿½ter fï¿½r Detailauswahl
 		imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
 		@Override public void handle(MouseEvent event) {
 			System.out.println(event.getX());
 			System.out.println(event.getY());
 		}
 		});
-		
+		srcButton = createButton("Drag ME!");
+		vbox.getChildren().add(srcButton);
+		addDropHandling(flowpane);
+		addDropHandling(vbox);
 		ueber.setOnAction(this::handleAbout);
 		dragndrop.setOnAction(this::handleWindow);
 		anwenden.setDisable(true);
 		dragndrop.setDisable(true);
+		srcButton.setDisable(true);
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
@@ -288,6 +304,7 @@ public class FXController implements Initializable{
 			imageView.setImage(image);
 			anwenden.setDisable(false);
 			dragndrop.setDisable(false);
+			srcButton.setDisable(false);
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -471,5 +488,38 @@ public class FXController implements Initializable{
 			e.printStackTrace();			
 		}		
 	}
+	 private Button createButton(String text) {
+	        Button button = new Button(text);
+	        button.setOnDragDetected(e -> {
+	            Dragboard db = button.startDragAndDrop(TransferMode.COPY);
+	            db.setDragView(button.snapshot(null, null));
+	            ClipboardContent cc = new ClipboardContent();
+	            cc.put(buttonFormat, "button");
+	            db.setContent(cc);
+	            draggingButton = createButton(cbox_filters.getValue().toString());
+	            //System.out.println(draggingButton.getText());
+	        });
+	        button.setOnDragDone(e -> draggingButton = null);
+	        return button;
+	    }
+	 private void addDropHandling(Pane pane) {
+		 pane.setOnDragOver(e -> {
+			 //System.out.println(e.toString());
+			 Dragboard db = e.getDragboard();
+			 if(db.hasContent(buttonFormat)
+					 && draggingButton != null
+					 && draggingButton.getParent() != pane) {
+				 e.acceptTransferModes(TransferMode.COPY);
+			 }
+		 });
+		 pane.setOnDragDropped(e -> {
+			 Dragboard db = e.getDragboard();
+			 if(db.hasContent(buttonFormat)) {
+				 pane.getChildren().add(draggingButton);
+				 e.setDropCompleted(true);
+			}
+		 });
+		 
+	 }
 }
 
