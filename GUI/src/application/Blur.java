@@ -11,9 +11,10 @@ public class Blur extends ImageMan{
 	private Mat dst = new Mat();
 	
 	public Mat imageMan(Mat src) {		
-			for(int i = 1; i < MAX_KERNEL_LENGHT; i = i + 2) {
-				Imgproc.GaussianBlur(src, dst, new Size(i , i), 0, 0);
-			}
+			//for(int i = 1; i < MAX_KERNEL_LENGHT; i = i + 2) {
+			//	Imgproc.GaussianBlur(src, dst, new Size(i , i), 0, 0);
+			//}
+		Imgproc.GaussianBlur(src, dst, new Size(3, 3), 0, 0);
 		return dst;
 	}
 	
