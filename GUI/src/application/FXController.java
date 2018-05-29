@@ -403,13 +403,13 @@ public class FXController implements Initializable{
 								// TODO Auto-generated method stub
 								try {
 									if(rad_button_blur_homogen.isSelected()) {
-										//HomogenFunktion
+										mat = blur.homogenBlur(mat);
 									}else if (rad_button_blur_gaussian.isSelected()) {
 										mat = blur.imageMan(mat);
 									}else if(rad_button_blur_median.isSelected()) {
-										//MedianFunktion
+										mat = blur.medianBlur(mat);
 									}else {
-										//BiliteralFunktion
+										mat = blur.biliteralBlur(mat);
 									}
 									
 									BufferedImage neu = imageMan.matToBuffImage(mat);
