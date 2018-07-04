@@ -56,7 +56,7 @@
                <children>
                   <ComboBox fx:id="cbox_filters" prefWidth="150.0" />
                   <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
-                  <Button fx:id="dragndrop" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
+                  <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                   
                </children>
             </VBox>

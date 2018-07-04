@@ -15,7 +15,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception{
 		
 			//BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("GUI.fxml"));
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("LGUI.fxml"));
 			Parent root = loader.load();
 			FXController controller = (FXController)loader.getController();
 			controller.init(primaryStage);
