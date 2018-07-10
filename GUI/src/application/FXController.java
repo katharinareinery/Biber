@@ -43,7 +43,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -90,6 +93,14 @@ public class FXController implements Initializable{
 	private Button next;
 	@FXML
 	private Button back;
+	@FXML
+	private ToolBar toolbar;
+	
+	private ToggleButton btn_movezoom;
+	private ImageView iv_movezoom;
+	private ImageView iv_cursor;
+	private ToggleButton btn_cursor;
+	private ToggleGroup tg_toolbar;
 	
 	private TextField txt_fld = new TextField();
 	private RadioButton rad_button_grayscale_average = new RadioButton("Average");
@@ -184,17 +195,7 @@ public class FXController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Weichzeichnen","Schwellwert");
-		cbox_filters.getItems().addAll(options);
-		//anwenden.setOnAction(this::handleAnwenden);
-		//schwellwerte.setOnAction(this::handleButtonSch);
-		
-		//Event wenn Maus sich innerhalb ImageView bewwegt, sp�ter f�r Detailauswahl
-		imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
-		@Override public void handle(MouseEvent event) {
-			System.out.println(event.getX());
-			System.out.println(event.getY());
-		}
-		});
+		cbox_filters.getItems().addAll(options);		
 		imageView.setPreserveRatio(true);
 		srcButton = createButton("Drag ME!");
 		vbox.getChildren().add(srcButton);
@@ -205,6 +206,7 @@ public class FXController implements Initializable{
 		anwenden.setDisable(true);
 		preview.setDisable(true);
 		srcButton.setDisable(true);
+		initToolbar();
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
@@ -312,75 +314,15 @@ public class FXController implements Initializable{
 				}
 			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
-			
+			imageView.setImage(image);
 			/*************************************
 			 *pluto-explorer scrollable imageview*
 			 *************************************/
-			width = image.getWidth();
-			height = image.getHeight();
-			imageView.setImage(image);
-			reset(imageView,width/2,height/2);
 			
-			ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
-
-	        imageView.setOnMousePressed(e -> {
-	            
-	            Point2D mousePress = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
-	            mouseDown.set(mousePress);
-	        });
-
-	        imageView.setOnMouseDragged(e -> {
-	            Point2D dragPoint = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
-	            shift(imageView, dragPoint.subtract(mouseDown.get()));
-	            mouseDown.set(imageViewToImage(imageView, new Point2D(e.getX(), e.getY())));
-	        });
-
-	        imageView.setOnScroll(e -> {
-	            double delta = e.getDeltaY();
-	            Rectangle2D viewport = imageView.getViewport();
-
-	            double scale = clamp(Math.pow(1.01, -delta),
-
-	                // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
-	                Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
-
-	                // don't scale so that we're bigger than image dimensions:
-	                Math.max(width / viewport.getWidth(), height / viewport.getHeight())
-
-	            );
-
-	            Point2D mouse = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
-
-	            double newWidth = viewport.getWidth() * scale;
-	            double newHeight = viewport.getHeight() * scale;
-
-	            // To keep the visual point under the mouse from moving, we need
-	            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-	            // where x is the mouse X coordinate in the image
-
-	            // solving this for newViewportMinX gives
-
-	            // newViewportMinX = x - (x - currentViewportMinX) * scale 
-
-	            // we then clamp this value so the image never scrolls out
-	            // of the imageview:
-
-	            double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
-	                    0, width - newWidth);
-	            double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
-	                    0, height - newHeight);
-
-	            imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
-	        });
-
-	            imageView.setOnMouseClicked(e -> {
-	                if (e.getClickCount() == 2) {
-	                reset(imageView, width, height);
-	            }
-	        });
 	            
             
-			
+			btn_movezoom.setDisable(false);
+			btn_cursor.setDisable(false);
 			anwenden.setDisable(false);
 			preview.setDisable(false);
 			srcButton.setDisable(false);
@@ -608,7 +550,7 @@ public class FXController implements Initializable{
 	        imageView.setViewport(new Rectangle2D(0, 0, width, height));
 	    }
 	 // shift the viewport of the imageView by the specified delta, clamping so
-	    // the viewport does not move off the actual image:
+	 // the viewport does not move off the actual image:
 	    private void shift(ImageView imageView, Point2D delta) {
 	        Rectangle2D viewport = imageView.getViewport();
 
@@ -642,6 +584,129 @@ public class FXController implements Initializable{
 	        return new Point2D(
 	                viewport.getMinX() + xProportion * viewport.getWidth(), 
 	                viewport.getMinY() + yProportion * viewport.getHeight());
+	    }
+	    
+	    private void initToolbar() {
+	    	tg_toolbar = new ToggleGroup();
+	    	btn_movezoom = new ToggleButton();
+	    	btn_cursor = new ToggleButton();
+	    	iv_cursor = new ImageView("file:cursor.png");
+	    	iv_movezoom = new ImageView("file:move.png");
+	    	iv_cursor.setFitHeight(20);
+	    	iv_cursor.setFitWidth(20);
+	    	iv_movezoom.setFitHeight(20);
+	    	iv_movezoom.setFitWidth(20);
+	    	btn_cursor.setGraphic(iv_cursor);
+	    	btn_movezoom.setGraphic(iv_movezoom);
+	    	btn_cursor.setUserData("cursor");
+	    	btn_movezoom.setUserData("move");
+	    	btn_movezoom.setDisable(true);
+			btn_cursor.setDisable(true);
+	    	btn_cursor.setToggleGroup(tg_toolbar);
+	    	btn_movezoom.setToggleGroup(tg_toolbar);
+	    	toolbar.getItems().add(btn_movezoom);
+	    	toolbar.getItems().add(btn_cursor);
+	    	tg_toolbar.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+
+				@Override
+				public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+					// TODO Auto-generated method stub
+					//System.out.println(tg_toolbar.getSelectedToggle().getUserData());
+					if(tg_toolbar.getSelectedToggle().getUserData() == "move") {
+						enableMoveZoom(imageView);
+						
+					}
+					else if(tg_toolbar.getSelectedToggle().getUserData()=="cursor")
+						disableMoveZoom(imageView);
+					else if(newValue == null) {
+						
+					}
+				}
+	    		
+	    	});
+	    }
+	    
+	    private void enableMoveZoom(ImageView imageView) {
+	    	removeAllListeners(imageView);
+	    	width = image.getWidth();
+			height = image.getHeight();
+			
+			reset(imageView,width-1,height-1);
+			
+			ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+
+	        imageView.setOnMousePressed(e -> {
+	            
+	            Point2D mousePress = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+	            mouseDown.set(mousePress);
+	        });
+
+	        imageView.setOnMouseDragged(e -> {
+	            Point2D dragPoint = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+	            shift(imageView, dragPoint.subtract(mouseDown.get()));
+	            mouseDown.set(imageViewToImage(imageView, new Point2D(e.getX(), e.getY())));
+	        });
+
+	        imageView.setOnScroll(e -> {
+	            double delta = e.getDeltaY();
+	            Rectangle2D viewport = imageView.getViewport();
+
+	            double scale = clamp(Math.pow(1.01, -delta),
+
+	                // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
+	                Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+
+	                // don't scale so that we're bigger than image dimensions:
+	                Math.max(width / viewport.getWidth(), height / viewport.getHeight())
+
+	            );
+
+	            Point2D mouse = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+
+	            double newWidth = viewport.getWidth() * scale;
+	            double newHeight = viewport.getHeight() * scale;
+
+	            // To keep the visual point under the mouse from moving, we need
+	            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
+	            // where x is the mouse X coordinate in the image
+
+	            // solving this for newViewportMinX gives
+
+	            // newViewportMinX = x - (x - currentViewportMinX) * scale 
+
+	            // we then clamp this value so the image never scrolls out
+	            // of the imageview:
+
+	            double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
+	                    0, width - newWidth);
+	            double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
+	                    0, height - newHeight);
+
+	            imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+	        });
+
+	            imageView.setOnMouseClicked(e -> {
+	                if (e.getClickCount() == 2) {
+	                reset(imageView, width, height);
+	            }
+	        });
+	    }
+	    private void disableMoveZoom(ImageView imageView) {
+	    	removeAllListeners(imageView);
+	    	//Event wenn Maus sich innerhalb ImageView bewwegt, sp�ter f�r Detailauswahl
+	    	imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
+	    		@Override public void handle(MouseEvent event) {
+	    			System.out.println(event.getX());
+	    			System.out.println(event.getY());
+	    		}
+	    	});
+	    }
+	    
+	    private void removeAllListeners(ImageView imageView) {
+	    	imageView.setOnMousePressed(null);
+	    	imageView.setOnScroll(null);
+	    	imageView.setOnMouseClicked(null);
+	    	imageView.setOnMouseMoved(null);
 	    }
 }
 
