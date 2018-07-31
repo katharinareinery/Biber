@@ -28,9 +28,7 @@
          </bottom>
          <center>
             <ImageView fx:id="imageView2" disable="true" fitHeight="194.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <image>
-                  <Image url="@../../lena.png" />
-               </image></ImageView>
+             </ImageView>
          </center>
       </BorderPane>
    </center>
