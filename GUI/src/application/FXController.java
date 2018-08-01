@@ -182,8 +182,8 @@ public class FXController implements Initializable{
 			
 			Parent root = FXMLLoader.load(getClass().getResource("GUI2.fxml"));
 			Scene scene = new Scene(root);
-			stage.setScene(scene);
 			stage = new Stage();
+			stage.setScene(scene);
 			stage.setTitle("About");
 			stage.show();
 		}catch(Exception e) {
