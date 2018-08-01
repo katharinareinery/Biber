@@ -10,5 +10,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCV-3.4.1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/opencv-3.4.1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/opencv3.4.1"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/opencv"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
