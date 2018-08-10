@@ -2,8 +2,8 @@
 
 /* Defines the design of the main window. */
 .root{
-	display:block;
-  -fx-background-color: grey;
+   display: block;
+  -fx-background-color: #424242;
 }
 
 /* Defines the design of the buttons. */
@@ -31,4 +31,8 @@
 
 .toolmenu{
 	-fx-background-color: grey;
+}
+
+.ToggleButton{
+	-fx-background-color: white;
 }
