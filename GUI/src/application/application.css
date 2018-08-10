@@ -3,7 +3,8 @@
 /* Defines the design of the main window. */
 .root{
    display: block;
-  -fx-background-color: #424242;
+  -fx-background-color: #292929;
+  -fx-text-fill: white;
 }
 
 /* Defines the design of the buttons. */
