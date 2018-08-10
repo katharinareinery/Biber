@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Menu?>
@@ -15,20 +20,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
+<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
       <SplitPane dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
         <items>
-            <SplitPane dividerPositions="0.5">
+            <SplitPane dividerPositions="0.5" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
                <items>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
                      <children>
                         <ImageView fx:id="imageView" fitHeight="464.0" fitWidth="641.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                   <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0">
                      <children>
-                        <ComboBox fx:id="cbox_filters" prefWidth="150.0" />
+                        <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" />
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                      </children>
@@ -37,8 +42,8 @@
             </SplitPane>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" />
-                  <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0">
+                  <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" />
+                  <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0" styleClass="toolmenu" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
                   </ToolBar>
                </children>
             </VBox>
@@ -46,7 +51,7 @@
       </SplitPane>
    </center>
    <top>
-      <MenuBar fx:id="menubar" BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menubar" styleClass="toolmenu" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" BorderPane.alignment="CENTER">
          <menus>
             <Menu id="datei" mnemonicParsing="false" text="Datei">
                <items>
