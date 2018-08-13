@@ -31,10 +31,10 @@
                         <ImageView fx:id="imageView" fitHeight="464.0" fitWidth="641.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
-                  <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0">
+                  <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
                      <children>
                         <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" />
-                        <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
+                        <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" text="Anwenden" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                      </children>
                   </VBox>
@@ -53,7 +53,7 @@
    <top>
       <MenuBar fx:id="menubar" styleClass="toolmenu" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" BorderPane.alignment="CENTER">
          <menus>
-            <Menu id="datei" mnemonicParsing="false" text="Datei">
+            <Menu id="datei" mnemonicParsing="false" styleClass="toolmenu" text="Datei">
                <items>
                   <MenuItem id="oeffnen" fx:id="oefnnen" onAction="#openFile" text="Öffnen">
                      <accelerator>
@@ -72,7 +72,7 @@
                   </MenuItem>
                </items>
             </Menu>
-            <Menu id="bearbeiten" mnemonicParsing="false" text="Bearbeiten">
+            <Menu id="bearbeiten" mnemonicParsing="false" styleClass="toolmenu" text="Bearbeiten">
                <items>
                   <MenuItem id="rueckgaengig" fx:id="rueckgaengig" text="Rückgängig">
                      <accelerator>
@@ -81,7 +81,7 @@
                   </MenuItem>
                </items>
             </Menu>
-            <Menu id="hilfe" text="Hilfe">
+            <Menu id="hilfe" styleClass="toolmenu" text="Hilfe">
                <items>
                   <MenuItem id="ueber" fx:id="ueber" mnemonicParsing="false" text="Über Biber">
                      <accelerator>
