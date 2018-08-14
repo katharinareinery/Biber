@@ -28,7 +28,7 @@
                <items>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
                      <children>
-                        <ImageView fx:id="imageView" fitHeight="464.0" fitWidth="641.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="imageView" fitHeight="464.0" fitWidth="641.0" pickOnBounds="true" preserveRatio="true" styleClass="root" />
                      </children>
                   </HBox>
                   <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">

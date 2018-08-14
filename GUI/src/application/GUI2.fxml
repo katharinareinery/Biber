@@ -12,7 +12,7 @@
          <center>
             <Label fx:id="label" prefHeight="208.0" prefWidth="420.0" text="Biber ist ein Bildbearbeitungsprogramm, dass die &#10;Bildbearbeitung von einem technischen Standpunkt &#10;aus betrachtet.&#10;&#10;Dem Anwender soll so die Möglichkeit gegeben werden, &#10;die Veränderungen an einem Bild mittels Filter &#10;nachvollziehen zu können." textAlignment="JUSTIFY" textFill="WHITE" BorderPane.alignment="CENTER">
                <font>
-                  <Font name="Arial" size="14.0" />
+                  <Font name="Arial" size="15.0" />
                </font></Label>
          </center>
       </BorderPane>

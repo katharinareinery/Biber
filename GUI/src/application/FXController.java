@@ -96,6 +96,7 @@ public class FXController implements Initializable{
 	@FXML
 	private ToolBar toolbar;
 		
+	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
 	private ImageView iv_cursor;
