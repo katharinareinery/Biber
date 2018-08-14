@@ -2,14 +2,14 @@
 
 /* Defines the design of the main window. */
 .root{
-   display: block;
+  	display: block;
   -fx-background-color: #292929;
-  -fx-text-fill: white;
+  -fx-text-fill: #FFFFFF;
 }
 
 /* Defines the design of the buttons. */
 .button{
-  -fx-text-fill: white;
+  -fx-text-fill: #FFFFFF;
   -fx-font-family: Helvetica, Arial, Geneva, sans-serif;
   -fx-font-weight: bold;
   -fx-font-size: 16px;
@@ -23,7 +23,7 @@
 
 /* Defines the design of the combobox. */
 .combobox{
-  -fx-text-fill: white;
+  -fx-text-fill: #FFFFFF;
   -fx-font-family: Helvetica, Arial, Geneva, sans-serif;
   -fx-font-weight: bold;
   -fx-font-size: 16px;
@@ -34,22 +34,22 @@
 /* Defines the design of the menubar, toolbar. */
 .toolmenu{
 	-fx-background-color: #424242;
-	-fx-text-fill: white;
+	-fx-text-fill: #FFFFFF;
 }
 
 
 
 /* Testing Area */
 .ToggleButton{
-	-fx-text-fill: white;
+	-fx-text-fill: #FFFFFF;
 }
 
 .RadioButton{
-	-fx-text-fill: white;
+	-fx-text-fill: #FFFFFF;
 }
 
 .ToggleGroup{
-	-fx-text-fill: white;
+	-fx-text-fill: #FFFFFF;
 }
 
 

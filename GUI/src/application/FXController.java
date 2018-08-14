@@ -95,7 +95,7 @@ public class FXController implements Initializable{
 	private Button back;
 	@FXML
 	private ToolBar toolbar;
-	
+		
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
 	private ImageView iv_cursor;
@@ -182,6 +182,7 @@ public class FXController implements Initializable{
 			
 			Parent root = FXMLLoader.load(getClass().getResource("GUI2.fxml"));
 			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("About");
@@ -245,6 +246,7 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
+			
 				rad_button_grayscale_average.setToggleGroup(group_rad_grayscale);
 				rad_button_grayscale_lumi.setToggleGroup(group_rad_grayscale);
 				rad_button_grayscale_pixelwise.setToggleGroup(group_rad_grayscale);
@@ -267,6 +269,7 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
+			
 				rad_button_blur_homogen.setToggleGroup(group_rad_blur);
 				rad_button_blur_gaussian.setToggleGroup(group_rad_blur);
 				rad_button_blur_median.setToggleGroup(group_rad_blur);
@@ -494,6 +497,7 @@ public class FXController implements Initializable{
 			//controller.init(stage);
 			
 			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage.setScene(scene);
 			stage = new Stage();
 			stage.setTitle("Biber");
