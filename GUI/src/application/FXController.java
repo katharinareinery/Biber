@@ -491,25 +491,16 @@ public class FXController implements Initializable{
 	 */
 	public void handleWindow(ActionEvent event2) {
 		try {
-		//	Parent root = FXMLLoader.load(getClass().getResource("GUI3.fxml"));
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI3.fxml"));
-			Parent root = loader.load();
-			//FXController controller = (FXController)loader.getController();
-			//controller.init(stage);
-			
+			Parent root = (Parent)loader.load();
+			FXController2 controller2 = (FXController2)loader.getController();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage.setScene(scene);
 			stage = new Stage();
 			stage.setTitle("Biber");
-		
-			//imageView2 = new ImageView("file:///D:/Git/SWPraktSS18/GUI/lena.png");
-					
-			//imageView2 = new ImageView (getClass().getResource("").toExternalForm());
-			//fxc2 = new FXController2();
-			//root.getChildrenUnmodifiable().add(imageView2);
-		//next, back
-			
+			controller2.setImage(image);
+			controller2.setImageInImageView();
 		}catch(Exception e) {
 			e.printStackTrace();			
 		}		

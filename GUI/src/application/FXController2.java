@@ -57,6 +57,11 @@ public class FXController2 implements Initializable{
 	public void setImage(Image img) {
 		this.img = img;
 	}
+	
+	public void setImageInImageView() {
+		imageView2.setImage(img);
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
