@@ -450,12 +450,11 @@ public class FXController implements Initializable{
 										mat = blur.homogenBlur(mat);
 									}else if (selectedRadioButton.getText().equals("gaussian")) {
 										mat = blur.imageMan(mat);
-									}else if(rad_button_blur_median.isSelected()) {
+									}else if(selectedRadioButton.getText().equals("median")) {
 										mat = blur.medianBlur(mat);
-									}else {
+									}else if(selectedRadioButton.getText().equals("bilateral")){
 										mat = blur.biliteralBlur(mat);
-									}
-									
+									}									
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
 									imageView.setImage(image);
