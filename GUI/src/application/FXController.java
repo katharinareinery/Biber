@@ -392,6 +392,7 @@ public class FXController implements Initializable{
 	
 	public void handleAnwenden(ActionEvent event) {
 		System.out.println(cbox_filters.getValue());
+		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
 		switch(cbox_filters.getValue().toString()) {
 			case "Grayscale":
 				backgroundThread = new Service<Void>() {
@@ -445,9 +446,9 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									if(rad_button_blur_homogen.isSelected()) {
+									if(selectedRadioButton.getText().equals("homogen")) {
 										mat = blur.homogenBlur(mat);
-									}else if (rad_button_blur_gaussian.isSelected()) {
+									}else if (selectedRadioButton.getText().equals("gaussian")) {
 										mat = blur.imageMan(mat);
 									}else if(rad_button_blur_median.isSelected()) {
 										mat = blur.medianBlur(mat);
