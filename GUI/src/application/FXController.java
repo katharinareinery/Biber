@@ -403,13 +403,13 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									if(rad_button_grayscale_average.isSelected()) {
+									if(selectedRadioButton.getText().equals("average")) {
 										mat = grayscale.average(src);
-									}else if (rad_button_grayscale_lumi.isSelected()) {
+									}else if (selectedRadioButton.getText().equals("luminosity")) {
 										mat = grayscale.luminosity(src);
-									}else if(rad_button_grayscale_lightness.isSelected()){
+									}else if(selectedRadioButton.getText().equals("lightness")){
 										mat = grayscale.lightness(src);
-									}else {
+									}else if(selectedRadioButton.getText().equals("pixelwise")){
 										for(int i = 0; i <mat.rows();i++) {
 											for(int j = 0; j < mat.cols(); j++) {
 												mat = grayscale.grayPixel(i, j, mat);
