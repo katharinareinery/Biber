@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -206,7 +207,7 @@ public class FXController implements Initializable{
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Weichzeichnen","Schwellwert");
-		cbox_filters.getItems().addAll(options);		
+		cbox_filters.getItems().addAll(options);
 		imageView.setPreserveRatio(true);
 		srcButton = createButton("Drag ME!");
 		vbox.getChildren().add(srcButton);

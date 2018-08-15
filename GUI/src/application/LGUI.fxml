@@ -20,37 +20,37 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
+<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
       <SplitPane dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
         <items>
-            <SplitPane dividerPositions="0.5" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
+            <SplitPane dividerPositions="0.5" styleClass="root">
                <items>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="root">
                      <children>
                         <ImageView fx:id="imageView" fitHeight="464.0" fitWidth="641.0" pickOnBounds="true" preserveRatio="true" styleClass="root" />
                      </children>
                   </HBox>
-                  <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
+                  <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0">
                      <children>
-                        <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" />
-                        <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" text="Anwenden" />
+                        <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" />
+                        <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
-                        <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton">
+                        <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
                            <toggleGroup>
                               <ToggleGroup fx:id="toggleGroup1" />
                            </toggleGroup></RadioButton>
-                        <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" toggleGroup="$toggleGroup1" />
-                        <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" toggleGroup="$toggleGroup1" />
-                        <RadioButton fx:id="radioButton4" mnemonicParsing="false" text="RadioButton" toggleGroup="$toggleGroup1" />
+                        <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                        <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                        <RadioButton fx:id="radioButton4" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                      </children>
                   </VBox>
                </items>
             </SplitPane>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" />
-                  <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0" styleClass="toolmenu" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css">
+                  <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" styleClass="root" />
+                  <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0" styleClass="toolmenu">
                   </ToolBar>
                </children>
             </VBox>
@@ -58,7 +58,7 @@
       </SplitPane>
    </center>
    <top>
-      <MenuBar fx:id="menubar" styleClass="toolmenu" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menubar" styleClass="toolmenu" BorderPane.alignment="CENTER">
          <menus>
             <Menu id="datei" mnemonicParsing="false" styleClass="toolmenu" text="Datei">
                <items>
