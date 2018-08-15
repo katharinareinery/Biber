@@ -491,16 +491,18 @@ public class FXController implements Initializable{
 	 */
 	public void handleWindow(ActionEvent event2) {
 		try {
+			//auﬂerdem loader.load auf root class hier (parent) explizit wandeln
+			//Reihenfolge wichtig erst loader.load dann controller holen
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI3.fxml"));
 			Parent root = (Parent)loader.load();
 			FXController2 controller2 = (FXController2)loader.getController();
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage.setScene(scene);
 			stage = new Stage();
 			stage.setTitle("Biber");
 			controller2.setImage(image);
 			controller2.setImageInImageView();
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		}catch(Exception e) {
 			e.printStackTrace();			
 		}		
