@@ -95,7 +95,16 @@ public class FXController implements Initializable{
 	private Button back;
 	@FXML
 	private ToolBar toolbar;
-		
+	@FXML
+	private RadioButton radioButton1;
+	@FXML
+	private RadioButton radioButton2;
+	@FXML
+	private RadioButton radioButton3;
+	@FXML
+	private RadioButton radioButton4;
+	@FXML
+	private ToggleGroup toggleGroup1;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -208,12 +217,20 @@ public class FXController implements Initializable{
 		anwenden.setDisable(true);
 		preview.setDisable(true);
 		srcButton.setDisable(true);
+		radioButton1.setVisible(false);
+		radioButton2.setVisible(false);
+		radioButton3.setVisible(false);
+		radioButton4.setVisible(false);
 		initToolbar();
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
 				vbox.getChildren().removeAll(itembox);
 				itembox.getChildren().clear();
+				radioButton1.setVisible(false);
+				radioButton2.setVisible(false);
+				radioButton3.setVisible(false);
+				radioButton4.setVisible(false);
 				itembox.setHgap(10);						//GridPane Horizontaler Gap
 				itembox.setVgap(10);						//GridPane Vertikaler Gap
 				itembox.setPadding(new Insets(5, 0, 5, 0));	//Padding Oben/Unten 5px
@@ -247,17 +264,18 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
-			
-				rad_button_grayscale_average.setToggleGroup(group_rad_grayscale);
-				rad_button_grayscale_lumi.setToggleGroup(group_rad_grayscale);
-				rad_button_grayscale_pixelwise.setToggleGroup(group_rad_grayscale);
-				rad_button_grayscale_lightness.setToggleGroup(group_rad_grayscale);
-				rad_button_grayscale_average.setSelected(true);
-				itembox.add(rad_button_grayscale_average, 0, 0);					//Radiobutton1 an Stelle 0,0
-				itembox.add(rad_button_grayscale_lumi, 0, 1);	//Radiobutton2 0,1(drunter)
-				itembox.add(rad_button_grayscale_lightness, 0, 2);
-				itembox.add(rad_button_grayscale_pixelwise, 0, 3); //Radiobutton3 0,2(drunter)
-				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
+				initRadioButton("average", "luminosity", "lightness", "pixelwise");
+//			
+//				rad_button_grayscale_average.setToggleGroup(group_rad_grayscale);
+//				rad_button_grayscale_lumi.setToggleGroup(group_rad_grayscale);
+//				rad_button_grayscale_pixelwise.setToggleGroup(group_rad_grayscale);
+//				rad_button_grayscale_lightness.setToggleGroup(group_rad_grayscale);
+//				rad_button_grayscale_average.setSelected(true);
+//				itembox.add(rad_button_grayscale_average, 0, 0);					//Radiobutton1 an Stelle 0,0
+//				itembox.add(rad_button_grayscale_lumi, 0, 1);	//Radiobutton2 0,1(drunter)
+//				itembox.add(rad_button_grayscale_lightness, 0, 2);
+//				itembox.add(rad_button_grayscale_pixelwise, 0, 3); //Radiobutton3 0,2(drunter)
+//				vbox.getChildren().add(itembox);			//GridPane itembox an Vbox vbox anhaengen
 			}
 			else if (newVal!=null && newVal.equals("Weichzeichnen")) {
 				vbox.getChildren().removeAll(itembox);
@@ -270,17 +288,17 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
-			
-				rad_button_blur_homogen.setToggleGroup(group_rad_blur);
-				rad_button_blur_gaussian.setToggleGroup(group_rad_blur);
-				rad_button_blur_median.setToggleGroup(group_rad_blur);
-				rad_button_blur_bilateral.setToggleGroup(group_rad_blur);
-				rad_button_blur_homogen.setSelected(true);
-				itembox.add(rad_button_blur_homogen,0,0);					//Radiobutton1 an Stelle 0,0
-				itembox.add(rad_button_blur_gaussian,0,1);	//Radiobutton2 0,1(drunter)
-				itembox.add(rad_button_blur_median,0,2); //Radiobutton3 0,2(drunter)
-				itembox.add(rad_button_blur_bilateral, 0, 3);
-				vbox.getChildren().add(itembox);			
+				initRadioButton("homogen", "gaussian", "median", "bilateral");
+//				rad_button_blur_homogen.setToggleGroup(group_rad_blur);
+//				rad_button_blur_gaussian.setToggleGroup(group_rad_blur);
+//				rad_button_blur_median.setToggleGroup(group_rad_blur);
+//				rad_button_blur_bilateral.setToggleGroup(group_rad_blur);
+//				rad_button_blur_homogen.setSelected(true);
+//				itembox.add(rad_button_blur_homogen,0,0);					//Radiobutton1 an Stelle 0,0
+//				itembox.add(rad_button_blur_gaussian,0,1);	//Radiobutton2 0,1(drunter)
+//				itembox.add(rad_button_blur_median,0,2); //Radiobutton3 0,2(drunter)
+//				itembox.add(rad_button_blur_bilateral, 0, 3);
+//				vbox.getChildren().add(itembox);			
 			}
 		});		
 		
@@ -705,6 +723,17 @@ public class FXController implements Initializable{
 	    	imageView.setOnScroll(null);
 	    	imageView.setOnMouseClicked(null);
 	    	imageView.setOnMouseMoved(null);
+	    }
+	    
+	    private void initRadioButton(String textButton1, String textButton2, String textButton3, String textButton4) {
+	    	radioButton1.setVisible(true);
+	    	radioButton1.setText(textButton1);
+	    	radioButton2.setVisible(true);
+	    	radioButton2.setText(textButton2);
+	    	radioButton3.setVisible(true);
+	    	radioButton3.setText(textButton3);
+	    	radioButton4.setVisible(true);
+	    	radioButton4.setText(textButton4);
 	    }
 }
 

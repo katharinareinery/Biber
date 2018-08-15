@@ -36,6 +36,13 @@
                         <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" />
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" text="Anwenden" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
+                        <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="toggleGroup1" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" toggleGroup="$toggleGroup1" />
+                        <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" toggleGroup="$toggleGroup1" />
+                        <RadioButton fx:id="radioButton4" mnemonicParsing="false" text="RadioButton" toggleGroup="$toggleGroup1" />
                      </children>
                   </VBox>
                </items>
