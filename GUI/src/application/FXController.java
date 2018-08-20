@@ -67,7 +67,6 @@ public class FXController implements Initializable{
 	
 	private final DataFormat buttonFormat = new DataFormat("com.example.myapp.formats.button");
 	private Button draggingButton;
-	private Button srcButton;
 	double width;
 	double height;
 	private static final int MIN_PIXELS = 10;
@@ -94,6 +93,8 @@ public class FXController implements Initializable{
 	private Button next;
 	@FXML
 	private Button back;
+	@FXML
+	private Button srcButton;
 	@FXML
 	private ToolBar toolbar;
 	@FXML
@@ -209,8 +210,9 @@ public class FXController implements Initializable{
 		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
 		imageView.setPreserveRatio(true);
-		srcButton = createButton("Drag ME!");
-		vbox.getChildren().add(srcButton);
+		//srcButton = createButton("Drag ME!");
+		//vbox.getChildren().add(srcButton);
+		setDragOnButton(srcButton);
 		addDropHandling(flowpane);
 		addDropHandling(vbox);
 		ueber.setOnAction(this::handleAbout);
@@ -534,12 +536,27 @@ public class FXController implements Initializable{
 	            ClipboardContent cc = new ClipboardContent();
 	            cc.put(buttonFormat, "button");
 	            db.setContent(cc);
+	            //draggingButton = createButton(cbox_filters.getValue().toString());
+	            //System.out.println(draggingButton.getText());
+	        });
+	        //button.setOnDragDone(e -> draggingButton = null);
+	        return button;
+	    }
+	 
+	 private Button setDragOnButton(Button button) {
+	        button.setOnDragDetected(e -> {
+	            Dragboard db = button.startDragAndDrop(TransferMode.COPY);
+	            db.setDragView(button.snapshot(null, null));
+	            ClipboardContent cc = new ClipboardContent();
+	            cc.put(buttonFormat, "button");
+	            db.setContent(cc);
 	            draggingButton = createButton(cbox_filters.getValue().toString());
 	            //System.out.println(draggingButton.getText());
 	        });
 	        //button.setOnDragDone(e -> draggingButton = null);
 	        return button;
 	    }
+	 
 	 private void addDropHandling(Pane pane) {
 		 pane.setOnDragOver(e -> {
 			 //System.out.println(e.toString());

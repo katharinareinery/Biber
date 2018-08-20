@@ -5,7 +5,8 @@
   	display: block;
   -fx-background-color: #292929;
   -fx-text-fill: #FFFFFF;
-  
+  -fx-border-color: #292929;
+  -fx-box-border: transparent;
 }
 
 /* Defines the design of the buttons. */
@@ -35,7 +36,13 @@
 /* Defines the design of the menubar, toolbar. */
 .toolmenu{
 	-fx-background-color: #424242;
+	-fx-border-color: #292929;
 	-fx-text-fill: #FFFFFF;
+}
+
+.split-pane:vertical{
+	-fx-border-color: #292929;
+	-fx-box-border: transparent;
 }
 
 

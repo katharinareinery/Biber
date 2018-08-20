@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -22,7 +23,7 @@
 
 <BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
-      <SplitPane dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="root" BorderPane.alignment="CENTER">
         <items>
             <SplitPane dividerPositions="0.5" styleClass="root">
                <items>
@@ -36,6 +37,7 @@
                         <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" />
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
+                        <Button fx:id="srcButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag me" />
                         <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
                            <toggleGroup>
                               <ToggleGroup fx:id="toggleGroup1" />
@@ -47,7 +49,7 @@
                   </VBox>
                </items>
             </SplitPane>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="200.0" prefWidth="100.0" styleClass="vbox">
                <children>
                   <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" styleClass="root" />
                   <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0" styleClass="toolmenu">
@@ -55,6 +57,9 @@
                </children>
             </VBox>
         </items>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </SplitPane>
    </center>
    <top>
