@@ -23,7 +23,7 @@
 
 <BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
-      <SplitPane dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="root" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="split" dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="mysplit" BorderPane.alignment="CENTER">
         <items>
             <SplitPane dividerPositions="0.5" styleClass="root">
                <items>
@@ -34,7 +34,7 @@
                   </HBox>
                   <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0">
                      <children>
-                        <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combobox" />
+                        <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combo-box" />
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Anwenden" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                         <Button fx:id="srcButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag me" />
@@ -63,7 +63,7 @@
       </SplitPane>
    </center>
    <top>
-      <MenuBar fx:id="menubar" styleClass="toolmenu" BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menubar" styleClass="context-menu" BorderPane.alignment="CENTER">
          <menus>
             <Menu id="datei" mnemonicParsing="false" styleClass="toolmenu" text="Datei">
                <items>
@@ -72,7 +72,7 @@
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <MenuItem id="speichern" fx:id="speichern" text="Speichern">
+                  <MenuItem id="speichern" fx:id="speichern" onAction="#saveFile" text="Speichern">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>

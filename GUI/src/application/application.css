@@ -6,7 +6,7 @@
   -fx-background-color: #292929;
   -fx-text-fill: #FFFFFF;
   -fx-border-color: #292929;
-  -fx-box-border: transparent;
+  -fx-box-border: #292929;
 }
 
 /* Defines the design of the buttons. */
@@ -24,7 +24,7 @@
 }
 
 /* Defines the design of the combobox. */
-.combobox{
+.combo-box .list-cell{
   -fx-text-fill: #FFFFFF;
   -fx-font-family: Helvetica, Arial, Geneva, sans-serif;
   -fx-font-weight: bold;
@@ -33,21 +33,59 @@
   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
 }
 
-/* Defines the design of the menubar, toolbar. */
+.combo-box-popup .list-cell:filled:hover{
+	-fx-background-color: linear-gradient(#2A5058,#61a2b1);
+}
+
+/* Defines the design of the toolbar. */
 .toolmenu{
 	-fx-background-color: #424242;
 	-fx-border-color: #292929;
+}
+
+/* Defines the design of the menubar. */
+.context-menu{
+	-fx-background-color: #424242;
+	-fx-border-color: #292929;
+}
+
+/* Menu item's label (not hovered / focused) */
+.menu-item .label{
 	-fx-text-fill: #FFFFFF;
 }
 
-.split-pane:vertical{
-	-fx-border-color: #292929;
-	-fx-box-border: transparent;
+/* Top-level menu's label (not selected / hovered) */
+.menu-bar > .container > .menu-button > .label{
+	-fx-text-fill: #FFFFFF;
 }
+
 
 
 
 /* Testing Area */
+.split-pane:vertical{
+	-fx-background-color: #292929;
+	-fx-border-color: #292929;
+	-fx-box-border: #292929;
+	-fx-background:#292929;
+}
+
+
+.split-pane > * > .split-pane {
+  	-fx-background-color: #292929;
+	-fx-border-color: #292929;
+	-fx-box-border: #292929;
+	-fx-background:#292929;
+ } 
+
+#mysplit{
+	 -fx-background-color: #292929;
+	-fx-border-color: #292929;
+	-fx-box-border: #292929;
+	-fx-background:#292929;
+}
+
+
 .ToggleButton{
 	-fx-text-fill: #FFFFFF;
 }

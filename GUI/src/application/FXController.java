@@ -209,6 +209,8 @@ public class FXController implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Weichzeichnen","Schwellwert");
 		cbox_filters.getItems().addAll(options);
+		//cbox_filters.applyCss();
+		//cbox_filters.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		imageView.setPreserveRatio(true);
 		//srcButton = createButton("Drag ME!");
 		//vbox.getChildren().add(srcButton);
