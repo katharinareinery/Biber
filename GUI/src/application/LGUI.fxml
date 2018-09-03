@@ -45,6 +45,9 @@
                         <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton4" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                        <TextField fx:id="txtFilterPower" />
+                        <Button fx:id="buttonPlus" mnemonicParsing="false" text="+" />
+                        <Button fx:id="buttonMinus" mnemonicParsing="false" text="-" />
                      </children>
                   </VBox>
                </items>
