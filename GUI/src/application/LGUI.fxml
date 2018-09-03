@@ -45,7 +45,10 @@
                         <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton4" mnemonicParsing="false" onAction="#handleRadioButton4Bilateral" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                        <Label fx:id="filerSize" text="Filter Size" />
+                        <Label fx:id="filerSize" text="Filter Size">
+                           <tooltip>
+                              <Tooltip fx:id="tooltipFilterSize" text="Filter size" />
+                           </tooltip></Label>
                         <FlowPane fx:id="flowPane" prefHeight="38.0" prefWidth="120.0">
                            <children>
                               <Button fx:id="buttonMinus" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
@@ -53,7 +56,10 @@
                               <Button fx:id="buttonPlus" mnemonicParsing="false" onAction="#handlePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" textAlignment="CENTER" translateX="20.0" />
                            </children>
                         </FlowPane>
-                        <Label fx:id="labelSigmaX" prefHeight="21.0" prefWidth="150.0" text="Sigma Colour" />
+                        <Label fx:id="labelSigmaX" prefHeight="21.0" prefWidth="150.0" text="Sigma Colour">
+                           <tooltip>
+                              <Tooltip fx:id="tooltipSgColour" text="Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace ) will be mixed together, resulting in larger areas of semi-equal color." />
+                           </tooltip></Label>
                         <FlowPane prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Button fx:id="buttonSgColourMinus" mnemonicParsing="false" onAction="#handleSgColourMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
@@ -61,7 +67,10 @@
                               <Button fx:id="buttonSgColourPlus" mnemonicParsing="false" onAction="#handleSgColourPlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
-                        <Label fx:id="labelSigmaY" text="SigmaSpace" />
+                        <Label fx:id="labelSigmaY" text="SigmaSpace">
+                           <tooltip>
+                              <Tooltip fx:id="tooltipSsSpace" text="Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d&gt;0 , it specifies the neighborhood size regardless of sigmaSpace . Otherwise, d is proportional to sigmaSpace ." />
+                           </tooltip></Label>
                         <FlowPane prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Button fx:id="buttonSgSpaceMinus" mnemonicParsing="false" onAction="#handleSgSpaceMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />

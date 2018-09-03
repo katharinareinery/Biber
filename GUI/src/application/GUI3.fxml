@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController2">
+<BorderPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController2">
    <center>
       <BorderPane prefHeight="379.0" prefWidth="588.0" styleClass="root" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" BorderPane.alignment="CENTER">
          <bottom>
@@ -18,7 +18,7 @@
                         <Insets top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="next" mnemonicParsing="false" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" text="Next" translateX="400.0">
+                  <Button fx:id="next" mnemonicParsing="false" stylesheets="@../../../../../workspace/SWPraktSS18/SWPraktSS18-master/GUI/src/application/application.css" text="Next" translateX="750.0" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -27,7 +27,7 @@
             </HBox>
          </bottom>
          <center>
-            <ImageView fx:id="imageView2" disable="true" fitHeight="194.0" fitWidth="330.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fx:id="imageView2" disable="true" fitHeight="500.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
              </ImageView>
          </center>
       </BorderPane>
