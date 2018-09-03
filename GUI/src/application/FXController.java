@@ -107,6 +107,12 @@ public class FXController implements Initializable{
 	private RadioButton radioButton4;
 	@FXML
 	private ToggleGroup toggleGroup1;
+	@FXML
+	private TextField txtFilterPower;
+	@FXML
+	private Button buttonPlus;
+	@FXML
+	private Button buttonMinus;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -226,6 +232,7 @@ public class FXController implements Initializable{
 		radioButton2.setVisible(false);
 		radioButton3.setVisible(false);
 		radioButton4.setVisible(false);
+		txtFilterPower.setText("1");
 		initToolbar();
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
@@ -451,15 +458,15 @@ public class FXController implements Initializable{
 							protected Void call() throws Exception {
 								// TODO Auto-generated method stub
 								try {
-									if(selectedRadioButton.getText().equals("homogen")) {
-										mat = blur.homogenBlur(mat);
-									}else if (selectedRadioButton.getText().equals("gaussian")) {
-										mat = blur.imageMan(mat);
-									}else if(selectedRadioButton.getText().equals("median")) {
-										mat = blur.medianBlur(mat);
-									}else if(selectedRadioButton.getText().equals("bilateral")){
-										mat = blur.biliteralBlur(mat);
-									}									
+//									if(selectedRadioButton.getText().equals("homogen")) {
+//										mat = blur.homogenBlur(mat,filter);
+//									}else if (selectedRadioButton.getText().equals("gaussian")) {
+//										mat = blur.imageMan(mat);
+//									}else if(selectedRadioButton.getText().equals("median")) {
+//										mat = blur.medianBlur(mat);
+//									}else if(selectedRadioButton.getText().equals("bilateral")){
+//										mat = blur.biliteralBlur(mat);
+//									}									
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
 									imageView.setImage(image);
@@ -509,6 +516,57 @@ public class FXController implements Initializable{
 				break;
 		}
 	}
+	
+	@FXML
+	private void handlePlusButton(ActionEvent event3) {
+		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		filterPower+=2;
+		txtFilterPower.setText(Integer.toString(filterPower));
+		try {
+			if(selectedRadioButton.getText().equals("median")) {
+				mat = blur.medianBlur(src, filterPower);
+			}else if (selectedRadioButton.getText().equals("gaussian")) {
+				mat = blur.gaussianBlur(src, filterPower);
+			}else if (selectedRadioButton.getText().equals("homogen")) {
+				mat = blur.homogenBlur(src, filterPower);
+			}else if (selectedRadioButton.getText().equals("bilateral")) {
+				mat = blur.bilateralBlur(src, filterPower);
+			}							
+			BufferedImage neu = imageMan.matToBuffImage(mat);
+			image = SwingFXUtils.toFXImage(neu, null);
+			imageView.setImage(image);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	private void handleMinusButton(ActionEvent event4) {
+		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		if(filterPower>1) {
+			filterPower-=2;
+		}
+		txtFilterPower.setText(Integer.toString(filterPower));
+		try {
+			if(selectedRadioButton.getText().equals("median")) {
+				mat = blur.medianBlur(src, filterPower);
+			}else if (selectedRadioButton.getText().equals("gaussian")) {
+				mat = blur.gaussianBlur(src, filterPower);
+			}else if (selectedRadioButton.getText().equals("homogen")) {
+				mat = blur.homogenBlur(src, filterPower);
+			}else if (selectedRadioButton.getText().equals("bilateral")) {
+				mat = blur.bilateralBlur(src, filterPower);
+			}							
+			BufferedImage neu = imageMan.matToBuffImage(mat);
+			image = SwingFXUtils.toFXImage(neu, null);
+			imageView.setImage(image);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * This method contains the second window to see the changes in the image.
 	 */
