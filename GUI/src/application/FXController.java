@@ -540,6 +540,9 @@ public class FXController implements Initializable{
 		txtSigmaColour.setText(Double.toString(sigmaColour));
 		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
 		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
 		
 	}
 	
@@ -553,6 +556,9 @@ public class FXController implements Initializable{
 		txtSigmaColour.setText(Double.toString(sigmaColour));
 		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
 		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
 		
 	}
 	
@@ -565,6 +571,9 @@ public class FXController implements Initializable{
 		txtSigmaSpace.setText(Double.toString(sigmaSpace));
 		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
 		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
 		
 	}
 	
@@ -578,6 +587,9 @@ public class FXController implements Initializable{
 		txtSigmaSpace.setText(Double.toString(sigmaSpace));
 		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
 		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
 		
 	}
 	
