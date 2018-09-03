@@ -120,11 +120,17 @@ public class FXController implements Initializable{
 	@FXML
 	private Button buttonSgSpacePlus;
 	@FXML
-	private Button buttonSGSpaceMinus;
+	private Button buttonSgSpaceMinus;
 	@FXML
 	private TextField txtSigmaColour;
 	@FXML
 	private TextField txtSigmaSpace;
+	@FXML
+	private Label filerSize;
+	@FXML
+	private Label labelSigmaX;
+	@FXML
+	private Label labelSigmaY;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -240,23 +246,19 @@ public class FXController implements Initializable{
 		anwenden.setDisable(true);
 		preview.setDisable(true);
 		srcButton.setDisable(true);
-		radioButton1.setVisible(false);
-		radioButton2.setVisible(false);
-		radioButton3.setVisible(false);
-		radioButton4.setVisible(false);
+		deinitRadioButtons();
 		txtFilterPower.setText("1");
 		txtSigmaColour.setText("1");
 		txtSigmaSpace.setText("1");
+		initBlurOptions(false, true);
 		initToolbar();
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
 				vbox.getChildren().removeAll(itembox);
 				itembox.getChildren().clear();
-				radioButton1.setVisible(false);
-				radioButton2.setVisible(false);
-				radioButton3.setVisible(false);
-				radioButton4.setVisible(false);
+				deinitRadioButtons();
+				initBlurOptions(false, true);
 				itembox.setHgap(10);						//GridPane Horizontaler Gap
 				itembox.setVgap(10);						//GridPane Vertikaler Gap
 				itembox.setPadding(new Insets(5, 0, 5, 0));	//Padding Oben/Unten 5px
@@ -290,7 +292,7 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
-				initRadioButton("average", "luminosity", "lightness", "pixelwise");
+				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 //			
 //				rad_button_grayscale_average.setToggleGroup(group_rad_grayscale);
 //				rad_button_grayscale_lumi.setToggleGroup(group_rad_grayscale);
@@ -314,7 +316,8 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
-				initRadioButton("homogen", "gaussian", "median", "bilateral");
+				initRadioButtons("homogen", "gaussian", "median", "bilateral");
+				initBlurOptions(true, false);
 //				rad_button_blur_homogen.setToggleGroup(group_rad_blur);
 //				rad_button_blur_gaussian.setToggleGroup(group_rad_blur);
 //				rad_button_blur_median.setToggleGroup(group_rad_blur);
@@ -884,16 +887,57 @@ public class FXController implements Initializable{
 	    	imageView.setOnMouseMoved(null);
 	    }
 	    
-	    private void initRadioButton(String textButton1, String textButton2, String textButton3, String textButton4) {
-	    	radioButton1.setVisible(true);
-	    	radioButton1.setText(textButton1);
-	    	radioButton1.setSelected(true);
-	    	radioButton2.setVisible(true);
-	    	radioButton2.setText(textButton2);
-	    	radioButton3.setVisible(true);
-	    	radioButton3.setText(textButton3);
-	    	radioButton4.setVisible(true);
-	    	radioButton4.setText(textButton4);
+	    private void initRadioButtons(String textButton1, String textButton2, String textButton3, String textButton4) {
+		    	radioButton1.setVisible(true);
+		    	radioButton1.setText(textButton1);
+		    	radioButton1.setSelected(true);
+		    	radioButton2.setVisible(true);
+		    	radioButton2.setText(textButton2);
+		    	radioButton3.setVisible(true);
+		    	radioButton3.setText(textButton3);
+		    	radioButton4.setVisible(true);
+		    	radioButton4.setText(textButton4);
+	    }
+	    
+	    private void deinitRadioButtons() {
+	    	radioButton1.setVisible(false);
+	    	radioButton2.setVisible(false);
+	    	radioButton3.setVisible(false);
+	    	radioButton4.setVisible(false);
+	    }
+	    
+	    private void initBlurOptions(boolean setInit,boolean withBila) {
+	    	if(setInit==true) {
+		    	txtFilterPower.setVisible(true);
+		    	buttonPlus.setVisible(true);
+		    	buttonMinus.setVisible(true);
+		    	filerSize.setVisible(true);
+		    	if(withBila==true) {
+		    		buttonSgColourPlus.setVisible(true);
+		    		buttonSgColourMinus.setVisible(true);
+		    		txtSigmaColour.setVisible(true);
+		    		labelSigmaX.setVisible(true);
+		    		buttonSgSpaceMinus.setVisible(true);
+		    		buttonSgSpacePlus.setVisible(true);
+		    		txtSigmaSpace.setVisible(true);
+		    		labelSigmaY.setVisible(true);
+		    	}
+	    	}else {
+		    	txtFilterPower.setVisible(false);
+		    	buttonPlus.setVisible(false);
+		    	buttonMinus.setVisible(false);
+		    	filerSize.setVisible(false);
+		    	if(withBila==true) {
+		    		buttonSgColourPlus.setVisible(false);
+		    		buttonSgColourMinus.setVisible(false);
+		    		txtSigmaColour.setVisible(false);
+		    		labelSigmaX.setVisible(false);
+		    		buttonSgSpaceMinus.setVisible(false);
+		    		buttonSgSpacePlus.setVisible(false);
+		    		txtSigmaSpace.setVisible(false);
+		    		labelSigmaY.setVisible(false);
+		    	}
+	    	}
 	    }
 }
 
