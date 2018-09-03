@@ -53,20 +53,20 @@
                               <Button fx:id="buttonPlus" mnemonicParsing="false" onAction="#handlePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" textAlignment="CENTER" translateX="20.0" />
                            </children>
                         </FlowPane>
-                        <Label fx:id="labelSigmaX" prefHeight="21.0" prefWidth="150.0" text="Sigma Value X" />
+                        <Label fx:id="labelSigmaX" prefHeight="21.0" prefWidth="150.0" text="Sigma Colour" />
                         <FlowPane prefHeight="41.0" prefWidth="150.0">
                            <children>
-                              <Button fx:id="buttonSXMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
-                              <TextField fx:id="txtSigmaX" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
-                              <Button fx:id="buttonSXPlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                              <Button fx:id="buttonSgColourMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtSigmaColour" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttongColourPlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
-                        <Label fx:id="labelSigmaY" text="SigmaValueY" />
+                        <Label fx:id="labelSigmaY" text="SigmaSpace" />
                         <FlowPane prefHeight="41.0" prefWidth="150.0">
                            <children>
-                              <Button fx:id="buttonSYMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
-                              <TextField fx:id="txtSigmaY" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
-                              <Button fx:id="buttonSYPlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                              <Button fx:id="buttonSgSpaceMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtSigmaSpace" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonSgSpacePlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
                      </children>
