@@ -113,6 +113,18 @@ public class FXController implements Initializable{
 	private Button buttonPlus;
 	@FXML
 	private Button buttonMinus;
+	@FXML
+	private Button buttonSgColourPlus;
+	@FXML
+	private Button buttonSgColourMinus;
+	@FXML
+	private Button buttonSgSpacePlus;
+	@FXML
+	private Button buttonSGSpaceMinus;
+	@FXML
+	private TextField txtSigmaColour;
+	@FXML
+	private TextField txtSigmaSpace;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -233,6 +245,8 @@ public class FXController implements Initializable{
 		radioButton3.setVisible(false);
 		radioButton4.setVisible(false);
 		txtFilterPower.setText("1");
+		txtSigmaColour.setText("1");
+		txtSigmaSpace.setText("1");
 		initToolbar();
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
@@ -517,6 +531,57 @@ public class FXController implements Initializable{
 		}
 	}
 	
+	
+	@FXML
+	private void handleSgColourPlusButton(ActionEvent event5) {
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+		sigmaColour+=2;
+		txtSigmaColour.setText(Double.toString(sigmaColour));
+		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		
+	}
+	
+	@FXML
+	private void handleSgColourMinusButton(ActionEvent event5) {
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+		if(sigmaColour>1) {
+			sigmaColour-=2;
+		}
+		txtSigmaColour.setText(Double.toString(sigmaColour));
+		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		
+	}
+	
+	
+	@FXML
+	private void handleSgSpacePlusButton(ActionEvent event5) {
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+		sigmaSpace+=2;
+		txtSigmaSpace.setText(Double.toString(sigmaSpace));
+		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		
+	}
+	
+	@FXML
+	private void handleSgSpaceMinusButton(ActionEvent event5) {
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+		if(sigmaSpace>1) {
+			sigmaSpace-=2;
+		}
+		txtSigmaSpace.setText(Double.toString(sigmaSpace));
+		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		
+	}
+	
+	
 	@FXML
 	private void handlePlusButton(ActionEvent event3) {
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
@@ -531,7 +596,9 @@ public class FXController implements Initializable{
 			}else if (selectedRadioButton.getText().equals("homogen")) {
 				mat = blur.homogenBlur(src, filterPower);
 			}else if (selectedRadioButton.getText().equals("bilateral")) {
-				mat = blur.bilateralBlur(src, filterPower);
+				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+				mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
 			}							
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -557,7 +624,9 @@ public class FXController implements Initializable{
 			}else if (selectedRadioButton.getText().equals("homogen")) {
 				mat = blur.homogenBlur(src, filterPower);
 			}else if (selectedRadioButton.getText().equals("bilateral")) {
-				mat = blur.bilateralBlur(src, filterPower);
+				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+				mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
 			}							
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -806,6 +875,7 @@ public class FXController implements Initializable{
 	    private void initRadioButton(String textButton1, String textButton2, String textButton3, String textButton4) {
 	    	radioButton1.setVisible(true);
 	    	radioButton1.setText(textButton1);
+	    	radioButton1.setSelected(true);
 	    	radioButton2.setVisible(true);
 	    	radioButton2.setText(textButton2);
 	    	radioButton3.setVisible(true);

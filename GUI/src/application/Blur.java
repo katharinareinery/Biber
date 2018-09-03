@@ -22,8 +22,8 @@ public class Blur extends ImageMan{
 		return dst;
 	}
 	
-	public Mat bilateralBlur(Mat src,int filterPower) {
-		Imgproc.bilateralFilter(src, dst, filterPower, filterPower*2, filterPower/2);
+	public Mat bilateralBlur(Mat src,int filterPower, double sigmaColour,double sigmaSpace) {
+		Imgproc.bilateralFilter(src, dst, filterPower, sigmaColour, sigmaSpace);
 		return dst;
 	}
 }
