@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="768.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
+<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
       <SplitPane fx:id="split" dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="mysplit" BorderPane.alignment="CENTER">
         <items>
@@ -45,11 +45,11 @@
                         <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton4" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                        <FlowPane prefHeight="39.0" prefWidth="120.0">
+                        <FlowPane fx:id="flowPane" prefHeight="38.0" prefWidth="120.0">
                            <children>
-                              <Button fx:id="buttonPlus" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" />
-                              <TextField fx:id="txtFilterPower" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" snapToPixel="false" />
-                              <Button fx:id="buttonMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" />
+                              <Button fx:id="buttonPlus" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="10.0" />
+                              <TextField fx:id="txtFilterPower" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" snapToPixel="false" translateX="15.0" />
+                              <Button fx:id="buttonMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" textAlignment="CENTER" translateX="20.0" />
                            </children>
                         </FlowPane>
                      </children>
