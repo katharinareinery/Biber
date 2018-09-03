@@ -58,7 +58,7 @@
                            <children>
                               <Button fx:id="buttonSgColourMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtSigmaColour" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
-                              <Button fx:id="buttonColourPlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                              <Button fx:id="buttonSgColourPlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
                         <Label fx:id="labelSigmaY" text="SigmaSpace" />
