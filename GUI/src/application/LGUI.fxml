@@ -45,9 +45,13 @@
                         <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                         <RadioButton fx:id="radioButton4" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                        <TextField fx:id="txtFilterPower" />
-                        <Button fx:id="buttonPlus" mnemonicParsing="false" text="+" />
-                        <Button fx:id="buttonMinus" mnemonicParsing="false" text="-" />
+                        <FlowPane prefHeight="39.0" prefWidth="120.0">
+                           <children>
+                              <Button fx:id="buttonPlus" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" />
+                              <TextField fx:id="txtFilterPower" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" snapToPixel="false" />
+                              <Button fx:id="buttonMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" />
+                           </children>
+                        </FlowPane>
                      </children>
                   </VBox>
                </items>
