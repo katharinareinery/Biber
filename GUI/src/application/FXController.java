@@ -252,6 +252,20 @@ public class FXController implements Initializable{
 		txtSigmaSpace.setText("1");
 		initBlurOptions(false, true);
 		initToolbar();
+		//Listener auf RadioButtons
+		toggleGroup1.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+		    public void changed(ObservableValue<? extends Toggle> ov,
+		        Toggle old_toggle, Toggle new_toggle) {
+		            if (toggleGroup1.getSelectedToggle() != null) {
+		        		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		            		if(selectedRadioButton.getText().equals("bilateral")) {
+		            			initBlurOptions(true, true);
+		            		}else {
+		            			initBlurOptions(true, false);
+		            		}
+		            }                
+		        }
+		});
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Schwellwert")) {
@@ -596,6 +610,13 @@ public class FXController implements Initializable{
 		
 	}
 	
+	@FXML
+	private void handleRadioButton4Bilateral(ActionEvent event) {
+		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		if(selectedRadioButton.getText().equals("bilateral")) {
+			initBlurOptions(true, true);
+		}
+	}
 	
 	@FXML
 	private void handlePlusButton(ActionEvent event3) {
@@ -622,6 +643,7 @@ public class FXController implements Initializable{
 			e.printStackTrace();
 		}
 	}
+	
 	
 	@FXML
 	private void handleMinusButton(ActionEvent event4) {
@@ -921,6 +943,15 @@ public class FXController implements Initializable{
 		    		buttonSgSpacePlus.setVisible(true);
 		    		txtSigmaSpace.setVisible(true);
 		    		labelSigmaY.setVisible(true);
+		    	}else {
+		    		buttonSgColourPlus.setVisible(false);
+		    		buttonSgColourMinus.setVisible(false);
+		    		txtSigmaColour.setVisible(false);
+		    		labelSigmaX.setVisible(false);
+		    		buttonSgSpaceMinus.setVisible(false);
+		    		buttonSgSpacePlus.setVisible(false);
+		    		txtSigmaSpace.setVisible(false);
+		    		labelSigmaY.setVisible(false);
 		    	}
 	    	}else {
 		    	txtFilterPower.setVisible(false);
