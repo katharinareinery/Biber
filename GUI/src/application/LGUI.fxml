@@ -38,13 +38,18 @@
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Apply" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                         <Button fx:id="srcButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag me" />
-                        <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="toggleGroup1" />
-                           </toggleGroup></RadioButton>
-                        <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                        <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                        <RadioButton fx:id="radioButton4" mnemonicParsing="false" onAction="#handleRadioButton4Bilateral" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                        <FlowPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="toggleGroup1" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                              <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                              <RadioButton fx:id="radioButton4" mnemonicParsing="false" onAction="#handleRadioButton4Bilateral" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                           </children>
+                        </FlowPane>
                         <FlowPane fx:id="flowpaneFilterSize" prefHeight="69.0" prefWidth="150.0">
                            <children>
                               <Label fx:id="filerSize" prefHeight="21.0" prefWidth="147.0" text="Filter Size">
