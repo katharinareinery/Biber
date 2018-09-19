@@ -59,43 +59,18 @@
 	-fx-text-fill: #FFFFFF;
 }
 
+/* Defines the design of the split-pane */
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: #424242;
+}
 
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: #424242;
+}
 
-
-/* Testing Area */
-.split-pane:vertical{
+.split-pane{
 	-fx-background-color: #292929;
 	-fx-border-color: #292929;
 	-fx-box-border: #292929;
 	-fx-background:#292929;
 }
-
-
-.split-pane > * > .split-pane {
-  	-fx-background-color: #292929;
-	-fx-border-color: #292929;
-	-fx-box-border: #292929;
-	-fx-background:#292929;
- } 
-
-#mysplit{
-	 -fx-background-color: #292929;
-	-fx-border-color: #292929;
-	-fx-box-border: #292929;
-	-fx-background:#292929;
-}
-
-
-.ToggleButton{
-	-fx-text-fill: #FFFFFF;
-}
-
-.RadioButton{
-	-fx-text-fill: #FFFFFF;
-}
-
-.ToggleGroup{
-	-fx-text-fill: #FFFFFF;
-}
-
-

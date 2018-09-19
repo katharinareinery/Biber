@@ -23,9 +23,9 @@
 
 <BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
-      <SplitPane fx:id="split" dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" styleClass="mysplit" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="split" dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
         <items>
-            <SplitPane dividerPositions="0.5" styleClass="root">
+            <SplitPane dividerPositions="0.5">
                <items>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="root">
                      <children>
