@@ -81,9 +81,9 @@
                         <Label fx:id="labelThreshold" text="Threshold" />
                         <FlowPane prefHeight="43.0" prefWidth="150.0">
                            <children>
-                              <Button fx:id="buttonthreshminus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <Button fx:id="buttonThreshMinus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtThreshold" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
-                              <Button fx:id="buttonthreshplus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                              <Button fx:id="buttoThreshPlus" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
                      </children>
