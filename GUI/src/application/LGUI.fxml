@@ -38,7 +38,7 @@
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Apply" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                         <Button fx:id="srcButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag me" />
-                        <FlowPane prefHeight="200.0" prefWidth="200.0">
+                        <FlowPane fx:id="flowpaneRadioButton" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
                                  <toggleGroup>
