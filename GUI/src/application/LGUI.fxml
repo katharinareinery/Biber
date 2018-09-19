@@ -40,14 +40,14 @@
                         <Button fx:id="srcButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag me" />
                         <FlowPane fx:id="flowpaneRadioButton" prefHeight="200.0" prefWidth="200.0">
                            <children>
-                              <RadioButton fx:id="radioButton1" mnemonicParsing="false" text="RadioButton" textFill="WHITE">
+                              <RadioButton fx:id="radioButton1" mnemonicParsing="false" prefHeight="21.0" prefWidth="145.0" text="RadioButton" textFill="WHITE">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="toggleGroup1" />
                                  </toggleGroup>
                               </RadioButton>
-                              <RadioButton fx:id="radioButton2" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                              <RadioButton fx:id="radioButton3" mnemonicParsing="false" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                              <RadioButton fx:id="radioButton4" mnemonicParsing="false" onAction="#handleRadioButton4Bilateral" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                              <RadioButton fx:id="radioButton2" mnemonicParsing="false" prefHeight="21.0" prefWidth="149.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                              <RadioButton fx:id="radioButton3" mnemonicParsing="false" prefHeight="21.0" prefWidth="150.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                              <RadioButton fx:id="radioButton4" mnemonicParsing="false" onAction="#handleRadioButton4Bilateral" prefHeight="21.0" prefWidth="152.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                            </children>
                         </FlowPane>
                         <FlowPane fx:id="flowpaneFilterSize" prefHeight="69.0" prefWidth="150.0">
