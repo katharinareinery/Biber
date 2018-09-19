@@ -219,11 +219,8 @@ public class FXController implements Initializable{
 		txtSigmaColour.setText("1");
 		txtSigmaSpace.setText("1");
 		deinitBlurOptionsBila();
+		deinitThreshold();
 		initToolbar();
-		vbox.getChildren().remove(flowpaneThreshold);
-		vbox.getChildren().remove(flowpaneFilterSize);
-		vbox.getChildren().remove(flowpaneSigmaColour);
-		vbox.getChildren().remove(flowpaneSigmaSpace);
 		//Listener auf RadioButtons
 		toggleGroup1.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 		    public void changed(ObservableValue<? extends Toggle> ov,
@@ -244,9 +241,9 @@ public class FXController implements Initializable{
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Threshold")) {
-				vbox.getChildren().add(flowpaneThreshold);
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
+				initThreshold();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -266,15 +263,20 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
+				deinitThreshold();
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
+				BufferedImage neu = imageMan.matToBuffImage(src);
+				image = SwingFXUtils.toFXImage(neu, null);
+				imageView.setImage(image);
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
+				deinitThreshold();
 				deinitRadioButtons();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
@@ -840,7 +842,6 @@ public class FXController implements Initializable{
 	    private void initRadioButtons(String textButton1, String textButton2, String textButton3, String textButton4) {
 	    		vbox.getChildren().add(flowpaneRadioButton);
 		    	radioButton1.setText(textButton1);
-		    	radioButton1.setSelected(true);
 		    	radioButton2.setText(textButton2);
 		    	radioButton3.setText(textButton3);
 		    	radioButton4.setText(textButton4);
@@ -869,6 +870,14 @@ public class FXController implements Initializable{
 	    	vbox.getChildren().remove(flowpaneFilterSize);
 	    	vbox.getChildren().remove(flowpaneSigmaColour);
 	    	vbox.getChildren().remove(flowpaneSigmaSpace);
+	    }
+	    
+	    private void deinitThreshold() {
+	    	vbox.getChildren().remove(flowpaneThreshold);
+	    }
+	    
+	    private void initThreshold() {
+	    	vbox.getChildren().add(flowpaneThreshold);
 	    }
 }
 

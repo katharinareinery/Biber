@@ -4,7 +4,7 @@ import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 public class Grayscale extends ImageMan{
-	private Mat dst;
+	private Mat dst = new Mat();
 	
 	/*The luminosity method 
 	 * averages the values, but it forms a weighted average
@@ -13,7 +13,7 @@ public class Grayscale extends ImageMan{
 	 * he formula for luminosity is 0.21 R + 0.72 G + 0.07 B.
 	 */
 	public Mat luminosity(Mat src) {
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double grayValue;
 		double[] data;
@@ -44,7 +44,7 @@ public class Grayscale extends ImageMan{
 	 * simply averages the values: (R + G + B) / 3.
 	*/
 	public Mat average(Mat src) {
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;
@@ -64,7 +64,7 @@ public class Grayscale extends ImageMan{
 	 * 
 	*/
 	public Mat lightness(Mat src) {
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;
