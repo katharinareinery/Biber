@@ -49,7 +49,7 @@
                            <tooltip>
                               <Tooltip fx:id="tooltipFilterSize" text="Filter size" />
                            </tooltip></Label>
-                        <FlowPane fx:id="flowPane" prefHeight="38.0" prefWidth="120.0">
+                        <FlowPane fx:id="flowpaneFilterSize" prefHeight="38.0" prefWidth="120.0">
                            <children>
                               <Button fx:id="buttonMinus" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtFilterPower" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35.0" prefWidth="50.0" snapToPixel="false" translateX="15.0" />
@@ -60,7 +60,7 @@
                            <tooltip>
                               <Tooltip fx:id="tooltipSgColour" text="Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace ) will be mixed together, resulting in larger areas of semi-equal color." />
                            </tooltip></Label>
-                        <FlowPane prefHeight="41.0" prefWidth="150.0">
+                        <FlowPane fx:id="flowpaneSigmaColour" prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Button fx:id="buttonSgColourMinus" mnemonicParsing="false" onAction="#handleSgColourMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtSigmaColour" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
@@ -71,7 +71,7 @@
                            <tooltip>
                               <Tooltip fx:id="tooltipSsSpace" text="Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d&gt;0 , it specifies the neighborhood size regardless of sigmaSpace . Otherwise, d is proportional to sigmaSpace ." />
                            </tooltip></Label>
-                        <FlowPane prefHeight="41.0" prefWidth="150.0">
+                        <FlowPane fx:id="flowpaneSigmaSpace" prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Button fx:id="buttonSgSpaceMinus" mnemonicParsing="false" onAction="#handleSgSpaceMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtSigmaSpace" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
