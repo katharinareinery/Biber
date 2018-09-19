@@ -47,7 +47,7 @@
                               </RadioButton>
                               <RadioButton fx:id="radioButton2" mnemonicParsing="false" prefHeight="21.0" prefWidth="149.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                               <RadioButton fx:id="radioButton3" mnemonicParsing="false" prefHeight="21.0" prefWidth="150.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
-                              <RadioButton fx:id="radioButton4" mnemonicParsing="false" onAction="#handleRadioButton4Bilateral" prefHeight="21.0" prefWidth="152.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
+                              <RadioButton fx:id="radioButton4" mnemonicParsing="false" prefHeight="21.0" prefWidth="152.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                            </children>
                         </FlowPane>
                         <FlowPane fx:id="flowpaneFilterSize" prefHeight="69.0" prefWidth="150.0">
