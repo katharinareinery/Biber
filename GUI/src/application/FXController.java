@@ -136,7 +136,7 @@ public class FXController implements Initializable{
 	@FXML
 	private Button buttonThreshPlus;
 	@FXML
-	private TextField txtTreshold;
+	private TextField txtThreshold;
 	@FXML
 	private FlowPane flowpaneThreshold;
 	@FXML
@@ -218,6 +218,7 @@ public class FXController implements Initializable{
 		txtFilterPower.setText("1");
 		txtSigmaColour.setText("1");
 		txtSigmaSpace.setText("1");
+		txtThreshold.setText("1");
 		deinitBlurOptionsBila();
 		deinitThreshold();
 		initToolbar();
@@ -241,6 +242,9 @@ public class FXController implements Initializable{
 		//ComboBox - Changelistener ( Wartet auf Auswahl )
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Threshold")) {
+				BufferedImage neu = imageMan.matToBuffImage(src);
+				image = SwingFXUtils.toFXImage(neu, null);
+				imageView.setImage(image);
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				initThreshold();
@@ -259,6 +263,9 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
+				BufferedImage neu = imageMan.matToBuffImage(src);
+				image = SwingFXUtils.toFXImage(neu, null);
+				imageView.setImage(image);
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -548,6 +555,29 @@ public class FXController implements Initializable{
 		
 	}
 	
+	
+	@FXML
+	private void handleButtonThreshMinus(ActionEvent event5){
+		int threshold = Integer.parseInt(txtThreshold.getText());
+		threshold -=1;
+		txtThreshold.setText(Integer.toString(threshold));
+		mat = thold.binarisieren(threshold, src);
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
+	}
+	
+	@FXML
+	private void handleButtonThreshPlus(ActionEvent event6) {
+		int threshold = Integer.parseInt(txtThreshold.getText());
+		threshold +=1;
+		txtThreshold.setText(Integer.toString(threshold));
+		mat = thold.binarisieren(threshold, src);
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
+	}
+	
 	@FXML
 	private void handlePlusButton(ActionEvent event3) {
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
@@ -640,13 +670,19 @@ public class FXController implements Initializable{
 	    }
 	 
 	 private Button setDragOnButton(Button button) {
-	        button.setOnDragDetected(e -> {
+		 button.setOnDragDetected(e -> {
 	            Dragboard db = button.startDragAndDrop(TransferMode.COPY);
 	            db.setDragView(button.snapshot(null, null));
 	            ClipboardContent cc = new ClipboardContent();
 	            cc.put(buttonFormat, "button");
 	            db.setContent(cc);
-	            draggingButton = createButton(cbox_filters.getValue().toString());
+	            RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+	            if(cbox_filters.getValue().equals("Threshold")) {
+	            	draggingButton = createButton(cbox_filters.getValue().toString());
+	            }else {
+	            	draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
+	            }
+	            draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
 	            //System.out.println(draggingButton.getText());
 	        });
 	        //button.setOnDragDone(e -> draggingButton = null);
@@ -715,6 +751,13 @@ public class FXController implements Initializable{
 	                viewport.getMinX() + xProportion * viewport.getWidth(), 
 	                viewport.getMinY() + yProportion * viewport.getHeight());
 	    }
+	    
+	    private EventHandler eventForDragButtons = new EventHandler<ActionEvent>() {
+	    	public void handle(ActionEvent event) {
+	    		//System.out.println(draggingButton.getText()+"!!!!!!");
+	    		System.out.println(event.getTarget());
+	    	}
+		};
 	    
 	    private void initToolbar() {
 	    	tg_toolbar = new ToggleGroup();
@@ -880,4 +923,3 @@ public class FXController implements Initializable{
 	    	vbox.getChildren().add(flowpaneThreshold);
 	    }
 }
-
