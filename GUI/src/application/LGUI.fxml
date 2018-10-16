@@ -32,7 +32,7 @@
                         <ImageView fx:id="imageView" fitHeight="464.0" fitWidth="641.0" pickOnBounds="true" preserveRatio="true" styleClass="root" />
                      </children>
                   </HBox>
-                  <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0">
+                  <VBox fx:id="vbox" maxWidth="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="409.0" prefWidth="120.0" SplitPane.resizableWithParent="false">
                      <children>
                         <ComboBox fx:id="cbox_filters" prefWidth="150.0" styleClass="combo-box" />
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Apply" />
@@ -98,9 +98,9 @@
                   </VBox>
                </items>
             </SplitPane>
-            <VBox fx:id="vbox2" prefHeight="200.0" prefWidth="100.0" styleClass="vbox">
+            <VBox fx:id="vbox2" prefHeight="200.0" prefWidth="100.0" styleClass="vbox" SplitPane.resizableWithParent="false">
                <children>
-                  <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" styleClass="root" />
+                  <FlowPane fx:id="flowpane" disable="true" prefHeight="116.0" prefWidth="773.0" styleClass="root" />
                   <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0" styleClass="toolmenu">
                   </ToolBar>
                </children>

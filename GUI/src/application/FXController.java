@@ -162,6 +162,7 @@ public class FXController implements Initializable{
 	private FileChooser fileChooser;
 	private Stage stage;
 	private Image image;
+
 	private BufferedImage bufferedImage;
 	
 	private Mat src;
@@ -176,6 +177,8 @@ public class FXController implements Initializable{
 	private ImageMan imageMan = new ImageMan();
 	
 	Service<Void> backgroundThread;
+	
+	private SharedObject so = SharedObject.getInstance();
 	
 	/**
 	 * About Biber.
@@ -325,6 +328,7 @@ public class FXController implements Initializable{
 			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			imageView.setImage(image);
+			so.setOriginalImage(image);
 			/*************************************
 			 *pluto-explorer scrollable imageview*
 			 *************************************/
@@ -644,9 +648,11 @@ public class FXController implements Initializable{
 			Parent root = (Parent)loader.load();
 			FXController2 controller2 = (FXController2)loader.getController();
 			Scene scene = new Scene(root);
-			stage.setScene(scene);
 			stage = new Stage();
+			stage.setScene(scene);
+			//stage = new Stage();
 			stage.setTitle("Biber");
+			stage.show();
 			controller2.setImage(image);
 			controller2.setImageInImageView();
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
