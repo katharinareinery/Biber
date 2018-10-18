@@ -303,7 +303,7 @@ public class FXController implements Initializable{
 
 	
 	/**
-	 * This method will open an file.
+	 * This method will open a file.
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
 	
@@ -365,7 +365,7 @@ public class FXController implements Initializable{
 	}
 	
 	/**
-	 * This method will save an file. 
+	 * This method will save a file. 
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
 	
