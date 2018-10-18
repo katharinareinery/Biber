@@ -182,7 +182,9 @@ public class FXController implements Initializable{
 	
 	/**
 	 * About Biber.
+	 * This method opens a new window, which provides brief information about the program.
 	 */
+	
 	public void handleAbout(ActionEvent event) {
 		try {
 			//stage = (Stage) menubar.getScene().getWindow();
@@ -302,7 +304,9 @@ public class FXController implements Initializable{
 	
 	/**
 	 * This method will open an file.
+	 * The file formats available to the user are PNG and JPG2000.
 	 */
+	
 	public void openFile() {
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
@@ -311,10 +315,10 @@ public class FXController implements Initializable{
 			);
 		File file = fileChooser.showOpenDialog(stage);
 		filepath = file.getAbsolutePath();
-		String localURL = file.toURI().toString();
-		Image image2 = new Image(localURL);
+		//String localURL = file.toURI().toString();
+		//Image image2 = new Image(localURL);
 		
-		/*
+		/**
 		 * Loading the image
 		 */
 		try {
@@ -329,12 +333,11 @@ public class FXController implements Initializable{
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			imageView.setImage(image);
 			so.setOriginalImage(image);
+						
 			/*************************************
 			 *pluto-explorer scrollable imageview*
 			 *************************************/
 			
-	            
-            
 			btn_movezoom.setDisable(false);
 			btn_cursor.setDisable(false);
 			anwenden.setDisable(false);
@@ -359,12 +362,13 @@ public class FXController implements Initializable{
 	 */
 	public void chooseImage(ActionEvent event) {
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		
 	}
 	
 	/**
-	 * This method will save an file.
+	 * This method will save an file. 
+	 * The file formats available to the user are PNG and JPG2000.
 	 */
+	
 	public void saveFile() {
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
@@ -660,6 +664,10 @@ public class FXController implements Initializable{
 			e.printStackTrace();			
 		}		
 	}
+	
+	/**
+	 * This method creates the drag button.
+	 */
 	 private Button createButton(String text) {
 	        Button button = new Button(text);
 	        button.setOnDragDetected(e -> {
@@ -675,6 +683,9 @@ public class FXController implements Initializable{
 	        return button;
 	    }
 	 
+	/**
+	 * This method assigns the selected filters to the drag button
+	*/
 	 private Button setDragOnButton(Button button) {
 		 button.setOnDragDetected(e -> {
 	            Dragboard db = button.startDragAndDrop(TransferMode.COPY);
@@ -695,6 +706,9 @@ public class FXController implements Initializable{
 	        return button;
 	    }
 	 
+	/**
+	 * This method deals with the different cases.
+	 */
 	 private void addDropHandling(Pane pane) {
 		 pane.setOnDragOver(e -> {
 			 //System.out.println(e.toString());
@@ -715,14 +729,18 @@ public class FXController implements Initializable{
 		 });
 		 
 	 }
+	 
 	 /**
-	  * Pluto-explorer hilfsfunktionen
+	  * Pluto-explorer helpful functions.
 	  */
 	 private void reset(ImageView imageView, double width, double height) {
 	        imageView.setViewport(new Rectangle2D(0, 0, width, height));
 	    }
-	 // shift the viewport of the imageView by the specified delta, clamping so
-	 // the viewport does not move off the actual image:
+	 
+	 /**
+	  * Shift the viewport of the imageView by the specified delta, clamping so
+	  * the viewport does not move off the actual image.
+	  */
 	    private void shift(ImageView imageView, Point2D delta) {
 	        Rectangle2D viewport = imageView.getViewport();
 
@@ -747,7 +765,9 @@ public class FXController implements Initializable{
 	        return value;
 	    }
 
-	    // convert mouse coordinates in the imageView to coordinates in the actual image:
+	    /**
+	     * Convert mouse coordinates in the imageView to coordinates in the actual image.
+	     */
 	    private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
 	        double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
 	        double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
@@ -805,6 +825,9 @@ public class FXController implements Initializable{
 	    	});
 	    }
 	    
+	    /**
+	     * enableMoveZoom
+	     */
 	    private void enableMoveZoom(ImageView imageView) {
 	    	removeAllListeners(imageView);
 	    	width = image.getWidth();
@@ -872,7 +895,7 @@ public class FXController implements Initializable{
 	    }
 	    private void disableMoveZoom(ImageView imageView) {
 	    	removeAllListeners(imageView);
-	    	//Event wenn Maus sich innerhalb ImageView bewwegt, sp�ter f�r Detailauswahl
+	    	//Event wenn Maus sich innerhalb ImageView bewwegt, spaeter fuer Detailauswahl
 	    	imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
 	    		@Override public void handle(MouseEvent event) {
 	    			System.out.println(event.getX());
