@@ -1,6 +1,7 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-
-/* Defines the design of the main window. */
+/**
+ * Defines the design of the main window.
+ */
+ 
 .root{
   	display: block;
   -fx-background-color: #292929;
@@ -9,7 +10,9 @@
   -fx-box-border: #292929;
 }
 
-/* Defines the design of the buttons. */
+/**
+ * Defines the design of the buttons.
+ */
 .button{
   -fx-text-fill: #FFFFFF;
   -fx-font-family: Helvetica, Arial, Geneva, sans-serif;
@@ -23,7 +26,9 @@
   -fx-background-color: linear-gradient(#2A5058,#61a2b1);
 }
 
-/* Defines the design of the combobox. */
+/**
+ * Defines the design of the combobox.
+ */
 .combo-box .list-cell{
   -fx-text-fill: #FFFFFF;
   -fx-font-family: Helvetica, Arial, Geneva, sans-serif;
@@ -37,29 +42,39 @@
 	-fx-background-color: linear-gradient(#2A5058,#61a2b1);
 }
 
-/* Defines the design of the toolbar. */
+/**
+ * Defines the design of the toolbar.
+ */
 .toolmenu{
 	-fx-background-color: #424242;
 	-fx-border-color: #292929;
 }
 
-/* Defines the design of the menubar. */
+/**
+ * Defines the design of the menubar.
+ */
 .context-menu{
 	-fx-background-color: #424242;
 	-fx-border-color: #292929;
 }
 
-/* Menu item's label (not hovered / focused) */
+/**
+ * Menu item's label (not hovered / focused)
+ */
 .menu-item .label{
 	-fx-text-fill: #FFFFFF;
 }
 
-/* Top-level menu's label (not selected / hovered) */
+/**
+ * Top-level menu's label (not selected / hovered)
+ */
 .menu-bar > .container > .menu-button > .label{
 	-fx-text-fill: #FFFFFF;
 }
 
-/* Defines the design of the split-pane */
+/**
+ * Defines the design of the split-pane
+ */
 .split-pane:horizontal > .split-pane-divider {
     -fx-background-color: #424242;
 }

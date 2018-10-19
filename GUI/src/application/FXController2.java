@@ -12,8 +12,7 @@ import javafx.scene.image.ImageView;
  * Passes the original image and the current image.
  * 
  * The FXController2 provides the original image and the currently edited image to be able 
- * to compare them in a separate window. The original image is obtained via the class SharedObject 
- * in which a singleton pattern was realized and the currently edited image from the FXController.
+ * to compare them in a separate window. 
  * 
  */
 

@@ -3,17 +3,26 @@ package application;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Converting Colored Images to Grayscale.
+ * The class named Imgproc of the package org.opencv.imgproc 
+ * provides methods to convert an image from one color to another.
+ * A method named cvtColor() is used to convert colored images to grayscale.
+ */
+
 public class Grayscale extends ImageMan{
 	private Mat dst = new Mat();
 	
-	/*The luminosity method 
+	/** 
+	 * The luminosity method 
 	 * averages the values, but it forms a weighted average
 	 * to account for human perception.
 	 * We are more sensitive to green than other colors, so green is weighted most heavily.
-	 * he formula for luminosity is 0.21 R + 0.72 G + 0.07 B.
+	 * The formula for luminosity is 0.21 R + 0.72 G + 0.07 B.
 	 */
 	public Mat luminosity(Mat src) {
 		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double grayValue;
 		double[] data;
@@ -39,12 +48,28 @@ public class Grayscale extends ImageMan{
 		return mat;
 	}
 	
-	
-	/*The average method
+	public Mat grayPixelFor(Mat src) {
+		double[] data;
+		dst = new Mat(src.size(),CvType.CV_8UC1);
+		double grayValue;
+		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
+		for(int i = 0; i <src.rows();i++) {
+			for(int j = 0; j < src.cols(); j++) {
+				data=src.get(i,j);
+				grayValue =  (data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+				dst.put(i, j, grayValue);
+			}
+		}
+		return dst;
+	}
+		
+	/** 
+	 * The average method
 	 * simply averages the values: (R + G + B) / 3.
 	*/
 	public Mat average(Mat src) {
 		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;
@@ -58,13 +83,15 @@ public class Grayscale extends ImageMan{
 		return dst;
 	}
 	
-	/*The lightness method 
+	/** 
+	 * The lightness method 
 	 * averages the most prominent and least prominent colors:
-	 *  (max(R, G, B) + min(R, G, B)) / 2.
+	 * (max(R, G, B) + min(R, G, B)) / 2.
 	 * 
 	*/
 	public Mat lightness(Mat src) {
 		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(src.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;

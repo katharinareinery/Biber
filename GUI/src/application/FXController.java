@@ -368,7 +368,6 @@ public class FXController implements Initializable{
 	 * This method will save a file. 
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
-	
 	public void saveFile() {
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
@@ -415,6 +414,7 @@ public class FXController implements Initializable{
 											image = SwingFXUtils.toFXImage(neu, null);
 											imageView.setImage(image);
 										}
+										mat = grayscale.grayPixelFor(src);
 									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);

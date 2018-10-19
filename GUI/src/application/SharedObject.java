@@ -3,8 +3,8 @@ package application;
 import javafx.scene.image.Image;
 
 /**
- * The SharedObject contains all Elements that should be accessable within different classes.
- * To reduce the memory overhead this class is implemented as a singelton.
+ * The SharedObject contains all Elements that should be accessible within different classes.
+ * To reduce the memory overhead this class is implemented as a singleton.
  */
 
 public class SharedObject {
