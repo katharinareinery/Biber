@@ -20,7 +20,6 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
       <SplitPane fx:id="split" dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
@@ -135,7 +134,7 @@
             </Menu>
             <Menu id="hilfe" styleClass="toolmenu" text="Help">
                <items>
-                  <MenuItem id="ueber" fx:id="ueber" mnemonicParsing="false" text="About Biber">
+                  <MenuItem id="about" fx:id="about" mnemonicParsing="false" text="About Biber">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>

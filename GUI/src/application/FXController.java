@@ -78,11 +78,11 @@ public class FXController implements Initializable{
 	@FXML
 	private Label label;
 	@FXML
-	private ImageView imageView, imageView2;
+	private ImageView imageView, imageView2, imageView3;
 	@FXML
 	private MenuBar menubar;
 	@FXML
-	private MenuItem ueber;
+	private MenuItem about;
 	@FXML
 	private ComboBox<String> cbox_filters;
 	@FXML
@@ -184,7 +184,6 @@ public class FXController implements Initializable{
 	 * About Biber.
 	 * This method opens a new window, which provides brief information about the program.
 	 */
-	
 	public void handleAbout(ActionEvent event) {
 		try {
 			//stage = (Stage) menubar.getScene().getWindow();
@@ -201,7 +200,10 @@ public class FXController implements Initializable{
 		}
 	}
 	
-	
+	/**
+	 * Initialize.
+	 * This method assigns the appropriate functions to the various image processing options.
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold");
@@ -214,7 +216,7 @@ public class FXController implements Initializable{
 		setDragOnButton(srcButton);
 		addDropHandling(flowpane);
 		addDropHandling(vbox);
-		ueber.setOnAction(this::handleAbout);
+		about.setOnAction(this::handleAbout);
 		preview.setOnAction(this::handleWindow);
 		anwenden.setDisable(true);
 		preview.setDisable(true);
@@ -227,7 +229,9 @@ public class FXController implements Initializable{
 		deinitBlurOptionsBila();
 		deinitThreshold();
 		initToolbar();
-		//Listener auf RadioButtons
+		/*
+		 * At this point we assign the listener to the radiobuttons.
+		 */
 		toggleGroup1.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 		    public void changed(ObservableValue<? extends Toggle> ov,
 		        Toggle old_toggle, Toggle new_toggle) {
@@ -244,7 +248,9 @@ public class FXController implements Initializable{
 		            }                
 		        }
 		});
-		//ComboBox - Changelistener ( Wartet auf Auswahl )
+		/*
+		 * Combobox - The changelistener is waiting for the selection.
+		 */
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Threshold")) {
 				BufferedImage neu = imageMan.matToBuffImage(src);
@@ -384,7 +390,10 @@ public class FXController implements Initializable{
 		}
 		
 	}
-	
+
+	/**
+	 * This method provides the various controls with functions.
+	 */
 	public void handleAnwenden(ActionEvent event) {
 		System.out.println(cbox_filters.getValue());
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
@@ -418,7 +427,7 @@ public class FXController implements Initializable{
 									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
 									image = SwingFXUtils.toFXImage(neu, null);
-									imageView.setImage(image);
+									imageView.setImage(image);									
 									//System.out.println(mat.cols());
 								}catch (Exception e) {
 									// TODO: handle exception
@@ -493,7 +502,7 @@ public class FXController implements Initializable{
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("Information Dialog");
 					alert.setHeaderText(null);
-					alert.setContentText("Nur Werte von 0-255 erlaubt!");
+					alert.setContentText("Only values from 0-255 allowed!");
 					alert.showAndWait();
 				}
 				backgroundThread.restart();
@@ -643,11 +652,11 @@ public class FXController implements Initializable{
 	
 	/**
 	 * This method contains the second window to see the changes in the image.
+	 * It is important to explicitly change loader.load to root class, here (parent).
+	 * The orders are important, too. First loader.load then get controller.
 	 */
 	public void handleWindow(ActionEvent event2) {
 		try {
-			//außerdem loader.load auf root class hier (parent) explizit wandeln
-			//Reihenfolge wichtig erst loader.load dann controller holen
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("GUI3.fxml"));
 			Parent root = (Parent)loader.load();
 			FXController2 controller2 = (FXController2)loader.getController();
@@ -684,7 +693,7 @@ public class FXController implements Initializable{
 	    }
 	 
 	/**
-	 * This method assigns the selected filters to the drag button
+	 * This method assigns the selected filters to the drag button.
 	*/
 	 private Button setDragOnButton(Button button) {
 		 button.setOnDragDetected(e -> {
@@ -707,7 +716,7 @@ public class FXController implements Initializable{
 	    }
 	 
 	/**
-	 * This method deals with the different cases.
+	 * This method deals with the drop handling of the drag button.
 	 */
 	 private void addDropHandling(Pane pane) {
 		 pane.setOnDragOver(e -> {
@@ -715,9 +724,10 @@ public class FXController implements Initializable{
 			 Dragboard db = e.getDragboard();
 			 if(db.hasContent(buttonFormat)&& draggingButton != null //&&  draggingButton.getParent().getId() != pane.getId()
 					 ) {
-				 System.out.println(draggingButton.toString());
-				 System.out.println(pane.getId());
+				 //System.out.println(draggingButton.toString());
+				 //System.out.println(pane.getId());
 				 e.acceptTransferModes(TransferMode.COPY);
+				// imageView3.setImage(image);
 			 }
 		 });
 		 pane.setOnDragDropped(e -> {
@@ -725,7 +735,7 @@ public class FXController implements Initializable{
 			 if(db.hasContent(buttonFormat)) {
 				 pane.getChildren().add(draggingButton);
 				 e.setDropCompleted(true);
-			}
+				 }
 		 });
 		 
 	 }
@@ -895,7 +905,7 @@ public class FXController implements Initializable{
 	    }
 	    private void disableMoveZoom(ImageView imageView) {
 	    	removeAllListeners(imageView);
-	    	//Event wenn Maus sich innerhalb ImageView bewwegt, spaeter fuer Detailauswahl
+	    	//Event wenn Maus sich innerhalb ImageView bewegt, spaeter fuer Detailauswahl
 	    	imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
 	    		@Override public void handle(MouseEvent event) {
 	    			System.out.println(event.getX());
