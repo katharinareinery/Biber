@@ -96,6 +96,8 @@ public class FXController implements Initializable{
 	@FXML
 	private Button srcButton;
 	@FXML
+	private Button buttonFilterPic;
+	@FXML
 	private ToolBar toolbar;
 	@FXML
 	private RadioButton radioButton1;
@@ -510,7 +512,9 @@ public class FXController implements Initializable{
 		}
 	}
 	
-	
+	/**
+	 * Adds up the sigma color filter via the plus button.
+	 */
 	@FXML
 	private void handleSgColourPlusButton(ActionEvent event5) {
 		int filterPower = Integer.parseInt(txtFilterPower.getText());
@@ -525,6 +529,9 @@ public class FXController implements Initializable{
 		
 	}
 	
+	/**
+	 * Subtracts the sigma color filter with the minus button.
+	 */
 	@FXML
 	private void handleSgColourMinusButton(ActionEvent event5) {
 		int filterPower = Integer.parseInt(txtFilterPower.getText());
@@ -541,7 +548,9 @@ public class FXController implements Initializable{
 		
 	}
 	
-	
+	/**
+	 * Adds up the sigma space filter via the plus button.
+	 */
 	@FXML
 	private void handleSgSpacePlusButton(ActionEvent event5) {
 		int filterPower = Integer.parseInt(txtFilterPower.getText());
@@ -556,6 +565,9 @@ public class FXController implements Initializable{
 		
 	}
 	
+	/**
+	 * Subtracts the sigma space filter with the minus button.
+	 */
 	@FXML
 	private void handleSgSpaceMinusButton(ActionEvent event5) {
 		int filterPower = Integer.parseInt(txtFilterPower.getText());
@@ -572,7 +584,9 @@ public class FXController implements Initializable{
 		
 	}
 	
-	
+	/**
+	 * Subtracts the treshold filter with the minus button.
+	 */
 	@FXML
 	private void handleButtonThreshMinus(ActionEvent event5){
 		int threshold = Integer.parseInt(txtThreshold.getText());
@@ -584,6 +598,9 @@ public class FXController implements Initializable{
 		imageView.setImage(image);
 	}
 	
+	/**
+	 * Adds up the threshold filter via the plus button.
+	 */
 	@FXML
 	private void handleButtonThreshPlus(ActionEvent event6) {
 		int threshold = Integer.parseInt(txtThreshold.getText());
@@ -595,6 +612,10 @@ public class FXController implements Initializable{
 		imageView.setImage(image);
 	}
 	
+	/**
+	 * This method coordinates the application of the different settings 
+	 * of the blur filter via the plus button.
+	 */
 	@FXML
 	private void handlePlusButton(ActionEvent event3) {
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
@@ -621,7 +642,10 @@ public class FXController implements Initializable{
 		}
 	}
 	
-	
+	/**
+	 * This method coordinates the application of the different settings 
+	 * of the blur filter via the minus button.
+	 */
 	@FXML
 	private void handleMinusButton(ActionEvent event4) {
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
@@ -668,6 +692,7 @@ public class FXController implements Initializable{
 			stage.show();
 			controller2.setImage(image);
 			controller2.setImageInImageView();
+			buttonFilterPic.setText("Filter");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		}catch(Exception e) {
 			e.printStackTrace();			
