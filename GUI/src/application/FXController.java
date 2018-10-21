@@ -692,7 +692,6 @@ public class FXController implements Initializable{
 			stage.show();
 			controller2.setImage(image);
 			controller2.setImageInImageView();
-			buttonFilterPic.setText("Filter");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		}catch(Exception e) {
 			e.printStackTrace();			
