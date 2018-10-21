@@ -66,7 +66,7 @@ import javafx.scene.input.TransferMode;
 public class FXController implements Initializable{
 	
 	private final DataFormat buttonFormat = new DataFormat("com.example.myapp.formats.button");
-	private Button draggingButton;
+	private BiberButton draggingButton;
 	double width;
 	double height;
 	private static final int MIN_PIXELS = 10;
@@ -706,8 +706,8 @@ public class FXController implements Initializable{
 	/**
 	 * This method creates the drag button.
 	 */
-	 private Button createButton(String text) {
-	        Button button = new Button(text);
+	 private BiberButton createButton(String text) {
+	        BiberButton button = new BiberButton(text);
 	        button.setOnDragDetected(e -> {
 	            db = button.startDragAndDrop(TransferMode.COPY);
 	            db.setDragView(button.snapshot(null, null));
@@ -759,15 +759,25 @@ public class FXController implements Initializable{
 		 pane.setOnDragDropped(e -> {
 			 db = e.getDragboard();
 			 if(db.hasContent(buttonFormat)) {
+				 draggingButton.setImageWithFilter(image);
+				 draggingButton.setUserData("draggingButton");
+				 
+				 draggingButton.setOnAction(new EventHandler<ActionEvent>() {
+					    @Override public void handle(ActionEvent e) {
+					    	System.out.println("Inside EventHandler of Biber Button");
+					    	//TODO: Set Image
+					    }
+					});
+				 
 				 pane.getChildren().add(draggingButton);
 				 e.setDropCompleted(true);
 				 ImageView thumb = new ImageView(image);
 				 //TODO: get size of button here. scaling is just a workaround
-				 thumb.setFitWidth(image.getWidth()/4);
-				 thumb.setFitHeight(image.getHeight()/4);
+				 thumb.setFitWidth(image.getWidth()/3);
+				 thumb.setFitHeight(image.getHeight()/3);
 				 thumpnailPane.getChildren().add(thumpnailPosition, thumb);
 				 thumpnailPosition++;
-			  }
+			}
 		 });
 		 
 	 }
