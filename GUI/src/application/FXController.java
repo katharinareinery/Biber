@@ -78,7 +78,7 @@ public class FXController implements Initializable{
 	@FXML
 	private Label label;
 	@FXML
-	private ImageView imageView, imageView2, imageView3;
+	private ImageView imageView, imageView2, imageView3, imageView4;
 	@FXML
 	private MenuBar menubar;
 	@FXML
@@ -149,6 +149,8 @@ public class FXController implements Initializable{
 	private FlowPane flowpaneFilterSize;
 	@FXML
 	private FlowPane flowpaneRadioButton;
+	@FXML
+	private FlowPane thumpnailPane;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -177,10 +179,13 @@ public class FXController implements Initializable{
 	private Threshold thold = new Threshold();
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
+	private Dragboard db;
+	private ClipboardContent cc = new ClipboardContent();
 	
 	Service<Void> backgroundThread;
 	
 	private SharedObject so = SharedObject.getInstance();
+	private int thumpnailPosition = 0;
 	
 	/**
 	 * About Biber.
@@ -704,9 +709,8 @@ public class FXController implements Initializable{
 	 private Button createButton(String text) {
 	        Button button = new Button(text);
 	        button.setOnDragDetected(e -> {
-	            Dragboard db = button.startDragAndDrop(TransferMode.COPY);
+	            db = button.startDragAndDrop(TransferMode.COPY);
 	            db.setDragView(button.snapshot(null, null));
-	            ClipboardContent cc = new ClipboardContent();
 	            cc.put(buttonFormat, "button");
 	            db.setContent(cc);
 	            //draggingButton = createButton(cbox_filters.getValue().toString());
@@ -721,9 +725,8 @@ public class FXController implements Initializable{
 	*/
 	 private Button setDragOnButton(Button button) {
 		 button.setOnDragDetected(e -> {
-	            Dragboard db = button.startDragAndDrop(TransferMode.COPY);
+	            db = button.startDragAndDrop(TransferMode.COPY);
 	            db.setDragView(button.snapshot(null, null));
-	            ClipboardContent cc = new ClipboardContent();
 	            cc.put(buttonFormat, "button");
 	            db.setContent(cc);
 	            RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
@@ -732,7 +735,7 @@ public class FXController implements Initializable{
 	            }else {
 	            	draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
 	            }
-	            draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
+	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
 	            //System.out.println(draggingButton.getText());
 	        });
 	        //button.setOnDragDone(e -> draggingButton = null);
@@ -745,21 +748,26 @@ public class FXController implements Initializable{
 	 private void addDropHandling(Pane pane) {
 		 pane.setOnDragOver(e -> {
 			 //System.out.println(e.toString());
-			 Dragboard db = e.getDragboard();
+			 db = e.getDragboard();
 			 if(db.hasContent(buttonFormat)&& draggingButton != null //&&  draggingButton.getParent().getId() != pane.getId()
 					 ) {
 				 //System.out.println(draggingButton.toString());
 				 //System.out.println(pane.getId());
 				 e.acceptTransferModes(TransferMode.COPY);
-				// imageView3.setImage(image);
 			 }
 		 });
 		 pane.setOnDragDropped(e -> {
-			 Dragboard db = e.getDragboard();
+			 db = e.getDragboard();
 			 if(db.hasContent(buttonFormat)) {
 				 pane.getChildren().add(draggingButton);
 				 e.setDropCompleted(true);
-				 }
+				 ImageView thumb = new ImageView(image);
+				 //TODO: get size of button here. scaling is just a workaround
+				 thumb.setFitWidth(image.getWidth()/4);
+				 thumb.setFitHeight(image.getHeight()/4);
+				 thumpnailPane.getChildren().add(thumpnailPosition, thumb);
+				 thumpnailPosition++;
+			  }
 		 });
 		 
 	 }

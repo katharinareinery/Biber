@@ -20,9 +20,10 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+
 <BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
-      <SplitPane fx:id="split" dividerPositions="0.8664192949907236" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="split" dividerPositions="0.8664192949907236, 0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
         <items>
             <SplitPane dividerPositions="0.5">
                <items>
@@ -97,10 +98,26 @@
                   </VBox>
                </items>
             </SplitPane>
+            <VBox prefHeight="100.0" prefWidth="100.0">
+               <children>
+                  <FlowPane fx:id="thumpnailPane" minHeight="40.0" onDragDone="#chooseImage" prefHeight="50.0" prefWidth="900.0">
+                     <children>
+                        <ImageView fx:id="imageView3" fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <FlowPane.margin>
+                              <Insets bottom="5.0" right="10.0" top="8.0" />
+                           </FlowPane.margin></ImageView>
+                        <ImageView fx:id="imageView4" fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <FlowPane.margin>
+                              <Insets bottom="5.0" left="5.0" top="8.0" />
+                           </FlowPane.margin></ImageView>
+                     </children>
+                  </FlowPane>
+               </children>
+            </VBox>
             <VBox fx:id="vbox2" prefHeight="200.0" prefWidth="100.0" styleClass="vbox" SplitPane.resizableWithParent="false">
                <children>
-                  <FlowPane fx:id="flowpane" prefHeight="116.0" prefWidth="773.0" styleClass="root" />
-                  <ToolBar fx:id="toolbar" prefHeight="0.0" prefWidth="767.0" styleClass="toolmenu">
+                  <FlowPane fx:id="flowpane" maxHeight="100.0" minHeight="45.0" prefHeight="100.0" prefWidth="898.0" styleClass="root" />
+                  <ToolBar fx:id="toolbar" prefHeight="100.0" prefWidth="898.0" styleClass="toolmenu">
                   </ToolBar>
                </children>
             </VBox>
