@@ -12,7 +12,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class Grayscale extends ImageMan{
 	private Mat dst = new Mat();
-	
+	private Mat srcCopy = new Mat();
 	/** 
 	 * The luminosity method 
 	 * averages the values, but it forms a weighted average
@@ -21,14 +21,15 @@ public class Grayscale extends ImageMan{
 	 * The formula for luminosity is 0.21 R + 0.72 G + 0.07 B.
 	 */
 	public Mat luminosity(Mat src) {
-		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
-		dst = new Mat(src.size(),CvType.CV_8UC1);
+		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		srcCopy = src;
+		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double grayValue;
 		double[] data;
-		for(int i = 0; i<src.rows();i++) {
-			for(int j = 0; j <src.cols();j++) {
-				data = src.get(i, j);	
+		for(int i = 0; i<srcCopy.rows();i++) {
+			for(int j = 0; j <srcCopy.cols();j++) {
+				data = srcCopy.get(i, j);	
 				grayValue=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 				dst.put(i, j, grayValue);	
 			}
@@ -49,13 +50,14 @@ public class Grayscale extends ImageMan{
 	}
 	
 	public Mat grayPixelFor(Mat src) {
+		srcCopy=src;
 		double[] data;
-		dst = new Mat(src.size(),CvType.CV_8UC1);
+		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double grayValue;
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
-		for(int i = 0; i <src.rows();i++) {
-			for(int j = 0; j < src.cols(); j++) {
-				data=src.get(i,j);
+		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+		for(int i = 0; i <srcCopy.rows();i++) {
+			for(int j = 0; j < srcCopy.cols(); j++) {
+				data=srcCopy.get(i,j);
 				grayValue =  (data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
 				dst.put(i, j, grayValue);
 			}
@@ -68,14 +70,15 @@ public class Grayscale extends ImageMan{
 	 * simply averages the values: (R + G + B) / 3.
 	*/
 	public Mat average(Mat src) {
-		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
-		dst = new Mat(src.size(),CvType.CV_8UC1);
+		srcCopy=src;
+		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;
-		for(int i = 0; i<src.rows(); i++) {
-			for(int j = 0; j<src.cols(); j++) {
-				data = src.get(i, j);
+		for(int i = 0; i<srcCopy.rows(); i++) {
+			for(int j = 0; j<srcCopy.cols(); j++) {
+				data = srcCopy.get(i, j);
 				grayValue=((data[0]+data[1]+data[2])/3);
 				dst.put(i, j, grayValue);
 			}
@@ -90,15 +93,16 @@ public class Grayscale extends ImageMan{
 	 * 
 	*/
 	public Mat lightness(Mat src) {
-		Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		Imgproc.cvtColor(src, src, Imgproc.COLOR_BGR2RGB);
-		dst = new Mat(src.size(),CvType.CV_8UC1);
+		srcCopy=src;
+		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double[] data;
 		double grayValue;
 		double max,min;
-		for(int i = 0; i < src.rows(); i++) {
-			for(int j = 0; j < src.cols(); j++) {
-				data = src.get(i, j);
+		for(int i = 0; i < srcCopy.rows(); i++) {
+			for(int j = 0; j < srcCopy.cols(); j++) {
+				data = srcCopy.get(i, j);
 				if(data[0]>data[1] && data[0]>data[2]) {
 					max = data[0];
 				}else {

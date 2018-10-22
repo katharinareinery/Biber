@@ -422,14 +422,14 @@ public class FXController implements Initializable{
 									}else if(selectedRadioButton.getText().equals("lightness")){
 										mat = grayscale.lightness(src);
 									}else if(selectedRadioButton.getText().equals("pixelwise")){
-										for(int i = 0; i <mat.rows();i++) {
+									/*	for(int i = 0; i <mat.rows();i++) {
 											for(int j = 0; j < mat.cols(); j++) {
 												mat = grayscale.grayPixel(i, j, mat);
 											}
 											BufferedImage neu = imageMan.matToBuffImage(mat);
 											image = SwingFXUtils.toFXImage(neu, null);
 											imageView.setImage(image);
-										}
+										}*/
 										mat = grayscale.grayPixelFor(src);
 									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
