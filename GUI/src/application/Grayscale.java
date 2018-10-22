@@ -22,7 +22,7 @@ public class Grayscale extends ImageMan{
 	 */
 	public Mat luminosity(Mat src) {
 		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		srcCopy = src;
+		srcCopy = src.clone();
 		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double grayValue;
@@ -50,7 +50,7 @@ public class Grayscale extends ImageMan{
 	}
 	
 	public Mat grayPixelFor(Mat src) {
-		srcCopy=src;
+		srcCopy=src.clone();
 		double[] data;
 		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double grayValue;
@@ -70,8 +70,7 @@ public class Grayscale extends ImageMan{
 	 * simply averages the values: (R + G + B) / 3.
 	*/
 	public Mat average(Mat src) {
-		srcCopy=src;
-		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+		srcCopy=src.clone();
 		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
 		double[] data;
@@ -93,7 +92,7 @@ public class Grayscale extends ImageMan{
 	 * 
 	*/
 	public Mat lightness(Mat src) {
-		srcCopy=src;
+		srcCopy=src.clone();
 		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
 		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
 		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);

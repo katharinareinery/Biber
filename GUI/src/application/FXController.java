@@ -964,11 +964,15 @@ public class FXController implements Initializable{
 	    }
 	    
 	    private void initRadioButtons(String textButton1, String textButton2, String textButton3, String textButton4) {
-	    		vbox.getChildren().add(flowpaneRadioButton);
-		    	radioButton1.setText(textButton1);
-		    	radioButton2.setText(textButton2);
-		    	radioButton3.setText(textButton3);
-		    	radioButton4.setText(textButton4);
+	    	radioButton1.setSelected(false);
+	    	radioButton2.setSelected(false);
+	    	radioButton3.setSelected(false);
+	    	radioButton4.setSelected(false);
+	    	vbox.getChildren().add(flowpaneRadioButton);
+		    radioButton1.setText(textButton1);
+		    radioButton2.setText(textButton2);
+		    radioButton3.setText(textButton3);
+		    radioButton4.setText(textButton4);
 	    }
 	    
 	    private void deinitRadioButtons() {
