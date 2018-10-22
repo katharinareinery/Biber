@@ -9,10 +9,8 @@ import javafx.scene.image.Image;
 public class BiberButton extends Button {
 	
 	private Image imageWithFilter;
-	private String filter;
-	private int thresValue;
-	private int filterPower;
-	private int sigmaColour;
+
+
 
 	public BiberButton() {
 		super();
@@ -24,19 +22,10 @@ public class BiberButton extends Button {
 		// TODO Auto-generated constructor stub
 	}
 
-	public BiberButton(String text,String filter) {
+	public BiberButton(String text) {
 		super(text);
-		this.filter=filter;
 		// TODO Auto-generated constructor stub
 	}
-
-	//Only for ThresButton
-	public BiberButton(String text,String filter,int thresValue) {
-		super(text);
-		this.filter=filter;
-		this.thresValue=thresValue;
-	}
-	//Für jeden Typen ein Kontruktor? oder nur zwei Kontruktor und dann darin überprüfen welche dinge man bekommen hat und braucht?
 	
 	public Image getImageWithFilter() {
 		return imageWithFilter;
@@ -46,16 +35,4 @@ public class BiberButton extends Button {
 		this.imageWithFilter = imageWithFilter;
 	}
 	
-	public String getFilter() {
-		return this.filter;
-	}
-	
-	public int getThresValue() {
-		return this.thresValue;
-	}
-	
-	
-	
-	
-
 }

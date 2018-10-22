@@ -698,8 +698,8 @@ public class FXController implements Initializable{
 	/**
 	 * This method creates the drag button.
 	 */
-	 private BiberButton createButton(String text,String filterPower) {
-	        BiberButton button = new BiberButton(text,filterPower);
+	 private BiberButton createButton(String text) {
+	        BiberButton button = new BiberButton(text);
 	        button.setOnDragDetected(e -> {
 	            db = button.startDragAndDrop(TransferMode.COPY);
 	            db.setDragView(button.snapshot(null, null));
@@ -722,19 +722,20 @@ public class FXController implements Initializable{
 	            cc.put(buttonFormat, "button");
 	            db.setContent(cc);
 	            RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+	            //Je nach dem lesen wir die txtfelder und radiobuttons aus schreiben das in den text des buttons zum später auslesen
+	            //
 	            if(cbox_filters.getValue().equals("Threshold")) {
-	            	draggingButton = new BiberButton(cbox_filters.getValue().toString(),"Threshold",Integer.parseInt(txtThreshold.getText()));
+	            	draggingButton = createButton(cbox_filters.getValue().toString()+" :"+txtThreshold.getText());
 	            }else if(cbox_filters.getValue().equals("Blur")){
-	            	
 	            	if(selectedRadioButton.getText().equals("bilateral")) {
 	            		//Hier alle drei txt(filterpwoer,sigmacolor,sigmaspace) auslesen und dem Kontruktor geben
 	            	}else {
 	            		//Hier nur einen txt(filterpower) auslesen auslesen
-	            		//draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText(),selectedRadioButton.getText());
+	            		draggingButton = createButton(cbox_filters.getValue().toString()+" :"+selectedRadioButton.getText()+txtFilterPower.getText());
 
 	            	}
-	            }else {
-	            	
+	            }else if(cbox_filters.getValue().equals("Grayscale")){
+	            	//Selber kram wie oben
 	            }
 	            		
 	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
@@ -765,20 +766,9 @@ public class FXController implements Initializable{
 				 draggingButton.setUserData("draggingButton");
 				 draggingButton.setOnAction(new EventHandler<ActionEvent>() {
 					    @Override public void handle(ActionEvent e) {
-					    	System.out.println("Inside EventHandler of Biber Button");
-					    	System.out.println(draggingButton.getFilter());
-					    	switch (draggingButton.getFilter()) {
-							case "Threshold":
-								int i = draggingButton.getThresValue();
-								mat = thold.binarisieren(i, src);
-								BufferedImage neu = imageMan.matToBuffImage(mat);
-								image = SwingFXUtils.toFXImage(neu, null);
-								imageView.setImage(image);
-								break;
-
-							default:
-								break;
-							}
+					    	System.out.println(" EventHandler of Biber Button");
+					    	//Hier text vom Button auslesen und je nach dem was drin steht den filter anwenden ...
+					    	//absolut nicht elegant aber was anderes fällt mir nich ein
 					    }
 					});
 				 
