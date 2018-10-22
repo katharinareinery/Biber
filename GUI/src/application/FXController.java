@@ -422,14 +422,6 @@ public class FXController implements Initializable{
 									}else if(selectedRadioButton.getText().equals("lightness")){
 										mat = grayscale.lightness(src);
 									}else if(selectedRadioButton.getText().equals("pixelwise")){
-									/*	for(int i = 0; i <mat.rows();i++) {
-											for(int j = 0; j < mat.cols(); j++) {
-												mat = grayscale.grayPixel(i, j, mat);
-											}
-											BufferedImage neu = imageMan.matToBuffImage(mat);
-											image = SwingFXUtils.toFXImage(neu, null);
-											imageView.setImage(image);
-										}*/
 										mat = grayscale.grayPixelFor(src);
 									}
 									BufferedImage neu = imageMan.matToBuffImage(mat);
@@ -706,8 +698,8 @@ public class FXController implements Initializable{
 	/**
 	 * This method creates the drag button.
 	 */
-	 private BiberButton createButton(String text) {
-	        BiberButton button = new BiberButton(text);
+	 private BiberButton createButton(String text,String filterPower) {
+	        BiberButton button = new BiberButton(text,filterPower);
 	        button.setOnDragDetected(e -> {
 	            db = button.startDragAndDrop(TransferMode.COPY);
 	            db.setDragView(button.snapshot(null, null));
@@ -731,10 +723,20 @@ public class FXController implements Initializable{
 	            db.setContent(cc);
 	            RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
 	            if(cbox_filters.getValue().equals("Threshold")) {
-	            	draggingButton = createButton(cbox_filters.getValue().toString());
+	            	draggingButton = new BiberButton(cbox_filters.getValue().toString(),"Threshold",Integer.parseInt(txtThreshold.getText()));
+	            }else if(cbox_filters.getValue().equals("Blur")){
+	            	
+	            	if(selectedRadioButton.getText().equals("bilateral")) {
+	            		//Hier alle drei txt(filterpwoer,sigmacolor,sigmaspace) auslesen und dem Kontruktor geben
+	            	}else {
+	            		//Hier nur einen txt(filterpower) auslesen auslesen
+	            		//draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText(),selectedRadioButton.getText());
+
+	            	}
 	            }else {
-	            	draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
+	            	
 	            }
+	            		
 	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
 	            //System.out.println(draggingButton.getText());
 	        });
@@ -761,11 +763,22 @@ public class FXController implements Initializable{
 			 if(db.hasContent(buttonFormat)) {
 				 draggingButton.setImageWithFilter(image);
 				 draggingButton.setUserData("draggingButton");
-				 
 				 draggingButton.setOnAction(new EventHandler<ActionEvent>() {
 					    @Override public void handle(ActionEvent e) {
 					    	System.out.println("Inside EventHandler of Biber Button");
-					    	//TODO: Set Image
+					    	System.out.println(draggingButton.getFilter());
+					    	switch (draggingButton.getFilter()) {
+							case "Threshold":
+								int i = draggingButton.getThresValue();
+								mat = thold.binarisieren(i, src);
+								BufferedImage neu = imageMan.matToBuffImage(mat);
+								image = SwingFXUtils.toFXImage(neu, null);
+								imageView.setImage(image);
+								break;
+
+							default:
+								break;
+							}
 					    }
 					});
 				 
