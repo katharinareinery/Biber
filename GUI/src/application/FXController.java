@@ -448,7 +448,7 @@ public class FXController implements Initializable{
 				backgroundThread.restart();
 				break;
 			case "Blur":
-				backgroundThread = new Service<Void>() {
+				/*backgroundThread = new Service<Void>() {
 					@Override
 					protected Task<Void> createTask() {
 						// TODO Auto-generated method stub
@@ -478,10 +478,10 @@ public class FXController implements Initializable{
 						};
 					}
 				};
-					backgroundThread.restart();
+					backgroundThread.restart();*/
 					break;
 			case "Threshold":
-				int t = (txt_fld.getText().isEmpty() ? 1 : Integer.parseInt(txt_fld.getText()));
+			/*	int t = (txt_fld.getText().isEmpty() ? 1 : Integer.parseInt(txt_fld.getText()));
 				System.out.println(t);
 				if(t >= 0 && t < 255) {
 					backgroundThread = new Service<Void>() {
@@ -512,7 +512,7 @@ public class FXController implements Initializable{
 					alert.setContentText("Only values from 0-255 allowed!");
 					alert.showAndWait();
 				}
-				backgroundThread.restart();
+				backgroundThread.restart();*/
 				break;
 		}
 	}
