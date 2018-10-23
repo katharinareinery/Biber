@@ -1,6 +1,8 @@
 package application;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -43,6 +45,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
@@ -151,6 +154,14 @@ public class FXController implements Initializable{
 	private FlowPane flowpaneRadioButton;
 	@FXML
 	private FlowPane thumpnailPane;
+	@FXML
+	private HBox workspace_hbox;
+	@FXML
+	private Label toolbar_dimensions;
+	@FXML
+	private SplitPane toolbar_split;
+	@FXML
+	private FlowPane toolbar_rightpane;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -186,6 +197,9 @@ public class FXController implements Initializable{
 	
 	private SharedObject so = SharedObject.getInstance();
 	private int thumpnailPosition = 0;
+	
+	//get screen size for imageview
+	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	/**
 	 * About Biber.
@@ -344,6 +358,18 @@ public class FXController implements Initializable{
 				}
 			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
+			//set Imageview to fit image if < screenSize
+			if(!(mat.rows() > screenSize.getHeight()/2 || mat.cols() > screenSize.getWidth()/2)){
+				imageView.setFitHeight(mat.rows());
+				imageView.setFitWidth(mat.cols());
+			}
+			//else set Imageview to height and width of workspace_hbox
+			else {
+				imageView.setFitHeight(workspace_hbox.heightProperty().intValue());
+				imageView.setFitWidth(workspace_hbox.heightProperty().intValue());
+			}
+			//Display Shape of Image in bottom right corner
+			toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
 			imageView.setImage(image);
 			so.setOriginalImage(image);
 						
@@ -473,9 +499,9 @@ public class FXController implements Initializable{
 					backgroundThread.restart();*/
 					break;
 			case "Threshold":
-			/*	int t = (txt_fld.getText().isEmpty() ? 1 : Integer.parseInt(txt_fld.getText()));
+				int t = (txtThreshold.getText().isEmpty() ? 1 : Integer.parseInt(txtThreshold.getText()));
 				System.out.println(t);
-				if(t >= 0 && t < 255) {
+				if(t >= 0 && t < 256) {
 					backgroundThread = new Service<Void>() {
 						@Override
 						protected Task<Void> createTask() {
@@ -504,7 +530,7 @@ public class FXController implements Initializable{
 					alert.setContentText("Only values from 0-255 allowed!");
 					alert.showAndWait();
 				}
-				backgroundThread.restart();*/
+				backgroundThread.restart();
 				break;
 		}
 	}
@@ -587,12 +613,14 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleButtonThreshMinus(ActionEvent event5){
 		int threshold = Integer.parseInt(txtThreshold.getText());
-		threshold -=1;
+		if(threshold>0) {
+			threshold -=1;
+		}
 		txtThreshold.setText(Integer.toString(threshold));
-		mat = thold.binarisieren(threshold, src);
+		/*mat = thold.binarisieren(threshold, src);
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
-		imageView.setImage(image);
+		imageView.setImage(image);*/
 	}
 	
 	/**
@@ -601,12 +629,14 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleButtonThreshPlus(ActionEvent event6) {
 		int threshold = Integer.parseInt(txtThreshold.getText());
-		threshold +=1;
+		if(threshold < 255) {
+			threshold +=1;
+		}
 		txtThreshold.setText(Integer.toString(threshold));
-		mat = thold.binarisieren(threshold, src);
+		/*mat = thold.binarisieren(threshold, src);
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
-		imageView.setImage(image);
+		imageView.setImage(image);*/
 	}
 	
 	/**
@@ -878,6 +908,10 @@ public class FXController implements Initializable{
 				}
 	    		
 	    	});
+	    	//fix dividers of splitpane for toolbar 80% and dimensions 20%
+	    	toolbar.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.90));
+	    	toolbar_rightpane.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.1));	   
+	    	toolbar_split.setDividerPositions(0.9);
 	    }
 	    
 	    /**
