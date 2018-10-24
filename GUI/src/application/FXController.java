@@ -756,16 +756,30 @@ public class FXController implements Initializable{
 	            //
 	            if(cbox_filters.getValue().equals("Threshold")) {
 	            	draggingButton = createButton(cbox_filters.getValue().toString()+" :"+txtThreshold.getText());
+	            	draggingButton.setFilter("Threshold");
+	            	draggingButton.setThreshold(Integer.parseInt(txtThreshold.getText()));
 	            }else if(cbox_filters.getValue().equals("Blur")){
 	            	if(selectedRadioButton.getText().equals("bilateral")) {
 	            		//Hier alle drei txt(filterpwoer,sigmacolor,sigmaspace) auslesen und dem Kontruktor geben
+	            		draggingButton = createButton(cbox_filters.getValue().toString()+" :"+selectedRadioButton.getText());
+	            		draggingButton.setFilter(cbox_filters.getValue().toString());
+	            		draggingButton.setFilterPower(Integer.parseInt(txtFilterPower.getText()));
+	            		draggingButton.setSigmaColour(Double.parseDouble(txtSigmaColour.getText()));
+	            		draggingButton.setSigmaSpace(Double.parseDouble(txtSigmaSpace.getText()));
+	            		draggingButton.setBlurOption(selectedRadioButton.getText());
+	            		
 	            	}else {
 	            		//Hier nur einen txt(filterpower) auslesen auslesen
 	            		draggingButton = createButton(cbox_filters.getValue().toString()+" :"+selectedRadioButton.getText()+txtFilterPower.getText());
-
+	            		draggingButton.setFilter("Blur");
+	            		draggingButton.setFilterPower(Integer.parseInt(txtFilterPower.getText()));
+	            		draggingButton.setBlurOption(selectedRadioButton.getText());
 	            	}
 	            }else if(cbox_filters.getValue().equals("Grayscale")){
 	            	//Selber kram wie oben
+	            	draggingButton = createButton(cbox_filters.getValue().toString()+selectedRadioButton.getText());
+	            	draggingButton.setFilter(selectedRadioButton.getText());
+	            	draggingButton.setGrayScale(selectedRadioButton.getText());
 	            }
 	            		
 	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
@@ -799,6 +813,26 @@ public class FXController implements Initializable{
 					    	System.out.println(" EventHandler of Biber Button");
 					    	//Hier text vom Button auslesen und je nach dem was drin steht den filter anwenden ...
 					    	//absolut nicht elegant aber was anderes fällt mir nich ein
+					    	BiberButton dragB = (BiberButton)e.getSource();
+					    	switch (dragB.getFilter()) {
+							case "Blur":
+								if(dragB.getBlurOption().equals("bilateral")) {
+									
+									mat = blur.bilateralBlur(src, dragB.getFilterPower(), dragB.getSigmaColour(), dragB.getSigmaSpace());
+									
+								}
+								break;
+							case "Threshold":
+								mat = thold.binarisieren(dragB.getThreshold(), src);
+								break;
+							case "Graycale":
+								
+							default:
+								break;
+							}
+							BufferedImage neu = imageMan.matToBuffImage(mat);
+							image = SwingFXUtils.toFXImage(neu, null);
+							imageView.setImage(image);
 					    }
 					});
 				 

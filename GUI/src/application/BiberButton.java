@@ -9,6 +9,13 @@ import javafx.scene.image.Image;
 public class BiberButton extends Button {
 	
 	private Image imageWithFilter;
+	private String filter;
+	private double sigmaColour;
+	private double sigmaSpace;
+	private int filterPower;
+	private int threshold;
+	private String grayScale;
+	private String blurOption;
 
 
 
@@ -35,4 +42,59 @@ public class BiberButton extends Button {
 		this.imageWithFilter = imageWithFilter;
 	}
 	
+	public void setFilter(String filter) {
+		this.filter=filter;
+	}
+	
+	public String getFilter() {
+		return this.filter;
+	}
+
+	public double getSigmaColour() {
+		return sigmaColour;
+	}
+
+	public void setSigmaColour(double sigmaColour) {
+		this.sigmaColour = sigmaColour;
+	}
+
+	public double getSigmaSpace() {
+		return sigmaSpace;
+	}
+
+	public void setSigmaSpace(double sigmaSpace) {
+		this.sigmaSpace = sigmaSpace;
+	}
+
+	public int getFilterPower() {
+		return filterPower;
+	}
+
+	public void setFilterPower(int filterPower) {
+		this.filterPower = filterPower;
+	}
+
+	public int getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(int threshold) {
+		this.threshold = threshold;
+	}
+
+	public String getGrayScale() {
+		return grayScale;
+	}
+
+	public void setGrayScale(String grayScale) {
+		this.grayScale = grayScale;
+	}
+
+	public String getBlurOption() {
+		return blurOption;
+	}
+
+	public void setBlurOption(String blurOption) {
+		this.blurOption = blurOption;
+	}
 }
