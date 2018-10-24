@@ -370,7 +370,7 @@ public class FXController implements Initializable{
 				imageView.setFitWidth(workspace_hbox.heightProperty().intValue());
 			}
 			//Display Shape of Image in bottom right corner
-			toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
+			//toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
 			imageView.setImage(image);
 			so.setOriginalImage(image);
 						
@@ -630,6 +630,11 @@ public class FXController implements Initializable{
 	 */
 	@FXML
 	private void handleButtonThreshPlus(ActionEvent event6) {
+		Button btn=(Button)event6.getSource();
+		System.out.println(btn.getText());
+		while(btn.isPressed()) {
+			System.out.println("Button pressed!!");
+		}
 		int threshold = Integer.parseInt(txtThreshold.getText());
 		if(threshold < 255) {
 			threshold +=1;
@@ -959,7 +964,7 @@ public class FXController implements Initializable{
 	    	});
 	    	//fix dividers of splitpane for toolbar 80% and dimensions 20%
 	    	toolbar.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.90));
-	    	toolbar_rightpane.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.1));	   
+	    	//toolbar_rightpane.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.1));	   
 	    	toolbar_split.setDividerPositions(0.9);
 	    }
 	    
