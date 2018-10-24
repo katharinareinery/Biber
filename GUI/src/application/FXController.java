@@ -862,6 +862,7 @@ public class FXController implements Initializable{
 				 //TODO: get size of button here. scaling is just a workaround
 				 thumb.setFitWidth(image.getWidth()/3);
 				 thumb.setFitHeight(image.getHeight()/3);
+				 draggingButton.setMinWidth(image.getWidth()/3);
 				 thumpnailPane.getChildren().add(thumpnailPosition, thumb);
 				 thumpnailPosition++;
 			}
@@ -917,12 +918,12 @@ public class FXController implements Initializable{
 	                viewport.getMinY() + yProportion * viewport.getHeight());
 	    }
 	    
-	    private EventHandler eventForDragButtons = new EventHandler<ActionEvent>() {
+/*	    private EventHandler eventForDragButtons = new EventHandler<ActionEvent>() {
 	    	public void handle(ActionEvent event) {
 	    		//System.out.println(draggingButton.getText()+"!!!!!!");
 	    		System.out.println(event.getTarget());
 	    	}
-		};
+		};*/
 	    
 	    private void initToolbar() {
 	    	tg_toolbar = new ToggleGroup();
