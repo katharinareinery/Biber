@@ -10,6 +10,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 
@@ -28,6 +29,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root,950,650);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setTitle("Biber");
+			primaryStage.getIcons().add(new Image("file:biber.png"));
 			primaryStage.setScene(scene);
 			//Fullscreenmodus
 			//primaryStage.setFullScreen(true);
