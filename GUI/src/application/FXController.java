@@ -963,9 +963,9 @@ public class FXController implements Initializable{
 	    		
 	    	});
 	    	//fix dividers of splitpane for toolbar 80% and dimensions 20%
-	    	toolbar.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.90));
+	    	//toolbar.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.90));
 	    	//toolbar_rightpane.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.1));	   
-	    	toolbar_split.setDividerPositions(0.9);
+	    	//toolbar_split.setDividerPositions(0.9);
 	    }
 	    
 	    /**
