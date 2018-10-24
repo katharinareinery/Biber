@@ -1,5 +1,7 @@
 package application;
 
+import java.awt.image.BufferedImage;
+
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -13,6 +15,119 @@ import org.opencv.imgproc.Imgproc;
 public class Grayscale extends ImageMan{
 	private Mat dst = new Mat();
 	private Mat srcCopy = new Mat();
+	
+	private Mat src;
+	private String ftype = "";
+	
+	//getter/setter
+	public void setSrc(Mat src) {
+		this.src = src;
+	}
+	public Mat getSrc() {
+		return src;
+	}
+	public void setFtype(String ftype) {
+		this.ftype = ftype;
+	}
+	public String getFtype() {
+		return ftype;
+	}
+	
+	//constructor
+	public Grayscale() {
+		
+	}
+	public Grayscale(String ftype) {
+		this.ftype = ftype;
+	}
+	public Grayscale(Mat src,String ftype) {
+		this.src = src;
+		this.ftype = ftype;
+	}
+	//toString() override
+	public String toString() {
+			// TODO Auto-generated method stub
+			return "BWMethod:"+ftype+"\tMat:["+src.rows()+","+src.cols()+":"+src.channels()+"]";
+	}
+		//useFilter() method to call from within timelines filterlist
+	public void useFilter() {
+		if(ftype.equals("") || ftype.equals(null)) {
+			System.out.println("Grayscale::useFilter::ftype equals NULLSTRING");
+		}
+		else if(ftype.equals("luminosity")) {
+			srcCopy = src.clone();
+			if(srcCopy.channels()>1)
+				Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double grayValue;
+			double[] data;
+			for(int i = 0; i<srcCopy.rows();i++) {
+				for(int j = 0; j <srcCopy.cols();j++) {
+					data = srcCopy.get(i, j);	
+					grayValue=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+					dst.put(i, j, grayValue);	
+				}
+			}
+		}
+		else if(ftype.equals("average")) {
+			srcCopy=src.clone();
+			if(srcCopy.channels()>1)
+				Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double[] data;
+			double grayValue;
+			for(int i = 0; i<srcCopy.rows(); i++) {
+				for(int j = 0; j<srcCopy.cols(); j++) {
+					data = srcCopy.get(i, j);
+					grayValue=((data[0]+data[1]+data[2])/3);
+					dst.put(i, j, grayValue);
+				}
+			}
+		}
+		else if(ftype.equals("lightness")) {
+			srcCopy=src.clone();
+			if(srcCopy.channels()>1)
+				Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double[] data;
+			double grayValue;
+			double max,min;
+			for(int i = 0; i < srcCopy.rows(); i++) {
+				for(int j = 0; j < srcCopy.cols(); j++) {
+					data = srcCopy.get(i, j);
+					if(data[0]>data[1] && data[0]>data[2]) {
+						max = data[0];
+					}else {
+						if(data[1]>data[0] && data[1]>data[2]) {
+							max = data[1];
+						}else {
+							max = data[2];
+						}
+					}
+					if(data[0]<data[1] && data[0]<data[2]) {
+						min = data[0];
+					}else {
+						if(data[1]<data[0] && data[1]<data[2]) {
+							min = data[1];
+						}else {
+							min = data[2];
+						}
+					}
+					grayValue = ((max+min)/2);
+					dst.put(i, j, grayValue);
+					}
+				}
+			}
+		}
+		
+		public Mat getDst() {
+			return dst;
+		}
+		
+		public BufferedImage returnImage() {
+			return matToBuffImage(dst);
+		}
+		
 	/** 
 	 * The luminosity method 
 	 * averages the values, but it forms a weighted average

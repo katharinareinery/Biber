@@ -16,6 +16,8 @@ public class BiberButton extends Button {
 	private int threshold;
 	private String grayScale;
 	private String blurOption;
+	//Filter object
+	private ImageMan filterobject; 
 
 
 
@@ -28,7 +30,20 @@ public class BiberButton extends Button {
 		super(text, graphic);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public BiberButton(String text,ImageMan filterobject) {
+		super(text);
+		this.filterobject=filterobject;
+	}
+	
+	public void setFilterobject(ImageMan filterobject) {
+		this.filterobject = filterobject;
+	}
+	
+	public ImageMan getFilterobject() {
+		return filterobject;
+	}
+	
 	public BiberButton(String text) {
 		super(text);
 		// TODO Auto-generated constructor stub

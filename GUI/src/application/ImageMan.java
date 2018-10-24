@@ -7,6 +7,8 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 public class ImageMan {
+	Mat src;
+	Mat dst;
 	
 	public BufferedImage matToBuffImage(Mat m) {
 		 int type = BufferedImage.TYPE_BYTE_GRAY;
@@ -28,4 +30,19 @@ public class ImageMan {
 		m.put(0, 0, pixels);
 		return m;
 	}
+	public void useFilter() {	
+	}
+	
+	public void setSrc(Mat src) {
+		this.src=src;
+	}
+	
+	public Mat getDst() {
+		return dst;
+	}
+	
+	public BufferedImage returnImage() {
+		return matToBuffImage(dst);
+	}
 }
+

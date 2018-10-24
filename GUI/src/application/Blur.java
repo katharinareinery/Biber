@@ -1,4 +1,6 @@
 package application;
+import java.awt.image.BufferedImage;
+
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 //import org.opencv.highgui.HighGui;
@@ -21,6 +23,79 @@ import org.opencv.imgproc.Imgproc;
 
 public class Blur extends ImageMan{
 	private Mat dst = new Mat();
+	private Mat src;
+	private String ftype = "";
+	private int filterpower;
+	private double sigmaColour;
+	private double sigmaSpace;
+	
+	//constructor
+	public Blur() {
+		
+	}
+	public Blur(String ftype,int filterpower) {
+		this.ftype = ftype;
+		this.filterpower = filterpower;
+	}
+	public Blur(String ftype,int filterpower,double sigmaColour,double sigmaSpace) {
+		this.ftype=ftype;
+		this.filterpower=filterpower;
+		this.sigmaColour=sigmaColour;
+		this.sigmaSpace = sigmaSpace;
+	}
+	public Blur(Mat src,String ftype,int filterpower,double sigmaColour,double sigmaSpace) {
+		this.src = src;
+		this.ftype = ftype;
+		this.filterpower = filterpower;
+		this.sigmaColour = sigmaColour;
+		this.sigmaSpace = sigmaSpace;
+	}
+	//useFilter MEthod to use within Timeline q
+	@Override
+	public void useFilter() {
+		if(ftype.equals("homogen")) {
+			Imgproc.blur(src, dst, new Size(filterpower,filterpower),new Point(-1,-1));
+		}
+		else if(ftype.equals("gaussian")) {
+			Imgproc.GaussianBlur(src, dst, new Size(filterpower,filterpower), 0,0);
+		}
+		else if(ftype.equals("median")) {
+			Imgproc.medianBlur(src, dst, filterpower);
+		}
+		else if(ftype.equals("bilateral")) {
+			Imgproc.bilateralFilter(src, dst, filterpower, sigmaColour, sigmaSpace);
+		}
+	}
+	//toString() override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "BlurMethod:"+ftype+"\tMat:["+src.rows()+","+src.cols()+":"+src.channels()+"]";
+	}
+	//returns buffered Image
+	public BufferedImage returnImage() {
+		return matToBuffImage(dst);
+	}
+
+	//getter/setter
+	public void setSrc(Mat src) {
+		this.src=src;
+	}
+
+	public Mat getDst() {
+		return dst;
+	}
+	public String getFtype() {
+		return ftype;
+	}
+	public Mat getSrc() {
+		return src;
+	}
+	public void setDst(Mat dst) {
+		this.dst = dst;
+	}
+	public void setFtype(String ftype) {
+		this.ftype = ftype;
+	}
 	
 	/**
 	 * Gaussian filtering is done by convolving each point in the input array with a Gaussian kernel 
