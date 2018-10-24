@@ -778,7 +778,7 @@ public class FXController implements Initializable{
 	            }else if(cbox_filters.getValue().equals("Grayscale")){
 	            	//Selber kram wie oben
 	            	draggingButton = createButton(cbox_filters.getValue().toString()+selectedRadioButton.getText());
-	            	draggingButton.setFilter(selectedRadioButton.getText());
+	            	draggingButton.setFilter("Grayscale");
 	            	draggingButton.setGrayScale(selectedRadioButton.getText());
 	            }
 	            		
@@ -814,19 +814,33 @@ public class FXController implements Initializable{
 					    	//Hier text vom Button auslesen und je nach dem was drin steht den filter anwenden ...
 					    	//absolut nicht elegant aber was anderes fällt mir nich ein
 					    	BiberButton dragB = (BiberButton)e.getSource();
+					    	System.out.println(dragB.getFilter());
 					    	switch (dragB.getFilter()) {
 							case "Blur":
 								if(dragB.getBlurOption().equals("bilateral")) {
-									
 									mat = blur.bilateralBlur(src, dragB.getFilterPower(), dragB.getSigmaColour(), dragB.getSigmaSpace());
-									
+								}else if(dragB.getBlurOption().equals("homogen")) {
+									mat = blur.homogenBlur(src, dragB.getFilterPower());
+								}else if(dragB.getBlurOption().equals("gaussian")) {
+									mat = blur.gaussianBlur(src, dragB.getFilterPower());
+								}else if(dragB.getBlurOption().equals("median")) {
+									mat = blur.medianBlur(src, dragB.getFilterPower());
 								}
 								break;
 							case "Threshold":
 								mat = thold.binarisieren(dragB.getThreshold(), src);
 								break;
-							case "Graycale":
-								
+							case "Grayscale":
+								if(dragB.getGrayScale().equals("average")) {
+									mat = grayscale.average(src);
+								}else if(dragB.getGrayScale().equals("luminosity")) {
+									mat = grayscale.luminosity(src);
+								}else if(dragB.getGrayScale().equals("lightness")) {
+									mat = grayscale.lightness(src);
+								}else if(dragB.getGrayScale().equals("pixelwise")) {
+									mat = grayscale.grayPixelFor(src);
+								}
+								break;
 							default:
 								break;
 							}
