@@ -277,9 +277,9 @@ public class FXController implements Initializable{
 		 */
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Threshold")) {
-				BufferedImage neu = imageMan.matToBuffImage(src);
-				image = SwingFXUtils.toFXImage(neu, null);
-				imageView.setImage(image);
+//				BufferedImage neu = imageMan.matToBuffImage(src);
+//				image = SwingFXUtils.toFXImage(neu, null);
+//				imageView.setImage(image);
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				initThreshold();
@@ -298,9 +298,9 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
-				BufferedImage neu = imageMan.matToBuffImage(src);
-				image = SwingFXUtils.toFXImage(neu, null);
-				imageView.setImage(image);
+//				BufferedImage neu = imageMan.matToBuffImage(src);
+//				image = SwingFXUtils.toFXImage(neu, null);
+//				imageView.setImage(image);
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -311,9 +311,9 @@ public class FXController implements Initializable{
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
-				BufferedImage neu = imageMan.matToBuffImage(src);
-				image = SwingFXUtils.toFXImage(neu, null);
-				imageView.setImage(image);
+//				BufferedImage neu = imageMan.matToBuffImage(src);
+//				image = SwingFXUtils.toFXImage(neu, null);
+//				imageView.setImage(image);
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -549,7 +549,12 @@ public class FXController implements Initializable{
 		sigmaColour+=2;
 		txtSigmaColour.setText(Double.toString(sigmaColour));
 		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		if(timeline.isEmpty()) {
+			mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		}
+		else {
+			mat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		}
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
 		imageView.setImage(image);
@@ -567,8 +572,13 @@ public class FXController implements Initializable{
 			sigmaColour-=2;
 		}
 		txtSigmaColour.setText(Double.toString(sigmaColour));
-		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());		
+		if(timeline.isEmpty()) {
+			mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		}
+		else {
+			mat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		}
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
 		imageView.setImage(image);
@@ -584,8 +594,13 @@ public class FXController implements Initializable{
 		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
 		sigmaSpace+=2;
 		txtSigmaSpace.setText(Double.toString(sigmaSpace));
-		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
-		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());		
+		if(timeline.isEmpty()) {
+			mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		}
+		else {
+			mat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		}
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
 		imageView.setImage(image);
@@ -603,8 +618,14 @@ public class FXController implements Initializable{
 			sigmaSpace-=2;
 		}
 		txtSigmaSpace.setText(Double.toString(sigmaSpace));
-		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
-		mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());		
+		if(timeline.isEmpty()) {
+			mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+		}
+		else {
+			mat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		}
+
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
 		imageView.setImage(image);
@@ -620,8 +641,14 @@ public class FXController implements Initializable{
 		if(threshold>0) {
 			threshold -=1;
 		}
-		txtThreshold.setText(Integer.toString(threshold));
-		mat = thold.binarisieren(threshold, src);
+		txtThreshold.setText(Integer.toString(threshold));		
+		if(timeline.isEmpty()) {
+			mat = thold.binarisieren(threshold, src);
+		}
+		else {
+			mat = thold.binarisieren(threshold, timeline.getLast().getDst());
+		}
+
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
 		imageView.setImage(image);
@@ -642,7 +669,12 @@ public class FXController implements Initializable{
 			threshold +=1;
 		}
 		txtThreshold.setText(Integer.toString(threshold));
-		mat = thold.binarisieren(threshold, src);
+		if(timeline.isEmpty()) {
+			mat = thold.binarisieren(threshold, src);
+		}
+		else {
+			mat = thold.binarisieren(threshold, timeline.getLast().getDst());
+		}
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
 		imageView.setImage(image);
@@ -660,15 +692,37 @@ public class FXController implements Initializable{
 		txtFilterPower.setText(Integer.toString(filterPower));
 		try {
 			if(selectedRadioButton.getText().equals("median")) {
-				mat = blur.medianBlur(src, filterPower);
+				if(timeline.isEmpty()) {
+					mat = blur.medianBlur(src, filterPower);
+				}
+				else {
+					mat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
+				}
+				
 			}else if (selectedRadioButton.getText().equals("gaussian")) {
-				mat = blur.gaussianBlur(src, filterPower);
+				if(timeline.isEmpty()) {
+					mat = blur.gaussianBlur(src, filterPower);
+				}
+				else {
+					mat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
+				}
 			}else if (selectedRadioButton.getText().equals("homogen")) {
-				mat = blur.homogenBlur(src, filterPower);
+				if(timeline.isEmpty()) {
+					mat = blur.homogenBlur(src, filterPower);
+				}
+				else {
+					mat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
+				}
 			}else if (selectedRadioButton.getText().equals("bilateral")) {
 				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
 				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-				mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+				if(timeline.isEmpty()) {
+					mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+				}
+				else {
+					mat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+				}
+				
 			}							
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -692,15 +746,37 @@ public class FXController implements Initializable{
 		txtFilterPower.setText(Integer.toString(filterPower));
 		try {
 			if(selectedRadioButton.getText().equals("median")) {
-				mat = blur.medianBlur(src, filterPower);
+				if(timeline.isEmpty()) {
+					mat = blur.medianBlur(src, filterPower);
+				}
+				else {
+					mat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
+				}
+				
 			}else if (selectedRadioButton.getText().equals("gaussian")) {
-				mat = blur.gaussianBlur(src, filterPower);
+				if(timeline.isEmpty()) {
+					mat = blur.gaussianBlur(src, filterPower);
+				}
+				else {
+					mat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
+				}
 			}else if (selectedRadioButton.getText().equals("homogen")) {
-				mat = blur.homogenBlur(src, filterPower);
+				if(timeline.isEmpty()) {
+					mat = blur.homogenBlur(src, filterPower);
+				}
+				else {
+					mat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
+				}
 			}else if (selectedRadioButton.getText().equals("bilateral")) {
 				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
 				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-				mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+				if(timeline.isEmpty()) {
+					mat = blur.bilateralBlur(src, filterPower,sigmaColour,sigmaSpace);
+				}
+				else {
+					mat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+				}
+				
 			}							
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -788,7 +864,7 @@ public class FXController implements Initializable{
 	            else {
 	            	draggingButton.getFilterobject().setSrc(src);
 	            }
-	            draggingButton.getFilterobject().useFilter();
+	            
 	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
 	            //System.out.println(draggingButton.getText());
 	        });
@@ -813,11 +889,16 @@ public class FXController implements Initializable{
 		 pane.setOnDragDropped(e -> {
 			 db = e.getDragboard();
 			 if(db.hasContent(buttonFormat)) {
+				 draggingButton.getFilterobject().useFilter();
 				 timeline.add(draggingButton.getFilterobject());
+				 BufferedImage neu = timeline.getLast().returnImage();
+				 image = SwingFXUtils.toFXImage(neu, null);
+				 imageView.setImage(image);
 				 draggingButton.setImageWithFilter(image);
 				 draggingButton.setUserData("draggingButton");
 				 draggingButton.setOnAction(new EventHandler<ActionEvent>() {
-					    @Override public void handle(ActionEvent e) {
+					    @Override 
+					    public void handle(ActionEvent e) {
 					    	System.out.println(" EventHandler of Biber Button");
 					    	//Hier text vom Button auslesen und je nach dem was drin steht den filter anwenden ...
 					    	//absolut nicht elegant aber was anderes f�llt mir nich ein
@@ -862,9 +943,6 @@ public class FXController implements Initializable{
 				 
 				 pane.getChildren().add(draggingButton);
 				 e.setDropCompleted(true);
-				 BufferedImage neu = imageMan.matToBuffImage(mat);
-				 image = SwingFXUtils.toFXImage(neu, null);
-				 imageView.setImage(image);
 				 ImageView thumb = new ImageView(image);
 				 //TODO: get size of button here. scaling is just a workaround
 				 thumb.setFitWidth(image.getWidth()/3);
