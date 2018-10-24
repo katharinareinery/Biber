@@ -237,6 +237,7 @@ public class FXController implements Initializable{
 		setDragOnButton(srcButton);
 		addDropHandling(flowpane);
 		addDropHandling(vbox);
+		cbox_filters.setDisable(true);
 		about.setOnAction(this::handleAbout);
 		preview.setOnAction(this::handleWindow);
 		anwenden.setDisable(true);
@@ -382,6 +383,7 @@ public class FXController implements Initializable{
 			anwenden.setDisable(false);
 			preview.setDisable(false);
 			srcButton.setDisable(false);
+			cbox_filters.setDisable(false);
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -617,10 +619,10 @@ public class FXController implements Initializable{
 			threshold -=1;
 		}
 		txtThreshold.setText(Integer.toString(threshold));
-		/*mat = thold.binarisieren(threshold, src);
+		mat = thold.binarisieren(threshold, src);
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
-		imageView.setImage(image);*/
+		imageView.setImage(image);
 	}
 	
 	/**
@@ -633,10 +635,10 @@ public class FXController implements Initializable{
 			threshold +=1;
 		}
 		txtThreshold.setText(Integer.toString(threshold));
-		/*mat = thold.binarisieren(threshold, src);
+		mat = thold.binarisieren(threshold, src);
 		BufferedImage neu = imageMan.matToBuffImage(mat);
 		image = SwingFXUtils.toFXImage(neu, null);
-		imageView.setImage(image);*/
+		imageView.setImage(image);
 	}
 	
 	/**
@@ -752,16 +754,13 @@ public class FXController implements Initializable{
 	            cc.put(buttonFormat, "button");
 	            db.setContent(cc);
 	            RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
-	            //Je nach dem lesen wir die txtfelder und radiobuttons aus schreiben das in den text des buttons zum später auslesen
-	            //
 	            if(cbox_filters.getValue().equals("Threshold")) {
-	            	draggingButton = createButton(cbox_filters.getValue().toString()+" :"+txtThreshold.getText());
+	            	draggingButton = createButton(cbox_filters.getValue().toString());
 	            	draggingButton.setFilter("Threshold");
 	            	draggingButton.setThreshold(Integer.parseInt(txtThreshold.getText()));
 	            }else if(cbox_filters.getValue().equals("Blur")){
 	            	if(selectedRadioButton.getText().equals("bilateral")) {
-	            		//Hier alle drei txt(filterpwoer,sigmacolor,sigmaspace) auslesen und dem Kontruktor geben
-	            		draggingButton = createButton(cbox_filters.getValue().toString()+" :"+selectedRadioButton.getText());
+	            		draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
 	            		draggingButton.setFilter(cbox_filters.getValue().toString());
 	            		draggingButton.setFilterPower(Integer.parseInt(txtFilterPower.getText()));
 	            		draggingButton.setSigmaColour(Double.parseDouble(txtSigmaColour.getText()));
@@ -769,15 +768,14 @@ public class FXController implements Initializable{
 	            		draggingButton.setBlurOption(selectedRadioButton.getText());
 	            		
 	            	}else {
-	            		//Hier nur einen txt(filterpower) auslesen auslesen
-	            		draggingButton = createButton(cbox_filters.getValue().toString()+" :"+selectedRadioButton.getText()+txtFilterPower.getText());
+	            		draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
 	            		draggingButton.setFilter("Blur");
 	            		draggingButton.setFilterPower(Integer.parseInt(txtFilterPower.getText()));
 	            		draggingButton.setBlurOption(selectedRadioButton.getText());
 	            	}
 	            }else if(cbox_filters.getValue().equals("Grayscale")){
 	            	//Selber kram wie oben
-	            	draggingButton = createButton(cbox_filters.getValue().toString()+selectedRadioButton.getText());
+	            	draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
 	            	draggingButton.setFilter("Grayscale");
 	            	draggingButton.setGrayScale(selectedRadioButton.getText());
 	            }
@@ -852,6 +850,9 @@ public class FXController implements Initializable{
 				 
 				 pane.getChildren().add(draggingButton);
 				 e.setDropCompleted(true);
+				 BufferedImage neu = imageMan.matToBuffImage(mat);
+				 image = SwingFXUtils.toFXImage(neu, null);
+				 imageView.setImage(image);
 				 ImageView thumb = new ImageView(image);
 				 //TODO: get size of button here. scaling is just a workaround
 				 thumb.setFitWidth(image.getWidth()/3);
