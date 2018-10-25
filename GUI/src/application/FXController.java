@@ -279,16 +279,16 @@ public class FXController implements Initializable{
 		 */
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Threshold")) {
-				if(!isApplied && timeline.isEmpty()) {
-					BufferedImage neu = imageMan.matToBuffImage(src);
-					image = SwingFXUtils.toFXImage(neu, null);
-					imageView.setImage(image);
-				}
-				else if(!isApplied && !timeline.isEmpty()) {
-					BufferedImage neu = timeline.getLast().returnImage();
-					image = SwingFXUtils.toFXImage(neu, null);
-					imageView.setImage(image);
-				}
+//				if(!isApplied && timeline.isEmpty()) {
+//					BufferedImage neu = imageMan.matToBuffImage(src);
+//					image = SwingFXUtils.toFXImage(neu, null);
+//					imageView.setImage(image);
+//				}
+//				else if(!isApplied && !timeline.isEmpty()) {
+//					BufferedImage neu = timeline.getLast().returnImage();
+//					image = SwingFXUtils.toFXImage(neu, null);
+//					imageView.setImage(image);
+//				}
 				isApplied = false;
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
@@ -308,16 +308,16 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
-				if(!isApplied && timeline.isEmpty()) {
-					BufferedImage neu = imageMan.matToBuffImage(src);
-					image = SwingFXUtils.toFXImage(neu, null);
-					imageView.setImage(image);
-				}
-				else if(!isApplied && !timeline.isEmpty()) {
-					BufferedImage neu = timeline.getLast().returnImage();
-					image = SwingFXUtils.toFXImage(neu, null);
-					imageView.setImage(image);
-				}
+//				if(!isApplied && timeline.isEmpty()) {
+//					BufferedImage neu = imageMan.matToBuffImage(src);
+//					image = SwingFXUtils.toFXImage(neu, null);
+//					imageView.setImage(image);
+//				}
+//				else if(!isApplied && !timeline.isEmpty()) {
+//					BufferedImage neu = timeline.getLast().returnImage();
+//					image = SwingFXUtils.toFXImage(neu, null);
+//					imageView.setImage(image);
+//				}
 				isApplied = false;
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
@@ -329,16 +329,16 @@ public class FXController implements Initializable{
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
-				if(!isApplied && timeline.isEmpty()) {
-					BufferedImage neu = imageMan.matToBuffImage(src);
-					image = SwingFXUtils.toFXImage(neu, null);
-					imageView.setImage(image);
-				}
-				else if(!isApplied && !timeline.isEmpty()) {
-					BufferedImage neu = timeline.getLast().returnImage();
-					image = SwingFXUtils.toFXImage(neu, null);
-					imageView.setImage(image);
-				}
+//				if(!isApplied && timeline.isEmpty()) {
+//					BufferedImage neu = imageMan.matToBuffImage(src);
+//					image = SwingFXUtils.toFXImage(neu, null);
+//					imageView.setImage(image);
+//				}
+//				else if(!isApplied && !timeline.isEmpty()) {
+//					BufferedImage neu = timeline.getLast().returnImage();
+//					image = SwingFXUtils.toFXImage(neu, null);
+//					imageView.setImage(image);
+//				}
 				isApplied = false;
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
