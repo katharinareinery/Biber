@@ -170,6 +170,8 @@ public class FXController implements Initializable{
 	private ToggleButton btn_cursor;
 	private ToggleGroup tg_toolbar;
 	
+	private boolean isApplied = false;
+	
 	private TextField txt_fld = new TextField();
 
 	//Linked List for storing filters
@@ -277,9 +279,17 @@ public class FXController implements Initializable{
 		 */
 		cbox_filters.getSelectionModel().selectedItemProperty().addListener((obs,oldVal,newVal)->{
 			if(newVal!= null && newVal.equals("Threshold")) {
-//				BufferedImage neu = imageMan.matToBuffImage(src);
-//				image = SwingFXUtils.toFXImage(neu, null);
-//				imageView.setImage(image);
+				if(!isApplied && timeline.isEmpty()) {
+					BufferedImage neu = imageMan.matToBuffImage(src);
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+				}
+				else if(!isApplied && !timeline.isEmpty()) {
+					BufferedImage neu = timeline.getLast().returnImage();
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+				}
+				isApplied = false;
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				initThreshold();
@@ -298,9 +308,17 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
-//				BufferedImage neu = imageMan.matToBuffImage(src);
-//				image = SwingFXUtils.toFXImage(neu, null);
-//				imageView.setImage(image);
+				if(!isApplied && timeline.isEmpty()) {
+					BufferedImage neu = imageMan.matToBuffImage(src);
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+				}
+				else if(!isApplied && !timeline.isEmpty()) {
+					BufferedImage neu = timeline.getLast().returnImage();
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+				}
+				isApplied = false;
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -311,9 +329,17 @@ public class FXController implements Initializable{
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
-//				BufferedImage neu = imageMan.matToBuffImage(src);
-//				image = SwingFXUtils.toFXImage(neu, null);
-//				imageView.setImage(image);
+				if(!isApplied && timeline.isEmpty()) {
+					BufferedImage neu = imageMan.matToBuffImage(src);
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+				}
+				else if(!isApplied && !timeline.isEmpty()) {
+					BufferedImage neu = timeline.getLast().returnImage();
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+				}
+				isApplied = false;
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -432,6 +458,7 @@ public class FXController implements Initializable{
 	 * This method provides the various controls with functions.
 	 */
 	public void handleAnwenden(ActionEvent event) {
+		isApplied = true;
 		System.out.println(cbox_filters.getValue());
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
 		switch(cbox_filters.getValue().toString()) {
