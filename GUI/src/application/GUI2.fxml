@@ -21,7 +21,7 @@
                </BorderPane.margin></Label>
          </center>
          <left>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="262.0" fitWidth="486.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
                   <Image url="@../../biber.png" />
                </image>
