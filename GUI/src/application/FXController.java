@@ -219,6 +219,7 @@ public class FXController implements Initializable{
 			stage = new Stage();
 			stage.setScene(scene);
 			stage.setTitle("About");
+			stage.getIcons().add(new Image("file:biber.png"));
 			stage.show();
 		}catch(Exception e) {
 			e.printStackTrace();			
@@ -828,6 +829,7 @@ public class FXController implements Initializable{
 			stage.setScene(scene);
 			//stage = new Stage();
 			stage.setTitle("Biber");
+			stage.getIcons().add(new Image("file:biber.png"));
 			stage.show();
 			controller2.setImage(image);
 			controller2.setImageInImageView();
