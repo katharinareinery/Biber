@@ -300,17 +300,6 @@ public class FXController implements Initializable{
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 			if(newVal!= null && newVal.equals("Threshold")) {
-//				if(!isApplied && timeline.isEmpty()) {
-//					BufferedImage neu = imageMan.matToBuffImage(src);
-//					image = SwingFXUtils.toFXImage(neu, null);
-//					imageView.setImage(image);
-//				}
-//				else if(!isApplied && !timeline.isEmpty()) {
-//					BufferedImage neu = timeline.getLast().returnImage();
-//					image = SwingFXUtils.toFXImage(neu, null);
-//					imageView.setImage(image);
-//				}
-				isApplied = false;
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				initThreshold();
@@ -319,13 +308,11 @@ public class FXController implements Initializable{
 				sc.setMin(1);
 				sc.setMax(255);
 				sc.valueProperty().addListener(new ChangeListener<Number>() {
-
 					@Override
 					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 						// TODO Auto-generated method stub
 						txt_fld.setText(Integer.toString(arg2.intValue()));
-					}
-					
+					}	
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
@@ -979,15 +966,7 @@ public class FXController implements Initializable{
 	        return new Point2D(
 	                viewport.getMinX() + xProportion * viewport.getWidth(), 
 	                viewport.getMinY() + yProportion * viewport.getHeight());
-	    }
-	    
-/*	    private EventHandler eventForDragButtons = new EventHandler<ActionEvent>() {
-	    	public void handle(ActionEvent event) {
-	    		//System.out.println(draggingButton.getText()+"!!!!!!");
-	    		System.out.println(event.getTarget());
-	    	}
-		};*/
-	    
+	    }	    
 	    private void initToolbar() {
 	    	tg_toolbar = new ToggleGroup();
 	    	btn_movezoom = new ToggleButton();
