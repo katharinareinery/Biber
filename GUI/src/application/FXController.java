@@ -895,7 +895,7 @@ public class FXController implements Initializable{
 	            	draggingButton.getFilterobject().setSrc(timeline.getLast().getDst());
 	            }
 	            else {
-	            	draggingButton.getFilterobject().setSrc(src);
+	            	draggingButton.getFilterobject().setSrc(mat);
 	            }
 	            
 	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
