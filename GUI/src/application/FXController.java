@@ -329,17 +329,6 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
-//				if(!isApplied && timeline.isEmpty()) {
-//					BufferedImage neu = imageMan.matToBuffImage(src);
-//					image = SwingFXUtils.toFXImage(neu, null);
-//					imageView.setImage(image);
-//				}
-//				else if(!isApplied && !timeline.isEmpty()) {
-//					BufferedImage neu = timeline.getLast().returnImage();
-//					image = SwingFXUtils.toFXImage(neu, null);
-//					imageView.setImage(image);
-//				}
-				isApplied = false;
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -350,17 +339,6 @@ public class FXController implements Initializable{
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
-//				if(!isApplied && timeline.isEmpty()) {
-//					BufferedImage neu = imageMan.matToBuffImage(src);
-//					image = SwingFXUtils.toFXImage(neu, null);
-//					imageView.setImage(image);
-//				}
-//				else if(!isApplied && !timeline.isEmpty()) {
-//					BufferedImage neu = timeline.getLast().returnImage();
-//					image = SwingFXUtils.toFXImage(neu, null);
-//					imageView.setImage(image);
-//				}
-				isApplied = false;
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -392,9 +370,7 @@ public class FXController implements Initializable{
 			);
 		File file = fileChooser.showOpenDialog(stage);
 		filepath = file.getAbsolutePath();
-		//String localURL = file.toURI().toString();
-		//Image image2 = new Image(localURL);
-		
+	
 		/**
 		 * Loading the image
 		 */
