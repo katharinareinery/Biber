@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -68,7 +70,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
 public class FXController implements Initializable{
-	
+
 	private final DataFormat buttonFormat = new DataFormat("com.example.myapp.formats.button");
 	private BiberButton draggingButton;
 	double width;
@@ -132,7 +134,7 @@ public class FXController implements Initializable{
 	@FXML
 	private TextField txtSigmaSpace;
 	@FXML
-	private Label filerSize;
+	private Label labelFilerSize;
 	@FXML
 	private Label labelSigmaX;
 	@FXML
@@ -163,32 +165,32 @@ public class FXController implements Initializable{
 	private SplitPane toolbar_split;
 	@FXML
 	private FlowPane toolbar_rightpane;
-	
+
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
 	private ImageView iv_cursor;
 	private ToggleButton btn_cursor;
 	private ToggleGroup tg_toolbar;
-	
+
 	private boolean isApplied = false;
-	
+
 	private TextField txt_fld = new TextField();
 
 	//Linked List for storing filters
 	private LinkedList<ImageMan> timeline = new LinkedList();
 	private ScrollBar sc = new ScrollBar();
-	
+
 	private FileChooser fileChooser;
 	private Stage stage;
 	private Image image;
 
 	private BufferedImage bufferedImage;
-	
+
 	private Mat src;
 	private Mat mat;
 
 	//private GridPane itembox = new GridPane();
-		
+
 	private Blur blur = new Blur();
 	private Grayscale grayscale = new Grayscale();
 	private Threshold thold = new Threshold();
@@ -196,15 +198,15 @@ public class FXController implements Initializable{
 	private ImageMan imageMan = new ImageMan();
 	private Dragboard db;
 	private ClipboardContent cc = new ClipboardContent();
-	
+
 	Service<Void> backgroundThread;
-	
+
 	private SharedObject so = SharedObject.getInstance();
 	private int thumpnailPosition = 0;
-	
+
 	//get screen size for imageview
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	
+
 	/**
 	 * About Biber.
 	 * This method opens a new window, which provides brief information about the program.
@@ -212,7 +214,7 @@ public class FXController implements Initializable{
 	public void handleAbout(ActionEvent event) {
 		try {
 			//stage = (Stage) menubar.getScene().getWindow();
-			
+
 			Parent root = FXMLLoader.load(getClass().getResource("GUI2.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -225,7 +227,7 @@ public class FXController implements Initializable{
 			e.printStackTrace();			
 		}
 	}
-	
+
 	/**
 	 * Initialize.
 	 * This method assigns the appropriate functions to the various image processing options.
@@ -260,37 +262,41 @@ public class FXController implements Initializable{
 		 * At this point we assign the listener to the radiobuttons.
 		 */
 		toggleGroup1.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
-		    public void changed(ObservableValue<? extends Toggle> ov,
-		        Toggle old_toggle, Toggle new_toggle) {
-		            if (toggleGroup1.getSelectedToggle() != null) {
-		        		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
-		        			if(cbox_filters.getSelectionModel().getSelectedItem().toString().equals("Grayscale")) {
-								Mat newMat = mat.clone();
-		        				try {
-									if(selectedRadioButton.getText().equals("average")) {
-										newMat = grayscale.average(newMat);
-									}else if (selectedRadioButton.getText().equals("luminosity")) {
-										newMat = grayscale.luminosity(newMat);
-									}else if(selectedRadioButton.getText().equals("lightness")){
-										newMat = grayscale.lightness(newMat);
-									}else if(selectedRadioButton.getText().equals("pixelwise")){
-										newMat = grayscale.grayPixelFor(newMat);
-									}
-									setTheImage(newMat);
-									//System.out.println(mat.cols());
-								}catch (Exception e) {
-									// TODO: handle exception
-									e.printStackTrace();
-								}
-		        				deinitBlurOptionsBila();
-		        			}else if(selectedRadioButton.getText().equals("bilateral")) {
-		        				initBlurOptionsBila();
-		        			}else {
-		        				deinitBlurOptionsBila();
-		        				initBlurOptions();
-		        			}
-		            }                
-		        }
+			public void changed(ObservableValue<? extends Toggle> ov,
+					Toggle old_toggle, Toggle new_toggle) {
+				if (toggleGroup1.getSelectedToggle() != null) {
+					RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+					if(cbox_filters.getSelectionModel().getSelectedItem().toString().equals("Grayscale")) {
+						Mat newMat = mat.clone();
+						try {
+							if(selectedRadioButton.getText().equals("average")) {
+								deinitGrayOptions();
+								newMat = grayscale.average(newMat);
+							}else if (selectedRadioButton.getText().equals("luminosity")) {
+								deinitGrayOptions();
+								newMat = grayscale.luminosity(newMat);
+							}else if(selectedRadioButton.getText().equals("lightness")){
+								deinitGrayOptions();
+								newMat = grayscale.lightness(newMat);
+							}else if(selectedRadioButton.getText().equals("customized")){
+								System.out.println("hallo");
+								initGrayOptions();
+							}
+							setTheImage(newMat);
+							//System.out.println(mat.cols());
+						}catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+						//deinitBlurOptionsBila();
+					}else if(selectedRadioButton.getText().equals("bilateral")) {
+						initBlurOptionsBila();
+					}else {
+						deinitBlurOptionsBila();
+						initBlurOptions();
+					}
+				}                
+			}
 		});
 		/*
 		 * Combobox - The changelistener is waiting for the selection.
@@ -323,7 +329,7 @@ public class FXController implements Initializable{
 				deinitThreshold();
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
-				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
+				initRadioButtons("average", "luminosity", "lightness", "customized");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
@@ -336,28 +342,28 @@ public class FXController implements Initializable{
 				deinitBlurOptionsBila();
 			}
 		});		
-		
+
 	}
-	
+
 	public void init(Stage stage) {
 		this.stage = stage;
 	}
 
-	
+
 	/**
 	 * This method will open a file.
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
-	
+
 	public void openFile() {
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter("PNG", "*.png"),
 				new FileChooser.ExtensionFilter("JPG2000", "*.jpg2")
-			);
+				);
 		File file = fileChooser.showOpenDialog(stage);
 		filepath = file.getAbsolutePath();
-	
+
 		/**
 		 * Loading the image
 		 */
@@ -368,7 +374,7 @@ public class FXController implements Initializable{
 				System.out.println("Error opening image");
 				System.out.println("Usage: filechooserPath");
 				System.exit(-1);
-				}
+			}
 			bufferedImage = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(bufferedImage, null);
 			//set Imageview to fit image if < screenSize
@@ -385,11 +391,11 @@ public class FXController implements Initializable{
 			//toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
 			imageView.setImage(image);
 			so.setOriginalImage(image);
-						
+
 			/*************************************
 			 *pluto-explorer scrollable imageview*
 			 *************************************/
-			
+
 			btn_movezoom.setDisable(false);
 			btn_cursor.setDisable(false);
 			anwenden.setDisable(false);
@@ -399,24 +405,24 @@ public class FXController implements Initializable{
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
-		
+
 	}
-	
+
 	/**
 	 * This method will close the window.
 	 */
-	 public void doExit() {
-		 Platform.exit();
-		 System.exit(0);
-	 }
-	 
+	public void doExit() {
+		Platform.exit();
+		System.exit(0);
+	}
+
 	/**
 	 * This method will allow the user to import an image.
 	 */
 	public void chooseImage(ActionEvent event) {
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	}
-	
+
 	/**
 	 * This method will save a file. 
 	 * The file formats available to the user are PNG and JPG2000.
@@ -426,212 +432,269 @@ public class FXController implements Initializable{
 		fileChooser.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter("PNG", "*.png"),
 				new FileChooser.ExtensionFilter("JPG2000", "*.jpg2")
-			);
+				);
 		File file = fileChooser.showSaveDialog(stage);
-	
+
 		try {
 			ImageIO.write(SwingFXUtils.fromFXImage(imageView.getImage(), null), "png", file);
-			
+
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
-		
+
 	}
 
 	/**
 	 * This method provides the various controls with functions.
 	 */
 	public void handleAnwenden(ActionEvent event) {
+
 		isApplied = true;
 		System.out.println(cbox_filters.getValue());
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
 		switch(cbox_filters.getValue().toString()) {
-			case "Grayscale":
-				backgroundThread = new Service<Void>() {
-					@Override
-					protected Task<Void> createTask() {
-						// TODO Auto-generated method stub
-						return new Task<Void>() {
-							@Override
-							protected Void call() throws Exception {
-								// TODO Auto-generated method stub
-								try {
-									if(selectedRadioButton.getText().equals("average")) {
-										mat = grayscale.average(mat);
-									}else if (selectedRadioButton.getText().equals("luminosity")) {
-										mat = grayscale.luminosity(mat);
-									}else if(selectedRadioButton.getText().equals("lightness")){
-										mat = grayscale.lightness(mat);
-									}else if(selectedRadioButton.getText().equals("pixelwise")){
-										mat = grayscale.grayPixelFor(mat);
-									}
-									setTheImage(mat);
-									//System.out.println(mat.cols());
-								}catch (Exception e) {
-									// TODO: handle exception
-									e.printStackTrace();
-								}
-								return null;
-							}
-						};
-					}
-				};
-				backgroundThread.restart();
-				break;
-			case "Blur":
-				backgroundThread = new Service<Void>() {
-					@Override
-					protected Task<Void> createTask() {
-						// TODO Auto-generated method stub
-						return new Task<Void>() {
-							
-							@Override
-							protected Void call() throws Exception {
-								// TODO Auto-generated method stub
-								try {
-									if(selectedRadioButton.getText().equals("homogen")) {
-										mat = blur.homogenBlur(mat,Integer.parseInt(txtFilterPower.getText()));
-									}else if (selectedRadioButton.getText().equals("gaussian")) {
-										mat = blur.gaussianBlur(mat, Integer.parseInt(txtFilterPower.getText()));
-									}else if(selectedRadioButton.getText().equals("median")) {
-										mat = blur.medianBlur(mat,Integer.parseInt(txtFilterPower.getText()));
-									}else if(selectedRadioButton.getText().equals("bilateral")){
-										mat = blur.bilateralBlur(mat, Integer.parseInt(txtFilterPower.getText()), Integer.parseInt(txtSigmaColour.getText()), Integer.parseInt(txtSigmaSpace.getText()));
-									}									
-									setTheImage(mat);
-								}catch(Exception e) {
-									e.printStackTrace();
-								}
-								return null;
-							}
-						};
-					}
-				};
-					backgroundThread.restart();
-					break;
-			case "Threshold":
-				int t = (txtThreshold.getText().isEmpty() ? 1 : Integer.parseInt(txtThreshold.getText()));
-				System.out.println(t);
-				if(t >= 0 && t < 256) {
-					backgroundThread = new Service<Void>() {
+		case "Grayscale":
+			backgroundThread = new Service<Void>() {
+				@Override
+				protected Task<Void> createTask() {
+					// TODO Auto-generated method stub
+					return new Task<Void>() {
 						@Override
-						protected Task<Void> createTask() {
+						protected Void call() throws Exception {
 							// TODO Auto-generated method stub
-							return new Task<Void>() {
-								@Override
-								protected Void call() throws Exception {
-									// TODO Auto-generated method stub
-									try {
-										mat = thold.binarisieren(t, mat);
-										setTheImage(mat);
-									}
-									catch(Exception e) {e.printStackTrace();}
-									return null;
+							try {
+								Mat newMat = mat.clone();
+								if(selectedRadioButton.getText().equals("average")) {
+									newMat = grayscale.average(mat);
+								}else if (selectedRadioButton.getText().equals("luminosity")) {
+									newMat = grayscale.luminosity(mat);
+								}else if(selectedRadioButton.getText().equals("lightness")){
+									newMat = grayscale.lightness(mat);
+								}else if(selectedRadioButton.getText().equals("customized")){
+									double red = Double.parseDouble(txtFilterPower.getText());
+									double green = Double.parseDouble(txtSigmaColour.getText());
+									double blue = Double.parseDouble(txtSigmaSpace.getText());
+									newMat = grayscale.grayOwn(mat, red, green, blue);
 								}
-							};
+								setTheImage(newMat);
+								newMat.copyTo(mat);
+								//System.out.println(mat.cols());
+							}catch (Exception e) {
+								// TODO: handle exception
+								e.printStackTrace();
+							}
+							return null;
 						}
 					};
 				}
-				else {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Information Dialog");
-					alert.setHeaderText(null);
-					alert.setContentText("Only values from 0-255 allowed!");
-					alert.showAndWait();
+			};
+			backgroundThread.restart();
+			break;
+		case "Blur":
+			backgroundThread = new Service<Void>() {
+				@Override
+				protected Task<Void> createTask() {
+					// TODO Auto-generated method stub
+					return new Task<Void>() {
+						@Override
+						protected Void call() throws Exception {
+							// TODO Auto-generated method stub
+							try {
+								Mat newMat = mat.clone();
+								if(selectedRadioButton.getText().equals("homogen")) {
+									newMat = blur.homogenBlur(mat,Integer.parseInt(txtFilterPower.getText()));
+								}else if (selectedRadioButton.getText().equals("gaussian")) {
+									newMat = blur.gaussianBlur(mat, Integer.parseInt(txtFilterPower.getText()));
+								}else if(selectedRadioButton.getText().equals("median")) {
+									newMat = blur.medianBlur(mat,Integer.parseInt(txtFilterPower.getText()));
+								}else if(selectedRadioButton.getText().equals("bilateral")){
+									newMat = blur.bilateralBlur(mat, Integer.parseInt(txtFilterPower.getText()), Integer.parseInt(txtSigmaColour.getText()), Integer.parseInt(txtSigmaSpace.getText()));
+								}									
+								setTheImage(newMat);
+								newMat.copyTo(mat);
+							}catch(Exception e) {
+								e.printStackTrace();
+							}
+							return null;
+						}
+					};
 				}
-				backgroundThread.restart();
-				break;
+			};
+			backgroundThread.restart();
+			break;
+		case "Threshold":
+			int t = (txtThreshold.getText().isEmpty() ? 1 : Integer.parseInt(txtThreshold.getText()));
+			System.out.println(t);
+			if(t >= 0 && t < 256) {
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							@Override
+							protected Void call() throws Exception {
+								// TODO Auto-generated method stub
+								try {
+									Mat newMat = mat.clone();
+									newMat = thold.binarisieren(t, mat);
+									setTheImage(newMat);
+									newMat.copyTo(mat);
+								}
+								catch(Exception e) {e.printStackTrace();}
+								return null;
+							}
+						};
+					}
+				};
+			}
+			else {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Information Dialog");
+				alert.setHeaderText(null);
+				alert.setContentText("Only values from 0-255 allowed!");
+				alert.showAndWait();
+			}
+			backgroundThread.restart();
+			break;
 		}
 	}
-	
+
 	/**
 	 * Adds up the sigma color filter via the plus button.
 	 */
 	@FXML
 	private void handleSgColourPlusButton(ActionEvent event5) {
 		Mat newMat = mat.clone();
-		int filterPower = Integer.parseInt(txtFilterPower.getText());
-		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
-		sigmaColour+=2;
-		txtSigmaColour.setText(Double.toString(sigmaColour));
-		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-		if(timeline.isEmpty()) {
-			newMat = blur.bilateralBlur(newMat, filterPower,sigmaColour,sigmaSpace);
-		}
-		else {
-			newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		if(getSelectedRadioButtonText().equals("customized")) {
+			double red = Double.parseDouble(txtFilterPower.getText());
+			double green = Double.parseDouble(txtSigmaColour.getText());
+			double  blue = Double.parseDouble(txtSigmaSpace.getText());
+			green=round(green+0.01,2);
+			txtSigmaColour.setText(Double.toString(green));
+			if(timeline.isEmpty()) {
+				newMat = grayscale.grayOwn(mat, red, green, blue);
+			}else {
+				newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
+			}
+		}else {
+			int filterPower = Integer.parseInt(txtFilterPower.getText());
+			double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+			sigmaColour+=2;
+			txtSigmaColour.setText(Double.toString(sigmaColour));
+			double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+			if(timeline.isEmpty()) {
+				newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
+			}
+			else {
+				newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+			}
 		}
 		setTheImage(newMat);
-		
 	}
-	
+
 	/**
 	 * Subtracts the sigma color filter with the minus button.
 	 */
 	@FXML
 	private void handleSgColourMinusButton(ActionEvent event5) {
 		Mat newMat = mat.clone();
-		int filterPower = Integer.parseInt(txtFilterPower.getText());
-		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
-		if(sigmaColour>1) {
-			sigmaColour-=2;
-		}
-		txtSigmaColour.setText(Double.toString(sigmaColour));
-		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());		
-		if(timeline.isEmpty()) {
-			newMat = blur.bilateralBlur(newMat, filterPower,sigmaColour,sigmaSpace);
-		}
-		else {
-			newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		if(getSelectedRadioButtonText().equals("customized")) {
+			double red = Double.parseDouble(txtFilterPower.getText());
+			double green = Double.parseDouble(txtSigmaColour.getText());
+			double  blue = Double.parseDouble(txtSigmaSpace.getText());
+			green=round(green-0.01,2);
+			txtSigmaColour.setText(Double.toString(green));
+			if(timeline.isEmpty()) {
+				newMat = grayscale.grayOwn(mat, red, green, blue);
+			}else {
+				newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
+			}
+		}else {
+			int filterPower = Integer.parseInt(txtFilterPower.getText());
+			double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+			if(sigmaColour>1) {
+				sigmaColour-=2;
+			}
+			txtSigmaColour.setText(Double.toString(sigmaColour));
+			double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());		
+			if(timeline.isEmpty()) {
+				newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
+			}
+			else {
+				newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+			}
 		}
 		setTheImage(newMat);
-		
 	}
-	
+
 	/**
 	 * Adds up the sigma space filter via the plus button.
 	 */
 	@FXML
 	private void handleSgSpacePlusButton(ActionEvent event5) {
 		Mat newMat = mat.clone();
-		int filterPower = Integer.parseInt(txtFilterPower.getText());
-		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-		sigmaSpace+=2;
-		txtSigmaSpace.setText(Double.toString(sigmaSpace));
-		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());		
-		if(timeline.isEmpty()) {
-			newMat = blur.bilateralBlur(newMat, filterPower,sigmaColour,sigmaSpace);
-		}
-		else {
-			newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		if(getSelectedRadioButtonText().equals("customized")) {
+			double red = Double.parseDouble(txtFilterPower.getText());
+			double green = Double.parseDouble(txtSigmaColour.getText());
+			double  blue = Double.parseDouble(txtSigmaSpace.getText());
+			blue=round(blue+0.01,2);
+			txtSigmaSpace.setText(Double.toString(blue));
+			if(timeline.isEmpty()) {
+				newMat = grayscale.grayOwn(mat, red, green, blue);
+			}else {
+				newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
+			}
+		}else {
+			int filterPower = Integer.parseInt(txtFilterPower.getText());
+			double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+			sigmaSpace+=2;
+			txtSigmaSpace.setText(Double.toString(sigmaSpace));
+			double sigmaColour = Double.parseDouble(txtSigmaColour.getText());		
+			if(timeline.isEmpty()) {
+				newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
+			}
+			else {
+				newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+			}
 		}
 		setTheImage(newMat);
-		
 	}
-	
+
 	/**
 	 * Subtracts the sigma space filter with the minus button.
 	 */
 	@FXML
 	private void handleSgSpaceMinusButton(ActionEvent event5) {
 		Mat newMat = mat.clone();
-		int filterPower = Integer.parseInt(txtFilterPower.getText());
-		double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-		if(sigmaSpace>1) {
-			sigmaSpace-=2;
-		}
-		txtSigmaSpace.setText(Double.toString(sigmaSpace));
-		double sigmaColour = Double.parseDouble(txtSigmaColour.getText());		
-		if(timeline.isEmpty()) {
-			newMat = blur.bilateralBlur(newMat, filterPower,sigmaColour,sigmaSpace);
-		}
-		else {
-			newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+		if(getSelectedRadioButtonText().equals("customized")) {
+			double red = Double.parseDouble(txtFilterPower.getText());
+			double green = Double.parseDouble(txtSigmaColour.getText());
+			double  blue = Double.parseDouble(txtSigmaSpace.getText());
+			blue=round(blue-0.01,2);
+			txtSigmaSpace.setText(Double.toString(blue));
+			if(timeline.isEmpty()) {
+				newMat = grayscale.grayOwn(mat, red, green, blue);
+			}else {
+				newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
+			}
+		}else {
+			int filterPower = Integer.parseInt(txtFilterPower.getText());
+			double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+			if(sigmaSpace>1) {
+				sigmaSpace-=2;
+			}
+			txtSigmaSpace.setText(Double.toString(sigmaSpace));
+			double sigmaColour = Double.parseDouble(txtSigmaColour.getText());		
+			if(timeline.isEmpty()) {
+				newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
+			}
+			else {
+				newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+			}
 		}
 		setTheImage(newMat);
-		
 	}
-	
+
 	/**
 	 * Subtracts the treshold filter with the minus button.
 	 */
@@ -644,14 +707,14 @@ public class FXController implements Initializable{
 		}
 		txtThreshold.setText(Integer.toString(threshold));		
 		if(timeline.isEmpty()) {
-			newMat = thold.binarisieren(threshold, newMat);
+			newMat = thold.binarisieren(threshold, mat);
 		}
 		else {
 			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
 		}
 		setTheImage(newMat);
 	}
-	
+
 	/**
 	 * Adds up the threshold filter via the plus button.
 	 */
@@ -669,14 +732,14 @@ public class FXController implements Initializable{
 		}
 		txtThreshold.setText(Integer.toString(threshold));
 		if(timeline.isEmpty()) {
-			newMat = thold.binarisieren(threshold, newMat);
+			newMat = thold.binarisieren(threshold, mat);
 		}
 		else {
 			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
 		}
 		setTheImage(newMat);
 	}
-	
+
 	/**
 	 * This method coordinates the application of the different settings 
 	 * of the blur filter via the plus button.
@@ -685,49 +748,62 @@ public class FXController implements Initializable{
 	private void handlePlusButton(ActionEvent event3) {
 		Mat newMat = mat.clone();
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
-		int filterPower = Integer.parseInt(txtFilterPower.getText());
-		filterPower+=2;
-		txtFilterPower.setText(Integer.toString(filterPower));
 		try {
-			if(selectedRadioButton.getText().equals("median")) {
+			if(getSelectedRadioButtonText().equals("customized")){
+				double red = Double.parseDouble(txtFilterPower.getText());
+				double green = Double.parseDouble(txtSigmaColour.getText());
+				double  blue = Double.parseDouble(txtSigmaSpace.getText());
+				red = round(red+0.01,2);
+				txtFilterPower.setText(Double.toString(red));
 				if(timeline.isEmpty()) {
-					newMat = blur.medianBlur(newMat, filterPower);
+					newMat = grayscale.grayOwn(mat, red, green, blue);
+				}else {
+					newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
 				}
-				else {
-					newMat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
+			}else {
+				int filterPower = Integer.parseInt(txtFilterPower.getText());
+				filterPower+=2;
+				txtFilterPower.setText(Integer.toString(filterPower));
+				if(selectedRadioButton.getText().equals("median")) {
+					if(timeline.isEmpty()) {
+						newMat = blur.medianBlur(mat, filterPower);
+					}
+					else {
+						newMat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
+					}
+
+				}else if (selectedRadioButton.getText().equals("gaussian")) {
+					if(timeline.isEmpty()) {
+						newMat = blur.gaussianBlur(mat, filterPower);
+					}
+					else {
+						newMat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
+					}
+				}else if (selectedRadioButton.getText().equals("homogen")) {
+					if(timeline.isEmpty()) {
+						newMat = blur.homogenBlur(mat, filterPower);
+					}
+					else {
+						newMat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
+					}
+				}else if (selectedRadioButton.getText().equals("bilateral")) {
+					double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+					double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+					if(timeline.isEmpty()) {
+						newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
+					}
+					else {
+						newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+					}
+
 				}
-				
-			}else if (selectedRadioButton.getText().equals("gaussian")) {
-				if(timeline.isEmpty()) {
-					newMat = blur.gaussianBlur(newMat, filterPower);
-				}
-				else {
-					newMat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
-				}
-			}else if (selectedRadioButton.getText().equals("homogen")) {
-				if(timeline.isEmpty()) {
-					newMat = blur.homogenBlur(newMat, filterPower);
-				}
-				else {
-					newMat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
-				}
-			}else if (selectedRadioButton.getText().equals("bilateral")) {
-				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
-				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-				if(timeline.isEmpty()) {
-					newMat = blur.bilateralBlur(newMat, filterPower,sigmaColour,sigmaSpace);
-				}
-				else {
-					newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
-				}
-				
-			}	
+			}
 			setTheImage(newMat);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method coordinates the application of the different settings 
 	 * of the blur filter via the minus button.
@@ -736,30 +812,40 @@ public class FXController implements Initializable{
 	private void handleMinusButton(ActionEvent event4) {
 		Mat newMat = mat.clone();
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
-		int filterPower = Integer.parseInt(txtFilterPower.getText());
-		if(filterPower>1) {
-			filterPower-=2;
-		}
-		txtFilterPower.setText(Integer.toString(filterPower));
 		try {
+			if(getSelectedRadioButtonText().equals("customized")){
+				double red = Double.parseDouble(txtFilterPower.getText());
+				double green = Double.parseDouble(txtSigmaColour.getText());
+				double  blue = Double.parseDouble(txtSigmaSpace.getText());
+				red = round(red-0.01,2);
+				txtFilterPower.setText(Double.toString(red));
+				if(timeline.isEmpty()) {
+					newMat = grayscale.grayOwn(mat, red, green, blue);
+				}else {
+					newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
+				}
+			}else {
+				int filterPower = Integer.parseInt(txtFilterPower.getText());
+				filterPower-=2;
+				txtFilterPower.setText(Integer.toString(filterPower));
 			if(selectedRadioButton.getText().equals("median")) {
 				if(timeline.isEmpty()) {
-					newMat = blur.medianBlur(newMat, filterPower);
+					newMat = blur.medianBlur(mat, filterPower);
 				}
 				else {
 					newMat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
 				}
-				
+
 			}else if (selectedRadioButton.getText().equals("gaussian")) {
 				if(timeline.isEmpty()) {
-					newMat = blur.gaussianBlur(newMat, filterPower);
+					newMat = blur.gaussianBlur(mat, filterPower);
 				}
 				else {
 					newMat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
 				}
 			}else if (selectedRadioButton.getText().equals("homogen")) {
 				if(timeline.isEmpty()) {
-					newMat = blur.homogenBlur(newMat, filterPower);
+					newMat = blur.homogenBlur(mat, filterPower);
 				}
 				else {
 					newMat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
@@ -768,19 +854,20 @@ public class FXController implements Initializable{
 				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
 				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
 				if(timeline.isEmpty()) {
-					newMat = blur.bilateralBlur(newMat, filterPower,sigmaColour,sigmaSpace);
+					newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
 				}
 				else {
 					newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
 				}
-								
+
 			}
+		}
 			setTheImage(newMat);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method contains the second window to see the changes in the image.
 	 * It is important to explicitly change loader.load to root class, here (parent).
@@ -805,346 +892,377 @@ public class FXController implements Initializable{
 			e.printStackTrace();			
 		}		
 	}
-	
+
 	/**
 	 * This method creates the drag button.
 	 */
-	 private BiberButton createButton(String text) {
-	        BiberButton button = new BiberButton(text);
-	        button.setOnDragDetected(e -> {
-	            db = button.startDragAndDrop(TransferMode.COPY);
-	            db.setDragView(button.snapshot(null, null));
-	            cc.put(buttonFormat, "button");
-	            db.setContent(cc);
-	            //draggingButton = createButton(cbox_filters.getValue().toString());
-	            //System.out.println(draggingButton.getText());
-	        });
-	        //button.setOnDragDone(e -> draggingButton = null);
-	        return button;
-	    }
-	 
+	private BiberButton createButton(String text) {
+		BiberButton button = new BiberButton(text);
+		button.setOnDragDetected(e -> {
+			db = button.startDragAndDrop(TransferMode.COPY);
+			db.setDragView(button.snapshot(null, null));
+			cc.put(buttonFormat, "button");
+			db.setContent(cc);
+			//draggingButton = createButton(cbox_filters.getValue().toString());
+			//System.out.println(draggingButton.getText());
+		});
+		//button.setOnDragDone(e -> draggingButton = null);
+		return button;
+	}
+
 	/**
 	 * This method assigns the selected filters to the drag button.
-	*/
-	 private Button setDragOnButton(Button button) {
-		 button.setOnDragDetected(e -> {
-	            db = button.startDragAndDrop(TransferMode.COPY);
-	            db.setDragView(button.snapshot(null, null));
-	            cc.put(buttonFormat, "button");
-	            db.setContent(cc);
-	            RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
-	            if(cbox_filters.getValue().equals("Threshold")) {
-	            	draggingButton = createButton(cbox_filters.getValue().toString());
-	            	draggingButton.setFilterobject(new Threshold(Integer.parseInt(txtThreshold.getText())));
-	            	
-	            }else if(cbox_filters.getValue().equals("Blur")){
-	            	if(selectedRadioButton.getText().equals("bilateral")) {
-	            		draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
-	            		draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),
-	            				Integer.parseInt(txtFilterPower.getText()),
-	            				Double.parseDouble(txtSigmaColour.getText()),
-	            				Double.parseDouble(txtSigmaSpace.getText())));
-	            	}else {
-	            		draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
-	            		draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),Integer.parseInt(txtFilterPower.getText())));
-	            	}
-	            }else if(cbox_filters.getValue().equals("Grayscale")){
-	            	//Selber kram wie oben
-	            	draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
-	            	draggingButton.setFilterobject(new Grayscale(selectedRadioButton.getText()));
-	            }
-	            
-	            if(!timeline.isEmpty() && timeline.getLast().getDst() != null) {
-	            	draggingButton.getFilterobject().setSrc(timeline.getLast().getDst());
-	            }
-	            else {
-	            	draggingButton.getFilterobject().setSrc(mat);
-	            }
-	            
-	            //draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
-	            //System.out.println(draggingButton.getText());
-	        });
-	        //button.setOnDragDone(e -> draggingButton = null);
-	        return button;
-	    }
-	 
+	 */
+	private Button setDragOnButton(Button button) {
+		button.setOnDragDetected(e -> {
+			db = button.startDragAndDrop(TransferMode.COPY);
+			db.setDragView(button.snapshot(null, null));
+			cc.put(buttonFormat, "button");
+			db.setContent(cc);
+			RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+			if(cbox_filters.getValue().equals("Threshold")) {
+				draggingButton = createButton(cbox_filters.getValue().toString());
+				draggingButton.setFilterobject(new Threshold(Integer.parseInt(txtThreshold.getText())));
+
+			}else if(cbox_filters.getValue().equals("Blur")){
+				if(selectedRadioButton.getText().equals("bilateral")) {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
+					draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),
+							Integer.parseInt(txtFilterPower.getText()),
+							Double.parseDouble(txtSigmaColour.getText()),
+							Double.parseDouble(txtSigmaSpace.getText())));
+				}else {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
+					draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),Integer.parseInt(txtFilterPower.getText())));
+				}
+			}else if(cbox_filters.getValue().equals("Grayscale")){
+				//Selber kram wie oben
+				draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
+				draggingButton.setFilterobject(new Grayscale(selectedRadioButton.getText()));
+			}
+
+			if(!timeline.isEmpty() && timeline.getLast().getDst() != null) {
+				draggingButton.getFilterobject().setSrc(timeline.getLast().getDst());
+			}
+			else {
+				draggingButton.getFilterobject().setSrc(mat);
+			}
+
+			//draggingButton.addEventHandler(ActionEvent.ACTION, eventForDragButtons);
+			//System.out.println(draggingButton.getText());
+		});
+		//button.setOnDragDone(e -> draggingButton = null);
+		return button;
+	}
+
 	/**
 	 * This method deals with the drop handling of the drag button.
 	 */
-	 private void addDropHandling(Pane pane) {
-		 pane.setOnDragOver(e -> {
-			 //System.out.println(e.toString());
-			 db = e.getDragboard();
-			 if(db.hasContent(buttonFormat)&& draggingButton != null //&&  draggingButton.getParent().getId() != pane.getId()
-					 ) {
-				 //System.out.println(draggingButton.toString());
-				 //System.out.println(pane.getId());
-				 e.acceptTransferModes(TransferMode.COPY);
-			 }
-		 });
-		 pane.setOnDragDropped(e -> {
-			 db = e.getDragboard();
-			 if(db.hasContent(buttonFormat)) {
-				 draggingButton.getFilterobject().useFilter();
-				 timeline.add(draggingButton.getFilterobject());
-				 BufferedImage neu = timeline.getLast().returnImage();
-				 image = SwingFXUtils.toFXImage(neu, null);
-				 imageView.setImage(image);
-				 mat = draggingButton.getFilterobject().getDst();
-				 draggingButton.setImageWithFilter(image);
-				 draggingButton.setUserData("draggingButton");
-				 draggingButton.setOnAction(new EventHandler<ActionEvent>() {
-					    @Override 
-					    public void handle(ActionEvent e) {
-					    	System.out.println(" EventHandler of Biber Button");
-					    	BiberButton dragB = (BiberButton)e.getSource();
-					    	System.out.println(dragB.getFilterobject());
-					    	dragB.getFilterobject().useFilter();
-							BufferedImage neu = dragB.getFilterobject().returnImage();
-							image = SwingFXUtils.toFXImage(neu, null);
-							imageView.setImage(image);
-					    }
-					});
-				 
-				 pane.getChildren().add(draggingButton);
-				 e.setDropCompleted(true);
-				 ImageView thumb = new ImageView(image);
-				 //TODO: get size of button here. scaling is just a workaround
-				 thumb.setFitWidth(image.getWidth()/3);
-				 thumb.setFitHeight(image.getHeight()/3);
-				 draggingButton.setMinWidth(image.getWidth()/3);
-				 thumpnailPane.getChildren().add(thumpnailPosition, thumb);
-				 thumpnailPosition++;
+	private void addDropHandling(Pane pane) {
+		pane.setOnDragOver(e -> {
+			//System.out.println(e.toString());
+			db = e.getDragboard();
+			if(db.hasContent(buttonFormat)&& draggingButton != null //&&  draggingButton.getParent().getId() != pane.getId()
+					) {
+				//System.out.println(draggingButton.toString());
+				//System.out.println(pane.getId());
+				e.acceptTransferModes(TransferMode.COPY);
 			}
-		 });
-		 
-	 }
-	 
-	 /**
-	  * Pluto-explorer helpful functions.
-	  */
-	 private void reset(ImageView imageView, double width, double height) {
-	        imageView.setViewport(new Rectangle2D(0, 0, width, height));
-	    }
-	 
-	 /**
-	  * Shift the viewport of the imageView by the specified delta, clamping so
-	  * the viewport does not move off the actual image.
-	  */
-	    private void shift(ImageView imageView, Point2D delta) {
-	        Rectangle2D viewport = imageView.getViewport();
-
-	        double width = imageView.getImage().getWidth() ;
-	        double height = imageView.getImage().getHeight() ;
-
-	        double maxX = width - viewport.getWidth();
-	        double maxY = height - viewport.getHeight();
-	        
-	        double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
-	        double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
-
-	        imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
-	    }
-
-	    private double clamp(double value, double min, double max) {
-
-	        if (value < min)
-	            return min;
-	        if (value > max)
-	            return max;
-	        return value;
-	    }
-
-	    /**
-	     * Convert mouse coordinates in the imageView to coordinates in the actual image.
-	     */
-	    private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
-	        double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
-	        double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
-
-	        Rectangle2D viewport = imageView.getViewport();
-	        return new Point2D(
-	                viewport.getMinX() + xProportion * viewport.getWidth(), 
-	                viewport.getMinY() + yProportion * viewport.getHeight());
-	    }	    
-	    private void initToolbar() {
-	    	tg_toolbar = new ToggleGroup();
-	    	btn_movezoom = new ToggleButton();
-	    	btn_cursor = new ToggleButton();
-	    	iv_cursor = new ImageView("file:cursor.png");
-	    	iv_movezoom = new ImageView("file:move.png");
-	    	iv_cursor.setFitHeight(20);
-	    	iv_cursor.setFitWidth(20);
-	    	iv_movezoom.setFitHeight(20);
-	    	iv_movezoom.setFitWidth(20);
-	    	btn_cursor.setGraphic(iv_cursor);
-	    	btn_movezoom.setGraphic(iv_movezoom);
-	    	btn_cursor.setUserData("cursor");
-	    	btn_movezoom.setUserData("move");
-	    	btn_movezoom.setDisable(true);
-			btn_cursor.setDisable(true);
-	    	btn_cursor.setToggleGroup(tg_toolbar);
-	    	btn_movezoom.setToggleGroup(tg_toolbar);
-	    	toolbar.getItems().add(btn_movezoom);
-	    	toolbar.getItems().add(btn_cursor);
-	    	tg_toolbar.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-
-				@Override
-				public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-					// TODO Auto-generated method stub
-					//System.out.println(tg_toolbar.getSelectedToggle().getUserData());
-					if(tg_toolbar.getSelectedToggle().getUserData() == "move") {
-						enableMoveZoom(imageView);
-						
+		});
+		pane.setOnDragDropped(e -> {
+			db = e.getDragboard();
+			if(db.hasContent(buttonFormat)) {
+				draggingButton.getFilterobject().useFilter();
+				timeline.add(draggingButton.getFilterobject());
+				BufferedImage neu = timeline.getLast().returnImage();
+				image = SwingFXUtils.toFXImage(neu, null);
+				imageView.setImage(image);
+				mat = draggingButton.getFilterobject().getDst();
+				draggingButton.setImageWithFilter(image);
+				draggingButton.setUserData("draggingButton");
+				draggingButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override 
+					public void handle(ActionEvent e) {
+						System.out.println(" EventHandler of Biber Button");
+						BiberButton dragB = (BiberButton)e.getSource();
+						System.out.println(dragB.getFilterobject());
+						dragB.getFilterobject().useFilter();
+						BufferedImage neu = dragB.getFilterobject().returnImage();
+						image = SwingFXUtils.toFXImage(neu, null);
+						imageView.setImage(image);
 					}
-					else if(tg_toolbar.getSelectedToggle().getUserData()=="cursor")
-						disableMoveZoom(imageView);
-					else if(newValue == null) {
-						
-					}
+				});
+
+				pane.getChildren().add(draggingButton);
+				e.setDropCompleted(true);
+				ImageView thumb = new ImageView(image);
+				//TODO: get size of button here. scaling is just a workaround
+				thumb.setFitWidth(image.getWidth()/3);
+				thumb.setFitHeight(image.getHeight()/3);
+				draggingButton.setMinWidth(image.getWidth()/3);
+				thumpnailPane.getChildren().add(thumpnailPosition, thumb);
+				thumpnailPosition++;
+			}
+		});
+
+	}
+
+	/**
+	 * Pluto-explorer helpful functions.
+	 */
+	private void reset(ImageView imageView, double width, double height) {
+		imageView.setViewport(new Rectangle2D(0, 0, width, height));
+	}
+
+	/**
+	 * Shift the viewport of the imageView by the specified delta, clamping so
+	 * the viewport does not move off the actual image.
+	 */
+	private void shift(ImageView imageView, Point2D delta) {
+		Rectangle2D viewport = imageView.getViewport();
+
+		double width = imageView.getImage().getWidth() ;
+		double height = imageView.getImage().getHeight() ;
+
+		double maxX = width - viewport.getWidth();
+		double maxY = height - viewport.getHeight();
+
+		double minX = clamp(viewport.getMinX() - delta.getX(), 0, maxX);
+		double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
+
+		imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+	}
+
+	private double clamp(double value, double min, double max) {
+
+		if (value < min)
+			return min;
+		if (value > max)
+			return max;
+		return value;
+	}
+
+	/**
+	 * Convert mouse coordinates in the imageView to coordinates in the actual image.
+	 */
+	private Point2D imageViewToImage(ImageView imageView, Point2D imageViewCoordinates) {
+		double xProportion = imageViewCoordinates.getX() / imageView.getBoundsInLocal().getWidth();
+		double yProportion = imageViewCoordinates.getY() / imageView.getBoundsInLocal().getHeight();
+
+		Rectangle2D viewport = imageView.getViewport();
+		return new Point2D(
+				viewport.getMinX() + xProportion * viewport.getWidth(), 
+				viewport.getMinY() + yProportion * viewport.getHeight());
+	}	    
+	private void initToolbar() {
+		tg_toolbar = new ToggleGroup();
+		btn_movezoom = new ToggleButton();
+		btn_cursor = new ToggleButton();
+		iv_cursor = new ImageView("file:cursor.png");
+		iv_movezoom = new ImageView("file:move.png");
+		iv_cursor.setFitHeight(20);
+		iv_cursor.setFitWidth(20);
+		iv_movezoom.setFitHeight(20);
+		iv_movezoom.setFitWidth(20);
+		btn_cursor.setGraphic(iv_cursor);
+		btn_movezoom.setGraphic(iv_movezoom);
+		btn_cursor.setUserData("cursor");
+		btn_movezoom.setUserData("move");
+		btn_movezoom.setDisable(true);
+		btn_cursor.setDisable(true);
+		btn_cursor.setToggleGroup(tg_toolbar);
+		btn_movezoom.setToggleGroup(tg_toolbar);
+		toolbar.getItems().add(btn_movezoom);
+		toolbar.getItems().add(btn_cursor);
+		tg_toolbar.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+				// TODO Auto-generated method stub
+				//System.out.println(tg_toolbar.getSelectedToggle().getUserData());
+				if(tg_toolbar.getSelectedToggle().getUserData() == "move") {
+					enableMoveZoom(imageView);
+
 				}
-	    		
-	    	});
-	    	//fix dividers of splitpane for toolbar 80% and dimensions 20%
-	    	//toolbar.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.90));
-	    	//toolbar_rightpane.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.1));	   
-	    	//toolbar_split.setDividerPositions(0.9);
-	    }
-	    
-	    /**
-	     * enableMoveZoom
-	     */
-	    private void enableMoveZoom(ImageView imageView) {
-	    	removeAllListeners(imageView);
-	    	width = image.getWidth();
-			height = image.getHeight();
-			
-			reset(imageView,width-1,height-1);
-			
-			ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
+				else if(tg_toolbar.getSelectedToggle().getUserData()=="cursor")
+					disableMoveZoom(imageView);
+				else if(newValue == null) {
 
-	        imageView.setOnMousePressed(e -> {
-	            
-	            Point2D mousePress = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
-	            mouseDown.set(mousePress);
-	        });
+				}
+			}
 
-	        imageView.setOnMouseDragged(e -> {
-	            Point2D dragPoint = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
-	            shift(imageView, dragPoint.subtract(mouseDown.get()));
-	            mouseDown.set(imageViewToImage(imageView, new Point2D(e.getX(), e.getY())));
-	        });
+		});
+		//fix dividers of splitpane for toolbar 80% and dimensions 20%
+		//toolbar.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.90));
+		//toolbar_rightpane.maxWidthProperty().bind(toolbar_split.widthProperty().multiply(0.1));	   
+		//toolbar_split.setDividerPositions(0.9);
+	}
 
-	        imageView.setOnScroll(e -> {
-	            double delta = e.getDeltaY();
-	            Rectangle2D viewport = imageView.getViewport();
+	/**
+	 * enableMoveZoom
+	 */
+	private void enableMoveZoom(ImageView imageView) {
+		removeAllListeners(imageView);
+		width = image.getWidth();
+		height = image.getHeight();
 
-	            double scale = clamp(Math.pow(1.01, -delta),
+		reset(imageView,width-1,height-1);
 
-	                // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
-	                Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
+		ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
-	                // don't scale so that we're bigger than image dimensions:
-	                Math.max(width / viewport.getWidth(), height / viewport.getHeight())
+		imageView.setOnMousePressed(e -> {
 
-	            );
+			Point2D mousePress = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+			mouseDown.set(mousePress);
+		});
 
-	            Point2D mouse = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+		imageView.setOnMouseDragged(e -> {
+			Point2D dragPoint = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+			shift(imageView, dragPoint.subtract(mouseDown.get()));
+			mouseDown.set(imageViewToImage(imageView, new Point2D(e.getX(), e.getY())));
+		});
 
-	            double newWidth = viewport.getWidth() * scale;
-	            double newHeight = viewport.getHeight() * scale;
+		imageView.setOnScroll(e -> {
+			double delta = e.getDeltaY();
+			Rectangle2D viewport = imageView.getViewport();
 
-	            // To keep the visual point under the mouse from moving, we need
-	            // (x - newViewportMinX) / (x - currentViewportMinX) = scale
-	            // where x is the mouse X coordinate in the image
+			double scale = clamp(Math.pow(1.01, -delta),
 
-	            // solving this for newViewportMinX gives
+					// don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
+					Math.min(MIN_PIXELS / viewport.getWidth(), MIN_PIXELS / viewport.getHeight()),
 
-	            // newViewportMinX = x - (x - currentViewportMinX) * scale 
+					// don't scale so that we're bigger than image dimensions:
+					Math.max(width / viewport.getWidth(), height / viewport.getHeight())
 
-	            // we then clamp this value so the image never scrolls out
-	            // of the imageview:
+					);
 
-	            double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
-	                    0, width - newWidth);
-	            double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
-	                    0, height - newHeight);
+			Point2D mouse = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
 
-	            imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
-	        });
+			double newWidth = viewport.getWidth() * scale;
+			double newHeight = viewport.getHeight() * scale;
 
-	            imageView.setOnMouseClicked(e -> {
-	                if (e.getClickCount() == 2) {
-	                reset(imageView, width, height);
-	            }
-	        });
-	    }
-	    private void disableMoveZoom(ImageView imageView) {
-	    	removeAllListeners(imageView);
-	    	//Event wenn Maus sich innerhalb ImageView bewegt, spaeter fuer Detailauswahl
-	    	imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
-	    		@Override public void handle(MouseEvent event) {
-	    			System.out.println(event.getX());
-	    			System.out.println(event.getY());
-	    		}
-	    	});
-	    }
-	    
-	    private void removeAllListeners(ImageView imageView) {
-	    	imageView.setOnMousePressed(null);
-	    	imageView.setOnScroll(null);
-	    	imageView.setOnMouseClicked(null);
-	    	imageView.setOnMouseMoved(null);
-	    }
-	    
-	    private void initRadioButtons(String textButton1, String textButton2, String textButton3, String textButton4) {
-	    	radioButton1.setSelected(false);
-	    	radioButton2.setSelected(false);
-	    	radioButton3.setSelected(false);
-	    	radioButton4.setSelected(false);
-	    	vbox.getChildren().add(flowpaneRadioButton);
-		    radioButton1.setText(textButton1);
-		    radioButton2.setText(textButton2);
-		    radioButton3.setText(textButton3);
-		    radioButton4.setText(textButton4);
-	    }
-	    
-	    private void deinitRadioButtons() {
-	    	vbox.getChildren().remove(flowpaneRadioButton);
-	    }
-	    
-	    private void initBlurOptions() {
-	    	vbox.getChildren().add(flowpaneFilterSize);
-	    }
-	    
-	    private void deinitBlurOptions() {
-	    	vbox.getChildren().remove(flowpaneFilterSize);
-	    }
-	    
-	    private void initBlurOptionsBila() {
-	    	vbox.getChildren().remove(flowpaneFilterSize);
-	    	vbox.getChildren().add(flowpaneFilterSize);
-	    	vbox.getChildren().add(flowpaneSigmaColour);
-	    	vbox.getChildren().add(flowpaneSigmaSpace);
-	    }
-	    
-	    private void deinitBlurOptionsBila() {
-	    	vbox.getChildren().remove(flowpaneFilterSize);
-	    	vbox.getChildren().remove(flowpaneSigmaColour);
-	    	vbox.getChildren().remove(flowpaneSigmaSpace);
-	    }
-	    
-	    private void deinitThreshold() {
-	    	vbox.getChildren().remove(flowpaneThreshold);
-	    }
-	    
-	    private void initThreshold() {
-	    	vbox.getChildren().add(flowpaneThreshold);
-	    }
-	    
-	    private void setTheImage(Mat mat) {
-			BufferedImage neu = imageMan.matToBuffImage(mat);
-			image = SwingFXUtils.toFXImage(neu, null);
-			imageView.setImage(image);
-	    }
+			// To keep the visual point under the mouse from moving, we need
+			// (x - newViewportMinX) / (x - currentViewportMinX) = scale
+			// where x is the mouse X coordinate in the image
+
+			// solving this for newViewportMinX gives
+
+			// newViewportMinX = x - (x - currentViewportMinX) * scale 
+
+			// we then clamp this value so the image never scrolls out
+			// of the imageview:
+
+			double newMinX = clamp(mouse.getX() - (mouse.getX() - viewport.getMinX()) * scale, 
+					0, width - newWidth);
+			double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale, 
+					0, height - newHeight);
+
+			imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+		});
+
+		imageView.setOnMouseClicked(e -> {
+			if (e.getClickCount() == 2) {
+				reset(imageView, width, height);
+			}
+		});
+	}
+	private void disableMoveZoom(ImageView imageView) {
+		removeAllListeners(imageView);
+		//Event wenn Maus sich innerhalb ImageView bewegt, spaeter fuer Detailauswahl
+		imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
+			@Override public void handle(MouseEvent event) {
+				System.out.println(event.getX());
+				System.out.println(event.getY());
+			}
+		});
+	}
+
+	private void removeAllListeners(ImageView imageView) {
+		imageView.setOnMousePressed(null);
+		imageView.setOnScroll(null);
+		imageView.setOnMouseClicked(null);
+		imageView.setOnMouseMoved(null);
+	}
+
+	private void initRadioButtons(String textButton1, String textButton2, String textButton3, String textButton4) {
+		radioButton1.setSelected(false);
+		radioButton2.setSelected(false);
+		radioButton3.setSelected(false);
+		radioButton4.setSelected(false);
+		vbox.getChildren().add(flowpaneRadioButton);
+		radioButton1.setText(textButton1);
+		radioButton2.setText(textButton2);
+		radioButton3.setText(textButton3);
+		radioButton4.setText(textButton4);
+	}
+
+	private void deinitRadioButtons() {
+		vbox.getChildren().remove(flowpaneRadioButton);
+	}
+
+	private void initBlurOptions() {
+		vbox.getChildren().add(flowpaneFilterSize);
+	}
+
+	private void initGrayOptions() {
+		labelFilerSize.setText("Red value");
+		vbox.getChildren().add(flowpaneFilterSize);
+
+		labelSigmaX.setText("Green value");
+		vbox.getChildren().add(flowpaneSigmaColour);
+
+		labelSigmaY.setText("Blue value");
+		vbox.getChildren().add(flowpaneSigmaSpace);
+	}
+
+	private void initBlurOptionsBila() {
+		vbox.getChildren().remove(flowpaneFilterSize);
+
+		labelFilerSize.setText("Filter Size");
+		vbox.getChildren().add(flowpaneFilterSize);
+
+		labelSigmaX.setText("Sigma Colour");
+		vbox.getChildren().add(flowpaneSigmaColour);
+
+		labelSigmaY.setText("Sigma Space");
+		vbox.getChildren().add(flowpaneSigmaSpace);
+	}
+
+	private void deinitBlurOptionsBila() {
+		vbox.getChildren().remove(flowpaneFilterSize);
+		vbox.getChildren().remove(flowpaneSigmaColour); 	
+		vbox.getChildren().remove(flowpaneSigmaSpace);
+	}
+
+	private void deinitGrayOptions() {
+		vbox.getChildren().remove(flowpaneFilterSize);
+		vbox.getChildren().remove(flowpaneSigmaColour); 	
+		vbox.getChildren().remove(flowpaneSigmaSpace);
+	}
+
+	private void deinitThreshold() {
+		vbox.getChildren().remove(flowpaneThreshold);
+	}
+
+	private void initThreshold() {
+		vbox.getChildren().add(flowpaneThreshold);
+	}
+
+	private String getSelectedRadioButtonText() {
+		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		return selectedRadioButton.getText();
+	}
+
+	private void setTheImage(Mat mat) {
+		BufferedImage neu = imageMan.matToBuffImage(mat);
+		image = SwingFXUtils.toFXImage(neu, null);
+		imageView.setImage(image);
+	}
+
+	private static double round(double value, int places) {
+		if (places < 0) throw new IllegalArgumentException();
+		BigDecimal bd = new BigDecimal(Double.toString(value));
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
+	}
 }

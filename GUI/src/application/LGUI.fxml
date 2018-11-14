@@ -57,7 +57,7 @@
                         </FlowPane>
                         <FlowPane fx:id="flowpaneFilterSize" prefHeight="69.0" prefWidth="150.0">
                            <children>
-                              <Label fx:id="filerSize" prefHeight="21.0" prefWidth="147.0" text="Filter Size">
+                              <Label fx:id="labelFilerSize" prefHeight="21.0" prefWidth="147.0" text="Filter Size">
                                  <tooltip>
                                     <Tooltip fx:id="tooltipFilterSize" text="Filter size" />
                                  </tooltip>

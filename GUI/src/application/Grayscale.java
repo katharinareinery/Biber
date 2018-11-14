@@ -152,16 +152,21 @@ public class Grayscale extends ImageMan{
 		return dst;
 	}
 	
-	public Mat grayPixel(int row, int col, Mat mat) {
-		double[] data = mat.get(row, col);
-		double grayValue = (data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-		//System.out.println(data.length);
-		data[0]=grayValue;
-		data[1]=grayValue;
-		data[2]=grayValue;
-		//System.out.println("row: "+row+"\tcol: "+col);
-		mat.put(row, col, data);
-		return mat;
+	public Mat grayOwn(Mat src,double red, double green, double blue) {
+		srcCopy=src.clone();
+		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+		double[] data;
+		double grayValue;
+		Imgproc.cvtColor(srcCopy,srcCopy,Imgproc.COLOR_BGR2RGB);
+		for(int i = 0; i < srcCopy.rows();i++) {
+			for(int j = 0; j < srcCopy.cols();j++ ) {
+				data=srcCopy.get(i, j);
+				grayValue = (data[0]*red)+(data[1]*green)+(data[2]*blue);
+				dst.put(i, j, grayValue);
+			}
+		}
+		//System.out.println("row: "+row+"\tcol: "+col)
+		return dst;
 	}
 	
 	public Mat grayPixelFor(Mat src) {
