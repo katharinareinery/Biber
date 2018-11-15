@@ -318,8 +318,10 @@ public class FXController implements Initializable{
 						}
 						//deinitBlurOptionsBila();
 					}else if(selectedRadioButton.getText().equals("bilateral")) {
+						deinitGrayOptions();
 						initBlurOptionsBila();
 					}else {
+						deinitGrayOptions();
 						deinitBlurOptionsBila();
 						initBlurOptions();
 					}
@@ -335,6 +337,7 @@ public class FXController implements Initializable{
 			imageView.setImage(image);
 			if(newVal!= null && newVal.equals("Threshold")) {
 				deinitRadioButtons();
+				deinitGrayOptions();
 				deinitBlurOptionsBila();
 				initThreshold();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
@@ -355,6 +358,7 @@ public class FXController implements Initializable{
 				sc.setMin(1);
 				sc.setMax(255);
 				deinitThreshold();
+				deinitGrayOptions();
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
 				initRadioButtons("average", "luminosity", "lightness", "customized");
@@ -366,6 +370,7 @@ public class FXController implements Initializable{
 				sc.setMax(255);
 				deinitThreshold();
 				deinitRadioButtons();
+				deinitGrayOptions();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
 			}
@@ -605,9 +610,9 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleGrayRedPlusButton(ActionEvent event) {
 		Mat newMat = mat.clone();
-		double red = Double.parseDouble(txtFilterPower.getText());
-		double green = Double.parseDouble(txtSigmaColour.getText());
-		double  blue = Double.parseDouble(txtSigmaSpace.getText());
+		double red = Double.parseDouble(txtGrayRed.getText());
+		double green = Double.parseDouble(txtGrayGreen.getText());
+		double  blue = Double.parseDouble(txtGrayBlue.getText());
 		red=round(red+0.01,2);
 		txtGrayRed.setText(Double.toString(red));
 		if(timeline.isEmpty()) {
@@ -621,9 +626,9 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleGrayGreenMinusButton(ActionEvent event) {
 		Mat newMat = mat.clone();
-		double red = Double.parseDouble(txtFilterPower.getText());
-		double green = Double.parseDouble(txtSigmaColour.getText());
-		double  blue = Double.parseDouble(txtSigmaSpace.getText());
+		double red = Double.parseDouble(txtGrayRed.getText());
+		double green = Double.parseDouble(txtGrayGreen.getText());
+		double  blue = Double.parseDouble(txtGrayBlue.getText());
 		green=round(green-0.01,2);
 		txtGrayGreen.setText(Double.toString(green));
 		if(timeline.isEmpty()) {
@@ -637,9 +642,9 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleGrayGreenPlusButton(ActionEvent event) {
 		Mat newMat = mat.clone();
-		double red = Double.parseDouble(txtFilterPower.getText());
-		double green = Double.parseDouble(txtSigmaColour.getText());
-		double  blue = Double.parseDouble(txtSigmaSpace.getText());
+		double red = Double.parseDouble(txtGrayRed.getText());
+		double green = Double.parseDouble(txtGrayGreen.getText());
+		double  blue = Double.parseDouble(txtGrayBlue.getText());
 		green=round(green+0.01,2);
 		txtGrayGreen.setText(Double.toString(green));
 		if(timeline.isEmpty()) {
@@ -653,9 +658,9 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleGrayBlueMinusButton(ActionEvent event) {
 		Mat newMat = mat.clone();
-		double red = Double.parseDouble(txtFilterPower.getText());
-		double green = Double.parseDouble(txtSigmaColour.getText());
-		double  blue = Double.parseDouble(txtSigmaSpace.getText());
+		double red = Double.parseDouble(txtGrayRed.getText());
+		double green = Double.parseDouble(txtGrayGreen.getText());
+		double  blue = Double.parseDouble(txtGrayBlue.getText());
 		blue=round(blue-0.01,2);
 		txtGrayBlue.setText(Double.toString(blue));
 		if(timeline.isEmpty()) {
@@ -669,9 +674,9 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleGrayBluePlusButton(ActionEvent event) {
 		Mat newMat = mat.clone();
-		double red = Double.parseDouble(txtFilterPower.getText());
-		double green = Double.parseDouble(txtSigmaColour.getText());
-		double  blue = Double.parseDouble(txtSigmaSpace.getText());
+		double red = Double.parseDouble(txtGrayRed.getText());
+		double green = Double.parseDouble(txtGrayGreen.getText());
+		double  blue = Double.parseDouble(txtGrayBlue.getText());
 		blue=round(blue+0.01,2);
 		txtGrayBlue.setText(Double.toString(blue));
 		if(timeline.isEmpty()) {
@@ -819,44 +824,43 @@ public class FXController implements Initializable{
 	private void handlePlusButton(ActionEvent event3) {
 		Mat newMat = mat.clone();
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		filterPower+=2;
+		txtFilterPower.setText(Integer.toString(filterPower));
 		try {
-				int filterPower = Integer.parseInt(txtFilterPower.getText());
-				filterPower+=2;
-				txtFilterPower.setText(Integer.toString(filterPower));
-				if(selectedRadioButton.getText().equals("median")) {
-					if(timeline.isEmpty()) {
-						newMat = blur.medianBlur(mat, filterPower);
-					}
-					else {
-						newMat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
-					}
-
-				}else if (selectedRadioButton.getText().equals("gaussian")) {
-					if(timeline.isEmpty()) {
-						newMat = blur.gaussianBlur(mat, filterPower);
-					}
-					else {
-						newMat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
-					}
-				}else if (selectedRadioButton.getText().equals("homogen")) {
-					if(timeline.isEmpty()) {
-						newMat = blur.homogenBlur(mat, filterPower);
-					}
-					else {
-						newMat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
-					}
-				}else if (selectedRadioButton.getText().equals("bilateral")) {
-					double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
-					double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
-					if(timeline.isEmpty()) {
-						newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
-					}
-					else {
-						newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
-					}
-
+			if(selectedRadioButton.getText().equals("median")) {
+				if(timeline.isEmpty()) {
+					newMat = blur.medianBlur(mat, filterPower);
 				}
-			}
+				else {
+					newMat = blur.medianBlur(timeline.getLast().getDst(), filterPower);
+				}
+				
+			}else if (selectedRadioButton.getText().equals("gaussian")) {
+				if(timeline.isEmpty()) {
+					newMat = blur.gaussianBlur(mat, filterPower);
+				}
+				else {
+					newMat = blur.gaussianBlur(timeline.getLast().getDst(), filterPower);
+				}
+			}else if (selectedRadioButton.getText().equals("homogen")) {
+				if(timeline.isEmpty()) {
+					newMat = blur.homogenBlur(mat, filterPower);
+				}
+				else {
+					newMat = blur.homogenBlur(timeline.getLast().getDst(), filterPower);
+				}
+			}else if (selectedRadioButton.getText().equals("bilateral")) {
+				double sigmaColour = Double.parseDouble(txtSigmaColour.getText());
+				double sigmaSpace = Double.parseDouble(txtSigmaSpace.getText());
+				if(timeline.isEmpty()) {
+					newMat = blur.bilateralBlur(mat, filterPower,sigmaColour,sigmaSpace);
+				}
+				else {
+					newMat = blur.bilateralBlur(timeline.getLast().getDst(), filterPower,sigmaColour,sigmaSpace);
+				}
+				
+			}	
 			setTheImage(newMat);
 		}catch(Exception e) {
 			e.printStackTrace();
