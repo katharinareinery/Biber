@@ -163,6 +163,14 @@ public class FXController implements Initializable{
 	private SplitPane toolbar_split;
 	@FXML
 	private FlowPane toolbar_rightpane;
+	@FXML
+	private FlowPane flowpaneZhangSuen;
+	@FXML
+	private Button buttonZhangSuenMinus;
+	@FXML
+	private Button buttonZhangSuenPlus;
+	@FXML
+	private TextField txtZhangSuen;
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -192,6 +200,7 @@ public class FXController implements Initializable{
 	private Blur blur = new Blur();
 	private Grayscale grayscale = new Grayscale();
 	private Threshold thold = new Threshold();
+	private ZhangSuen zhangsuen = new ZhangSuen();
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
 	private Dragboard db;
@@ -232,7 +241,7 @@ public class FXController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold");
+		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold","Zhang Suen Thinning");
 		cbox_filters.getItems().addAll(options);
 		//cbox_filters.applyCss();
 		//cbox_filters.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -253,8 +262,10 @@ public class FXController implements Initializable{
 		txtSigmaColour.setText("1");
 		txtSigmaSpace.setText("1");
 		txtThreshold.setText("1");
+		txtZhangSuen.setText("1");
 		deinitBlurOptionsBila();
 		deinitThreshold();
+		deinitZhangSuen();
 		initToolbar();
 		/*
 		 * At this point we assign the listener to the radiobuttons.
@@ -302,6 +313,7 @@ public class FXController implements Initializable{
 			if(newVal!= null && newVal.equals("Threshold")) {
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
+				deinitZhangSuen();
 				initThreshold();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
@@ -323,6 +335,7 @@ public class FXController implements Initializable{
 				deinitThreshold();
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
+				deinitZhangSuen();
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
@@ -331,9 +344,27 @@ public class FXController implements Initializable{
 				sc.setMin(1);
 				sc.setMax(255);
 				deinitThreshold();
+				deinitZhangSuen();
 				deinitRadioButtons();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
+			}
+			else if(newVal!= null && newVal.equals("Zhang Suen Thinning")) {
+				deinitRadioButtons();
+				deinitBlurOptionsBila();
+				deinitThreshold();
+				initZhangSuen();
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+				sc.valueProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+						// TODO Auto-generated method stub
+						txt_fld.setText(Integer.toString(arg2.intValue()));
+					}	
+				});
 			}
 		});		
 		
@@ -531,6 +562,41 @@ public class FXController implements Initializable{
 							};
 						}
 					};
+			
+				}
+				else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText(null);
+					alert.setContentText("Only values from 0-255 allowed!");
+					alert.showAndWait();
+				}
+				backgroundThread.restart();
+				break;
+			case "Zhang Suen Thinning":
+				int thresh = (txtZhangSuen.getText().isEmpty() ? 1 : Integer.parseInt(txtZhangSuen.getText()));
+				System.out.println(thresh);
+				if(thresh >= 0 && thresh < 256) {
+					backgroundThread = new Service<Void>() {
+						@Override
+						protected Task<Void> createTask() {
+							// TODO Auto-generated method stub
+							return new Task<Void>() {
+								@Override
+								protected Void call() throws Exception {
+									// TODO Auto-generated method stub
+									try {
+										System.out.println("in try");
+										mat = zhangsuen.zhangSuen(mat,thresh);
+										setTheImage(mat);
+									}
+									catch(Exception e) {e.printStackTrace();}
+									return null;
+								}
+							};
+						}
+					};
+			
 				}
 				else {
 					Alert alert = new Alert(AlertType.INFORMATION);
@@ -668,6 +734,50 @@ public class FXController implements Initializable{
 			threshold +=1;
 		}
 		txtThreshold.setText(Integer.toString(threshold));
+		if(timeline.isEmpty()) {
+			newMat = thold.binarisieren(threshold, newMat);
+		}
+		else {
+			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
+		}
+		setTheImage(newMat);
+	}
+	/**
+	 * Subtracts the zhang suen threshold filter with the minus button.
+	 */
+	@FXML
+	private void handleButtonzhangThreshMinus(ActionEvent event5){
+		Mat newMat = mat.clone();
+		int threshold = Integer.parseInt(txtZhangSuen.getText());
+		if(threshold>0) {
+			threshold -=1;
+		}
+		txtZhangSuen.setText(Integer.toString(threshold));		
+		if(timeline.isEmpty()) {
+			newMat = thold.binarisieren(threshold, newMat);
+		}
+		else {
+			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
+		}
+		setTheImage(newMat);
+	}
+	
+	/**
+	 * Adds up the zhang suen threshold filter via the plus button.
+	 */
+	@FXML
+	private void handleButtonzhangThreshPlus(ActionEvent event6) {
+		Mat newMat = mat.clone();
+		Button btn=(Button)event6.getSource();
+		System.out.println(btn.getText());
+		while(btn.isPressed()) {
+			System.out.println("Button pressed!!");
+		}
+		int threshold = Integer.parseInt(txtZhangSuen.getText());
+		if(threshold < 255) {
+			threshold +=1;
+		}
+		txtZhangSuen.setText(Integer.toString(threshold));
 		if(timeline.isEmpty()) {
 			newMat = thold.binarisieren(threshold, newMat);
 		}
@@ -837,6 +947,10 @@ public class FXController implements Initializable{
 	            	draggingButton = createButton(cbox_filters.getValue().toString());
 	            	draggingButton.setFilterobject(new Threshold(Integer.parseInt(txtThreshold.getText())));
 	            	
+	            }else if(cbox_filters.getValue().equals("Zhang Suen Thinning")) {
+	            	draggingButton = createButton(cbox_filters.getValue().toString());
+	            	draggingButton.setFilterobject(new ZhangSuen(Integer.parseInt(txtZhangSuen.getText())));
+	            	
 	            }else if(cbox_filters.getValue().equals("Blur")){
 	            	if(selectedRadioButton.getText().equals("bilateral")) {
 	            		draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
@@ -849,7 +963,6 @@ public class FXController implements Initializable{
 	            		draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),Integer.parseInt(txtFilterPower.getText())));
 	            	}
 	            }else if(cbox_filters.getValue().equals("Grayscale")){
-	            	//Selber kram wie oben
 	            	draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
 	            	draggingButton.setFilterobject(new Grayscale(selectedRadioButton.getText()));
 	            }
@@ -1141,6 +1254,14 @@ public class FXController implements Initializable{
 	    private void initThreshold() {
 	    	vbox.getChildren().add(flowpaneThreshold);
 	    }
+	    
+	    private void initZhangSuen() {
+	    	vbox.getChildren().add(flowpaneZhangSuen);
+	    }
+	    private void deinitZhangSuen() {
+	    	vbox.getChildren().remove(flowpaneZhangSuen);
+	    }
+	    
 	    
 	    private void setTheImage(Mat mat) {
 			BufferedImage neu = imageMan.matToBuffImage(mat);
