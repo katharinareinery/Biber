@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -171,6 +172,54 @@ public class FXController implements Initializable{
 	private Button buttonZhangSuenPlus;
 	@FXML
 	private TextField txtZhangSuen;
+	//Own Filter
+	@FXML
+	private FlowPane flowpaneOwnFilter;
+	@FXML
+	private RadioButton radioOwnFilter2;
+	@FXML
+	private RadioButton radioOwnFilter3;
+	@FXML
+	private RadioButton radioOwnFilter4;
+	@FXML
+	private ToggleGroup toggleOwnKernelSize;
+	@FXML
+	private TextField coef;
+	@FXML
+	private TextField zero_zero;
+	@FXML
+	private TextField one_zero;
+	@FXML
+	private TextField two_zero;
+	@FXML
+	private TextField three_zero;
+	@FXML
+	private TextField zero_one;
+	@FXML
+	private TextField one_one;
+	@FXML
+	private TextField two_one;
+	@FXML
+	private TextField three_one;
+	@FXML
+	private TextField zero_two;
+	@FXML
+	private TextField one_two;
+	@FXML
+	private TextField two_two;
+	@FXML
+	private TextField three_two;
+	@FXML
+	private TextField zero_three;
+	@FXML
+	private TextField one_three;
+	@FXML
+	private TextField two_three;
+	@FXML
+	private TextField three_three;
+
+
+
 	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -196,11 +245,15 @@ public class FXController implements Initializable{
 	private Mat mat;
 
 	//private GridPane itembox = new GridPane();
-		
+	
+	//Filter Objects
 	private Blur blur = new Blur();
 	private Grayscale grayscale = new Grayscale();
 	private Threshold thold = new Threshold();
 	private ZhangSuen zhangsuen = new ZhangSuen();
+	private CustomFilter customfilter = new CustomFilter();
+	private Mat kernel;
+	
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
 	private Dragboard db;
@@ -241,7 +294,7 @@ public class FXController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold","Zhang Suen Thinning");
+		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold","Zhang Suen Thinning","Custom Filter");
 		cbox_filters.getItems().addAll(options);
 		//cbox_filters.applyCss();
 		//cbox_filters.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -263,6 +316,7 @@ public class FXController implements Initializable{
 		txtSigmaSpace.setText("1");
 		txtThreshold.setText("1");
 		txtZhangSuen.setText("1");
+		deinitFilter();
 		deinitBlurOptionsBila();
 		deinitThreshold();
 		deinitZhangSuen();
@@ -303,6 +357,32 @@ public class FXController implements Initializable{
 		            }                
 		        }
 		});
+		
+		toggleOwnKernelSize.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+				// TODO Auto-generated method stub
+				if(toggleOwnKernelSize.getSelectedToggle() != null) {
+					RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
+					if(selected.getText().equals("2")) {
+						initSmallKernel();
+					}
+					else if(selected.getText().equals("3")) {
+						initBigKernel();
+						zero_three.setDisable(true);
+						one_three.setDisable(true);
+						two_three.setDisable(true);
+						three_three.setDisable(true);
+						three_two.setDisable(true);
+						three_one.setDisable(true);
+						three_zero.setDisable(true);
+					}
+					else if(selected.getText().equals("4")) {
+						initBigKernel();
+					}
+				}
+			}
+		});
 		/*
 		 * Combobox - The changelistener is waiting for the selection.
 		 */
@@ -311,6 +391,7 @@ public class FXController implements Initializable{
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 			if(newVal!= null && newVal.equals("Threshold")) {
+				deinitFilter();
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				deinitZhangSuen();
@@ -328,6 +409,7 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
+				deinitFilter();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -339,6 +421,7 @@ public class FXController implements Initializable{
 				initRadioButtons("average", "luminosity", "lightness", "pixelwise");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
+				deinitFilter();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -350,6 +433,7 @@ public class FXController implements Initializable{
 				deinitBlurOptionsBila();
 			}
 			else if(newVal!= null && newVal.equals("Zhang Suen Thinning")) {
+				deinitFilter();
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				deinitThreshold();
@@ -365,6 +449,15 @@ public class FXController implements Initializable{
 						txt_fld.setText(Integer.toString(arg2.intValue()));
 					}	
 				});
+			}
+			else if(newVal!= null && newVal.equals("Custom Filter")) {
+				deinitRadioButtons();
+				deinitBlurOptionsBila();
+				deinitThreshold();
+				deinitZhangSuen();
+				initFilter();
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				
 			}
 		});		
 		
@@ -586,7 +679,6 @@ public class FXController implements Initializable{
 								protected Void call() throws Exception {
 									// TODO Auto-generated method stub
 									try {
-										System.out.println("in try");
 										mat = zhangsuen.zhangSuen(mat,thresh);
 										setTheImage(mat);
 									}
@@ -605,6 +697,65 @@ public class FXController implements Initializable{
 					alert.setContentText("Only values from 0-255 allowed!");
 					alert.showAndWait();
 				}
+				backgroundThread.restart();
+				break;
+			case "Custom Filter":
+				RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
+				if(selected.getText().equals("2")) {
+					kernel = new Mat(2,2,CvType.CV_32F);
+					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+					kernel.put(1,1,Double.parseDouble(one_one.getText()));
+				}
+				else if(selected.getText().equals("3")) {
+					kernel = new Mat(3,3,CvType.CV_32F);
+					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+					kernel.put(0,2,Double.parseDouble(zero_two.getText()));
+					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+					kernel.put(1,1,Double.parseDouble(one_one.getText()));
+					kernel.put(1,2,Double.parseDouble(one_two.getText()));
+					kernel.put(2,0,Double.parseDouble(two_zero.getText()));
+					kernel.put(2,1,Double.parseDouble(two_one.getText()));
+					kernel.put(2,2,Double.parseDouble(two_two.getText()));
+				}
+				else {
+					kernel = new Mat(4,4,CvType.CV_32F);
+					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+					kernel.put(0,2,Double.parseDouble(zero_two.getText()));
+					kernel.put(0,3,Double.parseDouble(zero_three.getText()));
+					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+					kernel.put(1,1,Double.parseDouble(one_one.getText()));
+					kernel.put(1,2,Double.parseDouble(one_two.getText()));
+					kernel.put(1,3,Double.parseDouble(one_three.getText()));
+					kernel.put(2,0,Double.parseDouble(two_zero.getText()));
+					kernel.put(2,1,Double.parseDouble(two_one.getText()));
+					kernel.put(2,2,Double.parseDouble(two_two.getText()));	
+					kernel.put(2,3,Double.parseDouble(two_three.getText()));
+					kernel.put(3,0,Double.parseDouble(three_zero.getText()));
+					kernel.put(3,1,Double.parseDouble(three_one.getText()));
+					kernel.put(3,2,Double.parseDouble(three_two.getText()));	
+					kernel.put(3,3,Double.parseDouble(three_three.getText()));
+				}
+				System.out.println(kernel.toString());
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							@Override
+							protected Void call() throws Exception {
+								try {
+									mat = customfilter.customKernel(mat, kernel, Double.parseDouble(coef.getText()));
+									setTheImage(mat);
+								}catch(Exception e) {e.printStackTrace();}
+								return null;
+							}
+						};
+					}
+				};
 				backgroundThread.restart();
 				break;
 		}
@@ -1261,6 +1412,50 @@ public class FXController implements Initializable{
 	    private void deinitZhangSuen() {
 	    	vbox.getChildren().remove(flowpaneZhangSuen);
 	    }
+	    
+	    private void deinitFilter() {
+	    	vbox.getChildren().remove(flowpaneOwnFilter);
+	    }
+	    private void initFilter() {
+	    	vbox.getChildren().add(flowpaneOwnFilter);
+	    }
+	    private void initSmallKernel() {
+	    	zero_zero.setDisable(false);
+	    	zero_one.setDisable(false);
+	    	zero_two.setDisable(true);
+	    	zero_three.setDisable(true);
+	    	one_zero.setDisable(false);
+	    	one_one.setDisable(false);
+	    	one_two.setDisable(true);
+	    	one_three.setDisable(true);
+	    	two_zero.setDisable(true);
+	    	two_one.setDisable(true);
+	    	two_two.setDisable(true);
+	    	two_three.setDisable(true);
+	    	three_zero.setDisable(true);
+	    	three_one.setDisable(true);
+	    	three_two.setDisable(true);
+	    	three_three.setDisable(true);
+	    }
+	    private void initBigKernel() {
+	    	zero_zero.setDisable(false);
+	    	zero_one.setDisable(false);
+	    	zero_two.setDisable(false);
+	    	zero_three.setDisable(false);
+	    	one_zero.setDisable(false);
+	    	one_one.setDisable(false);
+	    	one_two.setDisable(false);
+	    	one_three.setDisable(false);
+	    	two_zero.setDisable(false);
+	    	two_one.setDisable(false);
+	    	two_two.setDisable(false);
+	    	two_three.setDisable(false);
+	    	three_zero.setDisable(false);
+	    	three_one.setDisable(false);
+	    	three_two.setDisable(false);
+	    	three_three.setDisable(false);
+	    }
+	   
 	    
 	    
 	    private void setTheImage(Mat mat) {
