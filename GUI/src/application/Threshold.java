@@ -14,9 +14,9 @@ import org.opencv.imgproc.Imgproc;
  */
 
 public class Threshold extends ImageMan{
-	private Mat bwsrc = new Mat();
+	private static Mat bwsrc = new Mat();
 	// destination Matrix for the picture
-	private Mat dst;		
+	private static Mat dst;		
 	//source Matrix for init
 	private Mat src;
 	//threshold value
@@ -55,7 +55,7 @@ public class Threshold extends ImageMan{
 			return dst;
 		}
 		//thresholding method
-		public Mat binarisieren(int t, Mat src) {
+		public static Mat binarisieren(int t, Mat src) {
 			if(src.channels() > 1) {
 				Imgproc.cvtColor(src, bwsrc, Imgproc.COLOR_BGR2GRAY);
 				dst = new Mat(bwsrc.size(),CvType.CV_8U);
@@ -65,7 +65,7 @@ public class Threshold extends ImageMan{
 //						System.out.println("col: "+j);
 						if(bwsrc.get(i,j)[0]>=t) {
 							dst.put(i, j, 255);
-						}else dst.put(i, j, 0);
+						}else dst.put(i, j,0);
 					}
 				}
 			}else {
@@ -80,6 +80,32 @@ public class Threshold extends ImageMan{
 			}
 			return dst;
 		}
+		public static Mat binarisierenInvers(int t, Mat src) {
+			if(src.channels() > 1) {
+				Imgproc.cvtColor(src, bwsrc, Imgproc.COLOR_BGR2GRAY);
+				dst = new Mat(bwsrc.size(),CvType.CV_8U);
+				for(int i = 0; i<bwsrc.rows();i++) {
+					for(int j = 0; j <bwsrc.cols();j++) {
+//						System.out.print("row: "+i+"\t");
+//						System.out.println("col: "+j);
+						if(bwsrc.get(i,j)[0]>=t) {
+							dst.put(i, j, 0);
+						}else dst.put(i, j,255);
+					}
+				}
+			}else {
+				dst = new Mat(src.size(),CvType.CV_8U);
+				for(int i = 0; i<src.rows();i++) {
+					for(int j = 0; j <src.cols();j++) {
+						if(src.get(i,j)[0]>=t) {
+							dst.put(i, j, 0);
+						}else dst.put(i, j, 255);
+					}
+				}
+			}
+			return dst;
+		}
+		
 		//method to use within timeline q
 		public void useFilter() {
 			if(src.channels() > 1) {

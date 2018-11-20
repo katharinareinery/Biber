@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -195,6 +196,59 @@ public class FXController implements Initializable{
 	private SplitPane toolbar_split;
 	@FXML
 	private FlowPane toolbar_rightpane;
+	@FXML
+	private FlowPane flowpaneZhangSuen;
+	@FXML
+	private Button buttonZhangSuenMinus;
+	@FXML
+	private Button buttonZhangSuenPlus;
+	@FXML
+	private TextField txtZhangSuen;
+	//Own Filter
+	@FXML
+	private FlowPane flowpaneOwnFilter;
+	@FXML
+	private RadioButton radioOwnFilter2;
+	@FXML
+	private RadioButton radioOwnFilter3;
+	@FXML
+	private RadioButton radioOwnFilter4;
+	@FXML
+	private ToggleGroup toggleOwnKernelSize;
+	@FXML
+	private TextField coef;
+	@FXML
+	private TextField zero_zero;
+	@FXML
+	private TextField one_zero;
+	@FXML
+	private TextField two_zero;
+	@FXML
+	private TextField three_zero;
+	@FXML
+	private TextField zero_one;
+	@FXML
+	private TextField one_one;
+	@FXML
+	private TextField two_one;
+	@FXML
+	private TextField three_one;
+	@FXML
+	private TextField zero_two;
+	@FXML
+	private TextField one_two;
+	@FXML
+	private TextField two_two;
+	@FXML
+	private TextField three_two;
+	@FXML
+	private TextField zero_three;
+	@FXML
+	private TextField one_three;
+	@FXML
+	private TextField two_three;
+	@FXML
+	private TextField three_three;
 
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
@@ -205,7 +259,7 @@ public class FXController implements Initializable{
 	private TextField txt_fld = new TextField();
 
 	//Linked List for storing filters
-	private LinkedList<ImageMan> timeline = new LinkedList();
+	private LinkedList<ImageMan> timeline = new LinkedList<ImageMan>();
 	private ScrollBar sc = new ScrollBar();
 
 	private FileChooser fileChooser;
@@ -218,10 +272,15 @@ public class FXController implements Initializable{
 	private Mat mat;
 
 	//private GridPane itembox = new GridPane();
-
+	
+	//Filter Objects
 	private Blur blur = new Blur();
 	private Grayscale grayscale = new Grayscale();
 	private Threshold thold = new Threshold();
+	private ZhangSuen zhangsuen = new ZhangSuen();
+	private CustomFilter customfilter = new CustomFilter();
+	private Mat kernel;
+	
 	private String filepath;
 	private ImageMan imageMan = new ImageMan();
 	private Dragboard db;
@@ -262,7 +321,7 @@ public class FXController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold");
+		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold","Zhang Suen Thinning","Custom Filter");
 		cbox_filters.getItems().addAll(options);
 		//cbox_filters.applyCss();
 		//cbox_filters.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -283,9 +342,12 @@ public class FXController implements Initializable{
 		txtSigmaColour.setText("1");
 		txtSigmaSpace.setText("1");
 		txtThreshold.setText("1");
+		txtZhangSuen.setText("1");
+		deinitFilter();
 		deinitBlurOptionsBila();
 		deinitThreshold();
 		deinitGrayOptions();
+		deinitZhangSuen();
 		initToolbar();
 		/*
 		 * At this point we assign the listener to the radiobuttons.
@@ -328,6 +390,32 @@ public class FXController implements Initializable{
 				}                
 			}
 		});
+		
+		toggleOwnKernelSize.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+				// TODO Auto-generated method stub
+				if(toggleOwnKernelSize.getSelectedToggle() != null) {
+					RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
+					if(selected.getText().equals("2")) {
+						initSmallKernel();
+					}
+					else if(selected.getText().equals("3")) {
+						initBigKernel();
+						zero_three.setDisable(true);
+						one_three.setDisable(true);
+						two_three.setDisable(true);
+						three_three.setDisable(true);
+						three_two.setDisable(true);
+						three_one.setDisable(true);
+						three_zero.setDisable(true);
+					}
+					else if(selected.getText().equals("4")) {
+						initBigKernel();
+					}
+				}
+			}
+		});
 		/*
 		 * Combobox - The changelistener is waiting for the selection.
 		 */
@@ -336,9 +424,11 @@ public class FXController implements Initializable{
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 			if(newVal!= null && newVal.equals("Threshold")) {
+				deinitFilter();
 				deinitRadioButtons();
 				deinitGrayOptions();
 				deinitBlurOptionsBila();
+				deinitZhangSuen();
 				initThreshold();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
@@ -353,6 +443,7 @@ public class FXController implements Initializable{
 				});
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
+				deinitFilter();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -361,18 +452,50 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
+				deinitZhangSuen();
 				initRadioButtons("average", "luminosity", "lightness", "customized");
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
+				deinitFilter();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 				deinitThreshold();
+				deinitZhangSuen();
 				deinitRadioButtons();
 				deinitGrayOptions();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
+			}
+			else if(newVal!= null && newVal.equals("Zhang Suen Thinning")) {
+				deinitFilter();
+				deinitRadioButtons();
+				deinitBlurOptionsBila();
+				deinitThreshold();
+				deinitGrayOptions();
+				initZhangSuen();
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+				sc.valueProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+						// TODO Auto-generated method stub
+						txt_fld.setText(Integer.toString(arg2.intValue()));
+					}	
+				});
+			}
+			else if(newVal!= null && newVal.equals("Custom Filter")) {
+				deinitRadioButtons();
+				deinitBlurOptionsBila();
+				deinitThreshold();
+				deinitZhangSuen();
+				deinitGrayOptions();
+				initFilter();
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				
 			}
 		});		
 
@@ -587,6 +710,98 @@ public class FXController implements Initializable{
 			}
 			backgroundThread.restart();
 			break;
+		case "Zhang Suen Thinning":
+				int thresh = (txtZhangSuen.getText().isEmpty() ? 1 : Integer.parseInt(txtZhangSuen.getText()));
+				System.out.println(thresh);
+				if(thresh >= 0 && thresh < 256) {
+					backgroundThread = new Service<Void>() {
+						@Override
+						protected Task<Void> createTask() {
+							// TODO Auto-generated method stub
+							return new Task<Void>() {
+								@Override
+								protected Void call() throws Exception {
+									// TODO Auto-generated method stub
+									try {
+										mat = zhangsuen.zhangSuen(mat,thresh);
+										setTheImage(mat);
+									}
+									catch(Exception e) {e.printStackTrace();}
+									return null;
+								}
+							};
+						}
+					};
+			
+				}
+				else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Information Dialog");
+					alert.setHeaderText(null);
+					alert.setContentText("Only values from 0-255 allowed!");
+					alert.showAndWait();
+				}
+				backgroundThread.restart();
+				break;
+			case "Custom Filter":
+				RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
+				if(selected.getText().equals("2")) {
+					kernel = new Mat(2,2,CvType.CV_32F);
+					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+					kernel.put(1,1,Double.parseDouble(one_one.getText()));
+				}
+				else if(selected.getText().equals("3")) {
+					kernel = new Mat(3,3,CvType.CV_32F);
+					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+					kernel.put(0,2,Double.parseDouble(zero_two.getText()));
+					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+					kernel.put(1,1,Double.parseDouble(one_one.getText()));
+					kernel.put(1,2,Double.parseDouble(one_two.getText()));
+					kernel.put(2,0,Double.parseDouble(two_zero.getText()));
+					kernel.put(2,1,Double.parseDouble(two_one.getText()));
+					kernel.put(2,2,Double.parseDouble(two_two.getText()));
+				}
+				else {
+					kernel = new Mat(4,4,CvType.CV_32F);
+					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+					kernel.put(0,2,Double.parseDouble(zero_two.getText()));
+					kernel.put(0,3,Double.parseDouble(zero_three.getText()));
+					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+					kernel.put(1,1,Double.parseDouble(one_one.getText()));
+					kernel.put(1,2,Double.parseDouble(one_two.getText()));
+					kernel.put(1,3,Double.parseDouble(one_three.getText()));
+					kernel.put(2,0,Double.parseDouble(two_zero.getText()));
+					kernel.put(2,1,Double.parseDouble(two_one.getText()));
+					kernel.put(2,2,Double.parseDouble(two_two.getText()));	
+					kernel.put(2,3,Double.parseDouble(two_three.getText()));
+					kernel.put(3,0,Double.parseDouble(three_zero.getText()));
+					kernel.put(3,1,Double.parseDouble(three_one.getText()));
+					kernel.put(3,2,Double.parseDouble(three_two.getText()));	
+					kernel.put(3,3,Double.parseDouble(three_three.getText()));
+				}
+				System.out.println(kernel.toString());
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							@Override
+							protected Void call() throws Exception {
+								try {
+									mat = customfilter.customKernel(mat, kernel, Double.parseDouble(coef.getText()));
+									setTheImage(mat);
+								}catch(Exception e) {e.printStackTrace();}
+								return null;
+							}
+						};
+					}
+				};
+				backgroundThread.restart();
+				break;
 		}
 	}
 
@@ -816,7 +1031,50 @@ public class FXController implements Initializable{
 		}
 		setTheImage(newMat);
 	}
-
+	/**
+	 * Subtracts the zhang suen threshold filter with the minus button.
+	 */
+	@FXML
+	private void handleButtonzhangThreshMinus(ActionEvent event5){
+		Mat newMat = mat.clone();
+		int threshold = Integer.parseInt(txtZhangSuen.getText());
+		if(threshold>0) {
+			threshold -=1;
+		}
+		txtZhangSuen.setText(Integer.toString(threshold));		
+		if(timeline.isEmpty()) {
+			newMat = thold.binarisieren(threshold, newMat);
+		}
+		else {
+			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
+		}
+		setTheImage(newMat);
+	}
+	
+	/**
+	 * Adds up the zhang suen threshold filter via the plus button.
+	 */
+	@FXML
+	private void handleButtonzhangThreshPlus(ActionEvent event6) {
+		Mat newMat = mat.clone();
+		Button btn=(Button)event6.getSource();
+		System.out.println(btn.getText());
+		while(btn.isPressed()) {
+			System.out.println("Button pressed!!");
+		}
+		int threshold = Integer.parseInt(txtZhangSuen.getText());
+		if(threshold < 255) {
+			threshold +=1;
+		}
+		txtZhangSuen.setText(Integer.toString(threshold));
+		if(timeline.isEmpty()) {
+			newMat = thold.binarisieren(threshold, newMat);
+		}
+		else {
+			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
+		}
+		setTheImage(newMat);
+	}
 	/**
 	 * This method coordinates the application of the different settings 
 	 * of the blur filter via the plus button.
@@ -1012,7 +1270,6 @@ public class FXController implements Initializable{
 		//button.setOnDragDone(e -> draggingButton = null);
 		return button;
 	}
-
 	/**
 	 * This method deals with the drop handling of the drag button.
 	 */
@@ -1291,19 +1548,10 @@ public class FXController implements Initializable{
 		vbox.getChildren().remove(flowpaneThreshold);
 	}
 
-	private void initThreshold() {
-		vbox.getChildren().add(flowpaneThreshold);
-	}
 
 	private String getSelectedRadioButtonText() {
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
 		return selectedRadioButton.getText();
-	}
-
-	private void setTheImage(Mat mat) {
-		BufferedImage neu = imageMan.matToBuffImage(mat);
-		image = SwingFXUtils.toFXImage(neu, null);
-		imageView.setImage(image);
 	}
 
 	private static double round(double value, int places) {
@@ -1312,4 +1560,66 @@ public class FXController implements Initializable{
 		bd = bd.setScale(places, RoundingMode.HALF_UP);
 		return bd.doubleValue();
 	}
+
+	    private void initThreshold() {
+	    	vbox.getChildren().add(flowpaneThreshold);
+	    }
+	    
+	    private void initZhangSuen() {
+	    	vbox.getChildren().add(flowpaneZhangSuen);
+	    }
+	    private void deinitZhangSuen() {
+	    	vbox.getChildren().remove(flowpaneZhangSuen);
+	    }
+	    
+	    private void deinitFilter() {
+	    	vbox.getChildren().remove(flowpaneOwnFilter);
+	    }
+	    private void initFilter() {
+	    	vbox.getChildren().add(flowpaneOwnFilter);
+	    }
+	    private void initSmallKernel() {
+	    	zero_zero.setDisable(false);
+	    	zero_one.setDisable(false);
+	    	zero_two.setDisable(true);
+	    	zero_three.setDisable(true);
+	    	one_zero.setDisable(false);
+	    	one_one.setDisable(false);
+	    	one_two.setDisable(true);
+	    	one_three.setDisable(true);
+	    	two_zero.setDisable(true);
+	    	two_one.setDisable(true);
+	    	two_two.setDisable(true);
+	    	two_three.setDisable(true);
+	    	three_zero.setDisable(true);
+	    	three_one.setDisable(true);
+	    	three_two.setDisable(true);
+	    	three_three.setDisable(true);
+	    }
+	    private void initBigKernel() {
+	    	zero_zero.setDisable(false);
+	    	zero_one.setDisable(false);
+	    	zero_two.setDisable(false);
+	    	zero_three.setDisable(false);
+	    	one_zero.setDisable(false);
+	    	one_one.setDisable(false);
+	    	one_two.setDisable(false);
+	    	one_three.setDisable(false);
+	    	two_zero.setDisable(false);
+	    	two_one.setDisable(false);
+	    	two_two.setDisable(false);
+	    	two_three.setDisable(false);
+	    	three_zero.setDisable(false);
+	    	three_one.setDisable(false);
+	    	three_two.setDisable(false);
+	    	three_three.setDisable(false);
+	    }
+	   
+	    
+	    
+	    private void setTheImage(Mat mat) {
+			BufferedImage neu = imageMan.matToBuffImage(mat);
+			image = SwingFXUtils.toFXImage(neu, null);
+			imageView.setImage(image);
+	    }
 }

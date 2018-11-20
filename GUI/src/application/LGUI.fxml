@@ -1,11 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.input.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -22,11 +14,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
+<BorderPane fx:id="mainParent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" styleClass="root" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXController">
    <center>
       <SplitPane fx:id="split" dividerPositions="0.8664192949907236, 0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
         <items>
@@ -43,6 +38,55 @@
                         <Button fx:id="anwenden" mnemonicParsing="false" onAction="#handleAnwenden" prefHeight="25.0" prefWidth="150.0" text="Apply" />
                         <Button fx:id="preview" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Preview" />
                         <Button fx:id="srcButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Drag me" />
+                        <FlowPane fx:id="flowpaneOwnFilter" prefHeight="43.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelOwnKernelSize" prefHeight="21.0" prefWidth="150.0" text="Kernel Size" />
+                              <RadioButton fx:id="radioOwnKernel2" mnemonicParsing="false" text="2">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="toggleOwnKernelSize" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="radioOwnKernel3" mnemonicParsing="false" text="3" toggleGroup="$toggleOwnKernelSize" />
+                              <RadioButton fx:id="radioOwnKernel4" mnemonicParsing="false" text="4" toggleGroup="$toggleOwnKernelSize" />
+                              <Label text="Coefficient: ">
+                                 <padding>
+                                    <Insets left="50.0" />
+                                 </padding></Label>
+                              <TextField fx:id="coef" maxHeight="37.0" maxWidth="37.0" minHeight="37.0" minWidth="37.0" prefHeight="37.0" prefWidth="37.0" text="1" />
+                              <GridPane gridLinesVisible="true" prefHeight="150.0" prefWidth="150.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="37.0" minWidth="37.0" prefWidth="37.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="37.0" minHeight="37.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="37.0" minHeight="37.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="37.0" minHeight="37.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="37.0" minHeight="37.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <TextField fx:id="zero_zero" minHeight="36.0" text="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="zero_one" minHeight="36.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="zero_two" minHeight="36.0" text="1" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="zero_three" minHeight="36.0" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="one_zero" minHeight="36.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="one_one" minHeight="36.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="one_two" minHeight="36.0" text="1" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="one_three" minHeight="36.0" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="two_zero" minHeight="36.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="two_one" minHeight="36.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="two_two" minHeight="36.0" text="1" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="two_three" minHeight="36.0" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="three_zero" minHeight="36.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="three_one" minHeight="36.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="three_two" minHeight="36.0" text="1" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                                    <TextField fx:id="three_three" minHeight="36.0" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </FlowPane>
                         <FlowPane fx:id="flowpaneRadioButton" prefHeight="94.0" prefWidth="152.0">
                            <children>
                               <RadioButton fx:id="radioButton1" mnemonicParsing="false" prefHeight="21.0" prefWidth="145.0" text="RadioButton" textFill="WHITE">
@@ -57,7 +101,7 @@
                         </FlowPane>
                         <FlowPane fx:id="flowpaneFilterSize" prefHeight="69.0" prefWidth="150.0">
                            <children>
-                              <Label fx:id="labelFilerSize" prefHeight="21.0" prefWidth="147.0" text="Filter Size">
+                              <Label fx:id="filerSize" prefHeight="21.0" prefWidth="147.0" text="Filter Size">
                                  <tooltip>
                                     <Tooltip fx:id="tooltipFilterSize" text="Filter size" />
                                  </tooltip>
@@ -79,19 +123,7 @@
                               <Button fx:id="buttonSgColourPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleSgColourPlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
-                        <FlowPane fx:id="flowpaneSigmaSpace" prefHeight="41.0" prefWidth="150.0">
-                           <children>
-                              <Label fx:id="labelSigmaY" prefHeight="21.0" prefWidth="147.0" text="SigmaSpace">
-                                 <tooltip>
-                                    <Tooltip fx:id="tooltipSsSpace" text="Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d&gt;0 , it specifies the neighborhood size regardless of sigmaSpace . Otherwise, d is proportional to sigmaSpace ." />
-                                 </tooltip>
-                              </Label>
-                              <Button fx:id="buttonSgSpaceMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleSgSpaceMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
-                              <TextField fx:id="txtSigmaSpace" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
-                              <Button fx:id="buttonSgSpacePlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleSgSpacePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
-                           </children>
-                        </FlowPane>
-                        <FlowPane fx:id="flowpaneGrayRed" prefHeight="41.0" prefWidth="150.0">
+                                                <FlowPane fx:id="flowpaneGrayRed" prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Label fx:id="labelGrayRed" prefHeight="21.0" prefWidth="147.0" text="Red">
                               </Label>
@@ -118,12 +150,32 @@
                               <Button fx:id="buttonGrayBluePlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleGrayBluePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
+                        <FlowPane fx:id="flowpaneSigmaSpace" prefHeight="41.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelSigmaY" prefHeight="21.0" prefWidth="147.0" text="SigmaSpace">
+                                 <tooltip>
+                                    <Tooltip fx:id="tooltipSsSpace" text="Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d&gt;0 , it specifies the neighborhood size regardless of sigmaSpace . Otherwise, d is proportional to sigmaSpace ." />
+                                 </tooltip>
+                              </Label>
+                              <Button fx:id="buttonSgSpaceMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleSgSpaceMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtSigmaSpace" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonSgSpacePlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleSgSpacePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                           </children>
+                        </FlowPane>
                         <FlowPane fx:id="flowpaneThreshold" prefHeight="43.0" prefWidth="150.0">
                            <children>
                               <Label fx:id="labelThreshold" prefHeight="21.0" prefWidth="150.0" text="Threshold" />
                               <Button fx:id="buttonThreshMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonThreshMinus" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtThreshold" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
                               <Button fx:id="buttonThreshPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonThreshPlus" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane fx:id="flowpaneZhangSuen" prefHeight="43.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelZhangSuen" prefHeight="21.0" prefWidth="150.0" text="Threshold" />
+                              <Button fx:id="buttonZhangSuenMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonzhangThreshMinus" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtZhangSuen" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonZhangSuenPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonzhangThreshPlus" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
                      </children>
