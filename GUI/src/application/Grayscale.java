@@ -58,17 +58,20 @@ public class Grayscale extends ImageMan{
 	}
 	//constructor
 	public Grayscale() {
-		
+		super();
 	}
 	public Grayscale(String ftype) {
+		super();
 		this.ftype = ftype;
 	}
 	public Grayscale(Mat src,String ftype) {
+		super();
 		this.src = src;
 		this.ftype = ftype;
 	}
 	
 	public Grayscale(Mat src, String ftype, double red, double green, double blue) {
+		super();
 		this.src=src;
 		this.ftype=ftype;
 		this.red=red;
@@ -77,6 +80,7 @@ public class Grayscale extends ImageMan{
 	}
 	
 	public Grayscale(String ftype, double red, double green, double blue) {
+		super();
 		this.ftype=ftype;
 		this.red=red;
 		this.green=green;
