@@ -18,6 +18,9 @@ public class Grayscale extends ImageMan{
 	
 	private Mat src;
 	private String ftype = "";
+	private double red;
+	private double green;
+	private double blue;
 	
 	//getter/setter
 	public void setSrc(Mat src) {
@@ -33,6 +36,26 @@ public class Grayscale extends ImageMan{
 		return ftype;
 	}
 	
+	public void setRed(double red) {
+		this.red=red;
+	}
+	
+	public double getRed() {
+		return red;
+	}
+	
+	public double getGreen() {
+		return green;
+	}
+	public void setGreen(double green) {
+		this.green = green;
+	}
+	public double getBlue() {
+		return blue;
+	}
+	public void setBlue(double blue) {
+		this.blue = blue;
+	}
 	//constructor
 	public Grayscale() {
 		
@@ -43,6 +66,21 @@ public class Grayscale extends ImageMan{
 	public Grayscale(Mat src,String ftype) {
 		this.src = src;
 		this.ftype = ftype;
+	}
+	
+	public Grayscale(Mat src, String ftype, double red, double green, double blue) {
+		this.src=src;
+		this.ftype=ftype;
+		this.red=red;
+		this.green=green;
+		this.blue=blue;
+	}
+	
+	public Grayscale(String ftype, double red, double green, double blue) {
+		this.ftype=ftype;
+		this.red=red;
+		this.green=green;
+		this.blue=blue;
 	}
 	//toString() override
 	public String toString() {
@@ -80,6 +118,20 @@ public class Grayscale extends ImageMan{
 				for(int j = 0; j<srcCopy.cols(); j++) {
 					data = srcCopy.get(i, j);
 					grayValue=((data[0]+data[1]+data[2])/3);
+					dst.put(i, j, grayValue);
+				}
+			}
+		}
+		else if(ftype.equals("customized")) {
+			srcCopy=src.clone();
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double[] data;
+			double grayValue;
+			Imgproc.cvtColor(srcCopy,srcCopy,Imgproc.COLOR_BGR2RGB);
+			for(int i = 0; i < srcCopy.rows();i++) {
+				for(int j = 0; j < srcCopy.cols();j++ ) {
+					data=srcCopy.get(i, j);
+					grayValue = (data[0]*red)+(data[1]*green)+(data[2]*blue);
 					dst.put(i, j, grayValue);
 				}
 			}

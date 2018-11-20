@@ -594,10 +594,11 @@ public class FXController implements Initializable{
 	@FXML
 	private void handleGrayRedMinusButton(ActionEvent event) {
 		Mat newMat = mat.clone();
-		double red = Double.parseDouble(txtFilterPower.getText());
-		double green = Double.parseDouble(txtSigmaColour.getText());
-		double  blue = Double.parseDouble(txtSigmaSpace.getText());
+		double red = Double.parseDouble(txtGrayRed.getText());
+		double green = Double.parseDouble(txtGrayGreen.getText());
+		double  blue = Double.parseDouble(txtGrayBlue.getText());
 		red=round(red-0.01,2);
+		System.out.println("hallo");
 		txtGrayRed.setText(Double.toString(red));
 		if(timeline.isEmpty()) {
 			newMat = grayscale.grayOwn(mat, red, green, blue);
@@ -875,22 +876,10 @@ public class FXController implements Initializable{
 	private void handleMinusButton(ActionEvent event4) {
 		Mat newMat = mat.clone();
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
+		int filterPower = Integer.parseInt(txtFilterPower.getText());
+		filterPower-=2;
+		txtFilterPower.setText(Integer.toString(filterPower));
 		try {
-			if(getSelectedRadioButtonText().equals("customized")){
-				double red = Double.parseDouble(txtFilterPower.getText());
-				double green = Double.parseDouble(txtSigmaColour.getText());
-				double  blue = Double.parseDouble(txtSigmaSpace.getText());
-				red = round(red-0.01,2);
-				txtFilterPower.setText(Double.toString(red));
-				if(timeline.isEmpty()) {
-					newMat = grayscale.grayOwn(mat, red, green, blue);
-				}else {
-					newMat = grayscale.grayOwn(timeline.getLast().getDst(), red, green, blue);
-				}
-			}else {
-				int filterPower = Integer.parseInt(txtFilterPower.getText());
-				filterPower-=2;
-				txtFilterPower.setText(Integer.toString(filterPower));
 			if(selectedRadioButton.getText().equals("median")) {
 				if(timeline.isEmpty()) {
 					newMat = blur.medianBlur(mat, filterPower);
@@ -924,7 +913,6 @@ public class FXController implements Initializable{
 				}
 
 			}
-		}
 			setTheImage(newMat);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -999,9 +987,16 @@ public class FXController implements Initializable{
 					draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),Integer.parseInt(txtFilterPower.getText())));
 				}
 			}else if(cbox_filters.getValue().equals("Grayscale")){
-				//Selber kram wie oben
-				draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
-				draggingButton.setFilterobject(new Grayscale(selectedRadioButton.getText()));
+				if(getSelectedRadioButtonText().equals("customized")) {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+getSelectedRadioButtonText());
+					draggingButton.setFilterobject(new Grayscale(getSelectedRadioButtonText(),
+							round(Double.parseDouble(txtGrayRed.getText()),2),
+							round(Double.parseDouble(txtGrayGreen.getText()),2),
+							round(Double.parseDouble(txtGrayBlue.getText()),2)));
+				}else {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
+					draggingButton.setFilterobject(new Grayscale(selectedRadioButton.getText()));
+				}
 			}
 
 			if(!timeline.isEmpty() && timeline.getLast().getDst() != null) {
