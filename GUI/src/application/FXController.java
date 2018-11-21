@@ -349,6 +349,7 @@ public class FXController implements Initializable{
 		deinitGrayOptions();
 		deinitZhangSuen();
 		initToolbar();
+		
 		/*
 		 * At this point we assign the listener to the radiobuttons.
 		 */
@@ -511,7 +512,9 @@ public class FXController implements Initializable{
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
 
+	
 	public void openFile() {
+		PlatformHelper.run(() -> {
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter("PNG", "*.png"),
@@ -519,6 +522,7 @@ public class FXController implements Initializable{
 				);
 		File file = fileChooser.showOpenDialog(stage);
 		filepath = file.getAbsolutePath();
+		
 
 		/**
 		 * Loading the image
@@ -547,6 +551,8 @@ public class FXController implements Initializable{
 			//toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
 			imageView.setImage(image);
 			so.setOriginalImage(image);
+			
+			
 
 			/*************************************
 			 *pluto-explorer scrollable imageview*
@@ -561,7 +567,7 @@ public class FXController implements Initializable{
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
-
+		});
 	}
 
 	/**
@@ -1622,4 +1628,16 @@ public class FXController implements Initializable{
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 	    }
+	    
+	    public static class PlatformHelper {
+	    	 
+	        public static void run (Runnable treatment) {
+	            if(treatment == null) throw new IllegalArgumentException("The treatment to perform can not be null");
+	     
+	            if(Platform.isFxApplicationThread()) treatment.run();
+	            else Platform.runLater(treatment);
+	        }
+	    }
+	    
+	    
 }
