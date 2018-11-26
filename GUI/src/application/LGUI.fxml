@@ -99,6 +99,17 @@
                               <RadioButton fx:id="radioButton4" mnemonicParsing="false" prefHeight="21.0" prefWidth="152.0" text="RadioButton" textFill="WHITE" toggleGroup="$toggleGroup1" />
                            </children>
                         </FlowPane>
+						<FlowPane fx:id="flowpaneRadioButtonEdge" prefHeight="94.0" prefWidth="152.0">
+                           <children>
+                              <RadioButton fx:id="radioButtonRobert" mnemonicParsing="false" prefHeight="21.0" prefWidth="145.0" text="Roberts Cross" textFill="WHITE">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="toggleGroupEdge" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="radioButtonSobel" mnemonicParsing="false" prefHeight="21.0" prefWidth="149.0" text="Sobel" textFill="WHITE" toggleGroup="$toggleGroupEdge" />
+                              <RadioButton fx:id="radioButtonPrewitt" mnemonicParsing="false" prefHeight="21.0" prefWidth="150.0" text="Prewitt" textFill="WHITE" toggleGroup="$toggleGroupEdge" />
+                           </children>
+                        </FlowPane>                        
                         <FlowPane fx:id="flowpaneFilterSize" prefHeight="69.0" prefWidth="150.0">
                            <children>
                               <Label fx:id="filerSize" prefHeight="21.0" prefWidth="147.0" text="Filter Size">

@@ -115,7 +115,15 @@ public class FXController implements Initializable{
 	@FXML
 	private RadioButton radioButton4;
 	@FXML
+	private RadioButton radioButtonRobert;
+	@FXML
+	private RadioButton radioButtonSobel;
+	@FXML
+	private RadioButton radioButtonPrewitt;
+	@FXML
 	private ToggleGroup toggleGroup1;
+	@FXML
+	private ToggleGroup toggleGroupEdge;
 	@FXML
 	private TextField txtFilterPower;
 	@FXML
@@ -188,6 +196,8 @@ public class FXController implements Initializable{
 	private FlowPane flowpaneGrayGreen;
 	@FXML
 	private FlowPane flowpaneGrayBlue;
+	@FXML
+	private FlowPane flowpaneRadioButtonEdge;
 	@FXML
 	private HBox workspace_hbox;
 	@FXML
@@ -279,6 +289,7 @@ public class FXController implements Initializable{
 	private Threshold thold = new Threshold();
 	private ZhangSuen zhangsuen = new ZhangSuen();
 	private CustomFilter customfilter = new CustomFilter();
+	private EdgeDetection edgeDetection = new EdgeDetection();
 	private Mat kernel;
 	
 	private String filepath;
@@ -321,7 +332,7 @@ public class FXController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Threshold","Zhang Suen Thinning","Custom Filter");
+		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Edge Detection","Threshold","Zhang Suen Thinning","Custom Filter");
 		cbox_filters.getItems().addAll(options);
 		//cbox_filters.applyCss();
 		//cbox_filters.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -348,9 +359,10 @@ public class FXController implements Initializable{
 		deinitThreshold();
 		deinitGrayOptions();
 		deinitZhangSuen();
+		deinitEdge();
 		initToolbar();
 		/*
-		 * At this point we assign the listener to the radiobuttons.
+		 * At this point we assign the listener to the radiobuttons for blur and grayscale.
 		 */
 		toggleGroup1.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
 			public void changed(ObservableValue<? extends Toggle> ov,
@@ -378,8 +390,9 @@ public class FXController implements Initializable{
 							// TODO: handle exception
 							e.printStackTrace();
 						}
-						//deinitBlurOptionsBila();
-					}else if(selectedRadioButton.getText().equals("bilateral")) {
+						//deinitBlurOptionsBila();	
+					}
+					else if(selectedRadioButton.getText().equals("bilateral")) {
 						deinitGrayOptions();
 						initBlurOptionsBila();
 					}else {
@@ -388,6 +401,28 @@ public class FXController implements Initializable{
 						initBlurOptions();
 					}
 				}                
+			}
+		});
+		
+		toggleGroupEdge.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+				// TODO Auto-generated method stub
+				if(toggleGroupEdge.getSelectedToggle() != null) {
+					try {
+						RadioButton selectedRadioB = (RadioButton)toggleGroupEdge.getSelectedToggle();
+						Mat newMat = mat.clone();
+						System.out.println(selectedRadioB.getText());
+						if(selectedRadioB.getText().equals("Roberts Cross")) {
+							newMat = edgeDetection.robertCross(mat);
+						}
+						setTheImage(newMat);
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		
@@ -425,6 +460,7 @@ public class FXController implements Initializable{
 			imageView.setImage(image);
 			if(newVal!= null && newVal.equals("Threshold")) {
 				deinitFilter();
+				deinitEdge();
 				deinitRadioButtons();
 				deinitGrayOptions();
 				deinitBlurOptionsBila();
@@ -452,6 +488,7 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
+				deinitEdge();
 				deinitZhangSuen();
 				initRadioButtons("average", "luminosity", "lightness", "customized");
 			}
@@ -465,6 +502,7 @@ public class FXController implements Initializable{
 				deinitZhangSuen();
 				deinitRadioButtons();
 				deinitGrayOptions();
+				deinitEdge();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
 			}
@@ -473,6 +511,7 @@ public class FXController implements Initializable{
 				deinitRadioButtons();
 				deinitBlurOptionsBila();
 				deinitThreshold();
+				deinitEdge();
 				deinitGrayOptions();
 				initZhangSuen();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
@@ -493,9 +532,23 @@ public class FXController implements Initializable{
 				deinitThreshold();
 				deinitZhangSuen();
 				deinitGrayOptions();
+				deinitEdge();
 				initFilter();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				
+			}
+			else if(newVal != null && newVal.equals("Edge Detection")) {
+				deinitRadioButtons();
+				deinitBlurOptionsBila();
+				deinitThreshold();
+				deinitZhangSuen();
+				deinitGrayOptions();
+				deinitFilter();
+				initEdge();
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
 			}
 		});		
 
@@ -1546,6 +1599,14 @@ public class FXController implements Initializable{
 
 	private void deinitThreshold() {
 		vbox.getChildren().remove(flowpaneThreshold);
+	}
+	
+	private void initEdge() {
+		vbox.getChildren().add(flowpaneRadioButtonEdge);
+	}
+	
+	private void deinitEdge() {
+		vbox.getChildren().remove(flowpaneRadioButtonEdge);
 	}
 
 
