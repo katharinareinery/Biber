@@ -34,8 +34,90 @@ public class EdgeDetection extends ImageMan {
 		robertY.put(0, 1, 1.0);
 		robertY.put(1, 0, -1.0);
 		robertY.put(1, 1, 0.0);
-		Imgproc.filter2D(this.src, dstX, ddepth, robertX, anchor, 0, Core.BORDER_DEFAULT);
-		Imgproc.filter2D(this.src, dstY, ddepth, robertY, anchor, 0, Core.BORDER_DEFAULT);
+		
+		dst = doIt(robertX, robertY);
+		
+		//dst wird aus dstX und dstY berechnet siehe https://homepages.inf.ed.ac.uk/rbf/HIPR2/roberts.htm
+		return dst;
+	}
+	
+	public Mat sobel(Mat src) {
+		this.src=src.clone();
+		dst = new Mat(this.src.size(),this.src.type());
+		Mat sobelX = new Mat(3, 3, CvType.CV_32F);
+		Mat sobelY = new Mat(3, 3, CvType.CV_32F);
+		sobelX.put(0, 0, -3.0);
+		sobelX.put(0, 1, 0.0);
+		sobelX.put(0, 2, 3.0);
+		
+		sobelX.put(1, 0, -10.0);
+		sobelX.put(1, 1, 0.0);
+		sobelX.put(1, 2, 10.0);
+		
+		sobelX.put(2, 0, -3.0);
+		sobelX.put(2, 1, 0.0);
+		sobelX.put(2, 2, 3.0);
+		
+		sobelY.put(0, 0, -3.0);
+		sobelY.put(0, 1, -10.0);
+		sobelY.put(0, 2, -3.0);
+		
+		sobelY.put(1, 0, 0.0);
+		sobelY.put(1, 1, 0.0);
+		sobelY.put(1, 2, 0.0);
+		
+		sobelY.put(2, 0, 3.0);
+		sobelY.put(2, 1, 10.0);
+		sobelY.put(2, 2, 3.0);
+		
+		dst = doIt(sobelX, sobelY);
+
+		//dst wird aus dstX und dstY berechnet siehe https://homepages.inf.ed.ac.uk/rbf/HIPR2/roberts.htm
+		return dst;
+	}
+	
+	public Mat prewitt(Mat src) {
+		this.src=src.clone();
+		dst = new Mat(this.src.size(),this.src.type());
+		Mat prewittX = new Mat(3, 3, CvType.CV_32F);
+		Mat prewittY = new Mat(3, 3, CvType.CV_32F);
+		prewittX.put(0, 0, -1.0);
+		prewittX.put(0, 1, 0.0);
+		prewittX.put(0, 2, 1.0);
+		
+		prewittX.put(1, 0, -1.0);
+		prewittX.put(1, 1, 0.0);
+		prewittX.put(1, 2, 1.0);
+		
+		prewittX.put(2, 0, -1.0);
+		prewittX.put(2, 1, 0.0);
+		prewittX.put(2, 2, 1.0);
+		
+		prewittY.put(0, 0, -1.0);
+		prewittY.put(0, 1, -1.0);
+		prewittY.put(0, 2, -1.0);
+		
+		prewittY.put(1, 0, 0.0);
+		prewittY.put(1, 1, 0.0);
+		prewittY.put(1, 2, 0.0);
+		
+		prewittY.put(2, 0, 1.0);
+		prewittY.put(2, 1, 1.0);
+		prewittY.put(2, 2, 1.0);
+		dst = doIt(prewittX, prewittY);
+		
+		return dst;
+	}
+	
+	private Mat doIt(Mat filterX, Mat filterY) {
+		Mat dstX = new Mat();
+		Mat dstY = new Mat();
+		double[] dataX;
+		double[] dataY;
+		double newValue;
+		double[] newValueArray = new double[3];
+		Imgproc.filter2D(this.src, dstX, ddepth, filterX, anchor, 0, Core.BORDER_DEFAULT);
+		Imgproc.filter2D(this.src, dstY, ddepth, filterY, anchor, 0, Core.BORDER_DEFAULT);
 		if(this.src.channels()==3) {
 			for(int i = 0; i < this.src.rows();i++) {
 				for(int j = 0; j < this.src.cols();j++ ) {
@@ -57,15 +139,6 @@ public class EdgeDetection extends ImageMan {
 				}
 			}
 		}
-		//dst wird aus dstX und dstY berechnet siehe https://homepages.inf.ed.ac.uk/rbf/HIPR2/roberts.htm
-		return dst;
-	}
-	
-	public Mat sobel() {
-		return dst;
-	}
-	
-	public Mat prewitt() {
 		return dst;
 	}
 	

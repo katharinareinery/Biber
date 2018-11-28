@@ -416,6 +416,10 @@ public class FXController implements Initializable{
 						System.out.println(selectedRadioB.getText());
 						if(selectedRadioB.getText().equals("Roberts Cross")) {
 							newMat = edgeDetection.robertCross(mat);
+						}else if(selectedRadioB.getText().equals("Sobel")) {
+							newMat = edgeDetection.sobel(mat);
+						}else if(selectedRadioB.getText().equals("Prewitt")) {
+							newMat = edgeDetection.prewitt(mat);
 						}
 						setTheImage(newMat);
 					} catch (Exception e) {
