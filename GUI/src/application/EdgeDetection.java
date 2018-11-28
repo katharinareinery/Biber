@@ -1,5 +1,7 @@
 package application;
 
+import java.awt.image.BufferedImage;
+
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -13,17 +15,50 @@ public class EdgeDetection extends ImageMan {
 	private Mat src;
 	private Mat dst;
 	private Point anchor = new Point(-1,-1);
-	private int ddepth = -1; 
+	private int ddepth = -1;
+	private String fType = "";
 	
+	public EdgeDetection(String fType, Mat src) {
+		super();
+		this.fType=fType;
+		this.src=src.clone();
+	}
+	
+	public Mat getSrc() {
+		return src;
+	}
+
+	public void setSrc(Mat src) {
+		this.src = src;
+	}
+
+	public Mat getDst() {
+		return dst;
+	}
+
+	public void setDst(Mat dst) {
+		this.dst = dst;
+	}
+
+	public String getfType() {
+		return fType;
+	}
+
+	public void setfType(String fType) {
+		this.fType = fType;
+	}
+
+	public EdgeDetection() {
+		super();
+	}
+	
+	public BufferedImage returnImage() {
+		return matToBuffImage(dst);
+	}
+
 	public Mat robertCross(Mat src) {
 		this.src=src.clone();
 		dst = new Mat(this.src.size(),this.src.type());
-		Mat dstX = new Mat();
-		Mat dstY = new Mat();
-		double[] dataX;
-		double[] dataY;
-		double newValue;
-		double[] newValueArray = new double[3];
 		Mat robertX = new Mat(2,2,CvType.CV_32F);
 		Mat robertY = new Mat(2, 2, CvType.CV_32F);
 		robertX.put(0, 0, 1.0);
@@ -140,6 +175,16 @@ public class EdgeDetection extends ImageMan {
 			}
 		}
 		return dst;
+	}
+	
+	public void useFilter() {
+		if(fType.equals("Roberts Cross")){
+			dst = robertCross(src);
+		}else if(fType.equals("Sobel")) {
+			dst = sobel(src);
+		}else if(fType.equals("Prewitt")) {
+			dst = prewitt(src);
+		}
 	}
 	
 }

@@ -830,6 +830,37 @@ public class FXController implements Initializable{
 				};
 				backgroundThread.restart();
 				break;
+			case "Edge Detection":
+				backgroundThread = new Service<Void>() {
+					@Override
+					protected Task<Void> createTask() {
+						// TODO Auto-generated method stub
+						return new Task<Void>() {
+							@Override
+							protected Void call() throws Exception {
+								// TODO Auto-generated method stub
+								try {
+									Mat newMat = mat.clone();
+									RadioButton selecB = (RadioButton)toggleGroupEdge.getSelectedToggle();
+									if(selecB.getText().equals("Roberts Cross")) {
+										newMat = edgeDetection.robertCross(mat);
+									}else if (selecB.getText().equals("Sobel")) {
+										newMat = edgeDetection.sobel(mat);
+									}else if(selecB.getText().equals("Prewitt")) {
+										newMat = edgeDetection.prewitt(mat);
+									}								
+									setTheImage(newMat);
+									newMat.copyTo(mat);
+								}catch(Exception e) {
+									e.printStackTrace();
+								}
+								return null;
+							}
+						};
+					}
+				};
+				backgroundThread.restart();
+				break;
 		}
 	}
 
@@ -1294,6 +1325,20 @@ public class FXController implements Initializable{
 					draggingButton.setFilterobject(new Grayscale(selectedRadioButton.getText()));
 				}
 			}
+			else if(cbox_filters.getValue().equals("Edge Detection")) {
+				System.out.println("drag");
+				RadioButton selectB = (RadioButton)toggleGroupEdge.getSelectedToggle();
+				if(selectB.getText().equals("Roberts Cross")) {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
+					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
+				}else if(selectB.getText().equals("Sobel")) {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
+					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
+				}else if(selectB.getText().equals("Prewitt")) {
+					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
+					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
+				}
+			}
 
 			if(!timeline.isEmpty() && timeline.getLast().getDst() != null) {
 				draggingButton.getFilterobject().setSrc(timeline.getLast().getDst());
@@ -1312,52 +1357,55 @@ public class FXController implements Initializable{
 	 * This method deals with the drop handling of the drag button.
 	 */
 	private void addDropHandling(Pane pane) {
-		pane.setOnDragOver(e -> {
-			//System.out.println(e.toString());
-			db = e.getDragboard();
-			if(db.hasContent(buttonFormat)&& draggingButton != null //&&  draggingButton.getParent().getId() != pane.getId()
-					) {
-				//System.out.println(draggingButton.toString());
-				//System.out.println(pane.getId());
-				e.acceptTransferModes(TransferMode.COPY);
-			}
-		});
-		pane.setOnDragDropped(e -> {
-			db = e.getDragboard();
-			if(db.hasContent(buttonFormat)) {
-				draggingButton.getFilterobject().useFilter();
-				timeline.add(draggingButton.getFilterobject());
-				BufferedImage neu = timeline.getLast().returnImage();
-				image = SwingFXUtils.toFXImage(neu, null);
-				imageView.setImage(image);
-				mat = draggingButton.getFilterobject().getDst();
-				draggingButton.setImageWithFilter(image);
-				draggingButton.setUserData("draggingButton");
-				draggingButton.setOnAction(new EventHandler<ActionEvent>() {
-					@Override 
-					public void handle(ActionEvent e) {
-						System.out.println(" EventHandler of Biber Button");
-						BiberButton dragB = (BiberButton)e.getSource();
-						System.out.println(dragB.getFilterobject());
-						dragB.getFilterobject().useFilter();
-						BufferedImage neu = dragB.getFilterobject().returnImage();
-						image = SwingFXUtils.toFXImage(neu, null);
-						imageView.setImage(image);
-					}
-				});
+		try {
+			pane.setOnDragOver(e -> {
+				//System.out.println(e.toString());
+				db = e.getDragboard();
+				if(db.hasContent(buttonFormat)&& draggingButton != null //&&  draggingButton.getParent().getId() != pane.getId()
+						) {
+					//System.out.println(draggingButton.toString());
+					//System.out.println(pane.getId());
+					e.acceptTransferModes(TransferMode.COPY);
+				}
+			});
+			pane.setOnDragDropped(e -> {
+				db = e.getDragboard();
+				if(db.hasContent(buttonFormat)) {
+					draggingButton.getFilterobject().useFilter();
+					timeline.add(draggingButton.getFilterobject());
+					BufferedImage neu = timeline.getLast().returnImage();
+					image = SwingFXUtils.toFXImage(neu, null);
+					imageView.setImage(image);
+					mat = draggingButton.getFilterobject().getDst();
+					draggingButton.setImageWithFilter(image);
+					draggingButton.setUserData("draggingButton");
+					draggingButton.setOnAction(new EventHandler<ActionEvent>() {
+						@Override 
+						public void handle(ActionEvent e) {
+							System.out.println(" EventHandler of Biber Button");
+							BiberButton dragB = (BiberButton)e.getSource();
+							System.out.println(dragB.getFilterobject());
+							dragB.getFilterobject().useFilter();
+							BufferedImage neu = dragB.getFilterobject().returnImage();
+							image = SwingFXUtils.toFXImage(neu, null);
+							imageView.setImage(image);
+						}
+					});
+					pane.getChildren().add(draggingButton);
+					e.setDropCompleted(true);
+					ImageView thumb = new ImageView(image);
+					//TODO: get size of button here. scaling is just a workaround
+					thumb.setFitWidth(image.getWidth()/3);
+					thumb.setFitHeight(image.getHeight()/3);
+					draggingButton.setMinWidth(image.getWidth()/3);
+					thumpnailPane.getChildren().add(thumpnailPosition, thumb);
+					thumpnailPosition++;
+				}
+			});
 
-				pane.getChildren().add(draggingButton);
-				e.setDropCompleted(true);
-				ImageView thumb = new ImageView(image);
-				//TODO: get size of button here. scaling is just a workaround
-				thumb.setFitWidth(image.getWidth()/3);
-				thumb.setFitHeight(image.getHeight()/3);
-				draggingButton.setMinWidth(image.getWidth()/3);
-				thumpnailPane.getChildren().add(thumpnailPosition, thumb);
-				thumpnailPosition++;
-			}
-		});
-
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
