@@ -259,7 +259,9 @@ public class FXController implements Initializable{
 	private TextField two_three;
 	@FXML
 	private TextField three_three;
-
+	@FXML
+	private TextField custom_delta;
+	
 	private ToggleButton btn_movezoom;
 	private ImageView iv_movezoom;
 	private ImageView iv_cursor;
@@ -361,6 +363,7 @@ public class FXController implements Initializable{
 		deinitZhangSuen();
 		deinitEdge();
 		initToolbar();
+		
 		/*
 		 * At this point we assign the listener to the radiobuttons for blur and grayscale.
 		 */
@@ -568,7 +571,9 @@ public class FXController implements Initializable{
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
 
+	
 	public void openFile() {
+		PlatformHelper.run(() -> {
 		fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter("PNG", "*.png"),
@@ -576,6 +581,7 @@ public class FXController implements Initializable{
 				);
 		File file = fileChooser.showOpenDialog(stage);
 		filepath = file.getAbsolutePath();
+		
 
 		/**
 		 * Loading the image
@@ -604,6 +610,8 @@ public class FXController implements Initializable{
 			//toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
 			imageView.setImage(image);
 			so.setOriginalImage(image);
+			
+			
 
 			/*************************************
 			 *pluto-explorer scrollable imageview*
@@ -618,7 +626,7 @@ public class FXController implements Initializable{
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
-
+		});
 	}
 
 	/**
@@ -802,44 +810,7 @@ public class FXController implements Initializable{
 				break;
 			case "Custom Filter":
 				RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
-				if(selected.getText().equals("2")) {
-					kernel = new Mat(2,2,CvType.CV_32F);
-					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
-					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
-					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
-					kernel.put(1,1,Double.parseDouble(one_one.getText()));
-				}
-				else if(selected.getText().equals("3")) {
-					kernel = new Mat(3,3,CvType.CV_32F);
-					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
-					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
-					kernel.put(0,2,Double.parseDouble(zero_two.getText()));
-					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
-					kernel.put(1,1,Double.parseDouble(one_one.getText()));
-					kernel.put(1,2,Double.parseDouble(one_two.getText()));
-					kernel.put(2,0,Double.parseDouble(two_zero.getText()));
-					kernel.put(2,1,Double.parseDouble(two_one.getText()));
-					kernel.put(2,2,Double.parseDouble(two_two.getText()));
-				}
-				else {
-					kernel = new Mat(4,4,CvType.CV_32F);
-					kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
-					kernel.put(0,1,Double.parseDouble(zero_one.getText()));
-					kernel.put(0,2,Double.parseDouble(zero_two.getText()));
-					kernel.put(0,3,Double.parseDouble(zero_three.getText()));
-					kernel.put(1,0,Double.parseDouble(one_zero.getText()));
-					kernel.put(1,1,Double.parseDouble(one_one.getText()));
-					kernel.put(1,2,Double.parseDouble(one_two.getText()));
-					kernel.put(1,3,Double.parseDouble(one_three.getText()));
-					kernel.put(2,0,Double.parseDouble(two_zero.getText()));
-					kernel.put(2,1,Double.parseDouble(two_one.getText()));
-					kernel.put(2,2,Double.parseDouble(two_two.getText()));	
-					kernel.put(2,3,Double.parseDouble(two_three.getText()));
-					kernel.put(3,0,Double.parseDouble(three_zero.getText()));
-					kernel.put(3,1,Double.parseDouble(three_one.getText()));
-					kernel.put(3,2,Double.parseDouble(three_two.getText()));	
-					kernel.put(3,3,Double.parseDouble(three_three.getText()));
-				}
+				kernel = fillKernel(selected.getText());
 				System.out.println(kernel.toString());
 				backgroundThread = new Service<Void>() {
 					@Override
@@ -849,7 +820,7 @@ public class FXController implements Initializable{
 							@Override
 							protected Void call() throws Exception {
 								try {
-									mat = customfilter.customKernel(mat, kernel, Double.parseDouble(coef.getText()));
+									mat = customfilter.customKernel(mat, kernel, Double.parseDouble(coef.getText()),Double.parseDouble(custom_delta.getText()));
 									setTheImage(mat);
 								}catch(Exception e) {e.printStackTrace();}
 								return null;
@@ -1290,6 +1261,12 @@ public class FXController implements Initializable{
 				draggingButton = createButton(cbox_filters.getValue().toString());
 				draggingButton.setFilterobject(new Threshold(Integer.parseInt(txtThreshold.getText())));
 
+			}else if(cbox_filters.getValue().equals("Custom Filter")) {
+				RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
+				draggingButton = createButton(cbox_filters.getValue().toString());
+				draggingButton.setFilterobject(new CustomFilter(fillKernel(selected.getText())
+						,Double.parseDouble(coef.getText())
+						,Double.parseDouble(custom_delta.getText())));
 			}else if(cbox_filters.getValue().equals("Blur")){
 				if(selectedRadioButton.getText().equals("bilateral")) {
 					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
@@ -1301,7 +1278,11 @@ public class FXController implements Initializable{
 					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectedRadioButton.getText());
 					draggingButton.setFilterobject(new Blur(selectedRadioButton.getText(),Integer.parseInt(txtFilterPower.getText())));
 				}
-			}else if(cbox_filters.getValue().equals("Grayscale")){
+			}else if(cbox_filters.getValue().equals("Zhang Suen Thinning")){
+				draggingButton = createButton(cbox_filters.getValue().toString());
+				draggingButton.setFilterobject(new ZhangSuen(Integer.parseInt(txtZhangSuen.getText())));
+			}
+			else if(cbox_filters.getValue().equals("Grayscale")){
 				if(getSelectedRadioButtonText().equals("customized")) {
 					draggingButton = createButton(cbox_filters.getValue().toString()+": "+getSelectedRadioButtonText());
 					draggingButton.setFilterobject(new Grayscale(getSelectedRadioButtonText(),
@@ -1679,6 +1660,48 @@ public class FXController implements Initializable{
 	    	three_two.setDisable(false);
 	    	three_three.setDisable(false);
 	    }
+	    private Mat fillKernel(String size) {
+	    	Mat kernel;
+	    	if(size.equals("2")) {
+				kernel = new Mat(2,2,CvType.CV_32F);
+				kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+				kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+				kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+				kernel.put(1,1,Double.parseDouble(one_one.getText()));
+			}
+			else if(size.equals("3")) {
+				kernel = new Mat(3,3,CvType.CV_32F);
+				kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+				kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+				kernel.put(0,2,Double.parseDouble(zero_two.getText()));
+				kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+				kernel.put(1,1,Double.parseDouble(one_one.getText()));
+				kernel.put(1,2,Double.parseDouble(one_two.getText()));
+				kernel.put(2,0,Double.parseDouble(two_zero.getText()));
+				kernel.put(2,1,Double.parseDouble(two_one.getText()));
+				kernel.put(2,2,Double.parseDouble(two_two.getText()));
+			}
+			else {
+				kernel = new Mat(4,4,CvType.CV_32F);
+				kernel.put(0,0,Double.parseDouble(zero_zero.getText()));
+				kernel.put(0,1,Double.parseDouble(zero_one.getText()));
+				kernel.put(0,2,Double.parseDouble(zero_two.getText()));
+				kernel.put(0,3,Double.parseDouble(zero_three.getText()));
+				kernel.put(1,0,Double.parseDouble(one_zero.getText()));
+				kernel.put(1,1,Double.parseDouble(one_one.getText()));
+				kernel.put(1,2,Double.parseDouble(one_two.getText()));
+				kernel.put(1,3,Double.parseDouble(one_three.getText()));
+				kernel.put(2,0,Double.parseDouble(two_zero.getText()));
+				kernel.put(2,1,Double.parseDouble(two_one.getText()));
+				kernel.put(2,2,Double.parseDouble(two_two.getText()));	
+				kernel.put(2,3,Double.parseDouble(two_three.getText()));
+				kernel.put(3,0,Double.parseDouble(three_zero.getText()));
+				kernel.put(3,1,Double.parseDouble(three_one.getText()));
+				kernel.put(3,2,Double.parseDouble(three_two.getText()));	
+				kernel.put(3,3,Double.parseDouble(three_three.getText()));
+			}
+	    	return kernel;
+	    }
 	   
 	    
 	    
@@ -1687,4 +1710,16 @@ public class FXController implements Initializable{
 			image = SwingFXUtils.toFXImage(neu, null);
 			imageView.setImage(image);
 	    }
+	    
+	    public static class PlatformHelper {
+	    	 
+	        public static void run (Runnable treatment) {
+	            if(treatment == null) throw new IllegalArgumentException("The treatment to perform can not be null");
+	     
+	            if(Platform.isFxApplicationThread()) treatment.run();
+	            else Platform.runLater(treatment);
+	        }
+	    }
+	    
+	    
 }

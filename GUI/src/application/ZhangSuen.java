@@ -17,9 +17,11 @@ public class ZhangSuen extends ImageMan{
 	private Mat src;
 	//threshold value
 	private int t = 0;
-	/*public Threshold(){
-		super();
-	}*/
+	
+	private Mat kernel;
+	
+	
+	
 	//constructor
 		public ZhangSuen(Mat src,int t){
 			super();
@@ -152,7 +154,7 @@ public class ZhangSuen extends ImageMan{
 		public BufferedImage returnImage() {
 			return matToBuffImage(dst);
 		}
-		
+
 		//overriden toString for debugging purpose
 		@Override
 		public String toString() {
