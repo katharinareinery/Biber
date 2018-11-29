@@ -871,8 +871,9 @@ public class FXController implements Initializable{
 		double red = Double.parseDouble(txtGrayRed.getText());
 		double green = Double.parseDouble(txtGrayGreen.getText());
 		double  blue = Double.parseDouble(txtGrayBlue.getText());
-		red=round(red-0.01,2);
-		System.out.println("hallo");
+		if(red >= 0.01) {
+			red=round(red-0.01,2);
+		}		
 		txtGrayRed.setText(Double.toString(red));
 		if(timeline.isEmpty()) {
 			newMat = grayscale.grayOwn(mat, red, green, blue);
@@ -904,7 +905,9 @@ public class FXController implements Initializable{
 		double red = Double.parseDouble(txtGrayRed.getText());
 		double green = Double.parseDouble(txtGrayGreen.getText());
 		double  blue = Double.parseDouble(txtGrayBlue.getText());
-		green=round(green-0.01,2);
+		if(green >= 0.01) {
+			green=round(green-0.01,2);
+		}
 		txtGrayGreen.setText(Double.toString(green));
 		if(timeline.isEmpty()) {
 			newMat = grayscale.grayOwn(mat, red, green, blue);
@@ -936,7 +939,9 @@ public class FXController implements Initializable{
 		double red = Double.parseDouble(txtGrayRed.getText());
 		double green = Double.parseDouble(txtGrayGreen.getText());
 		double  blue = Double.parseDouble(txtGrayBlue.getText());
-		blue=round(blue-0.01,2);
+		if(blue >= 0.01) {
+			blue=round(blue-0.01,2);
+		}
 		txtGrayBlue.setText(Double.toString(blue));
 		if(timeline.isEmpty()) {
 			newMat = grayscale.grayOwn(mat, red, green, blue);
