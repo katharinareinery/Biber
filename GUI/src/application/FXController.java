@@ -631,8 +631,8 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitFilter();
 				initScale();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
-				sc.setPrefWidth(anwenden.getPrefHeight());
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
+				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 			}
@@ -852,6 +852,33 @@ public class FXController implements Initializable{
 				alert.setContentText("Only values from 0-255 allowed!");
 				alert.showAndWait();
 			}
+			backgroundThread.restart();
+			break;
+		case "Pixel Scaling":
+			double red = Double.parseDouble(txtScaleRed.getText());
+			double green = Double.parseDouble(txtScaleGreen.getText());
+			double blue = Double.parseDouble(txtScaleBlue.getText());
+			backgroundThread = new Service<Void>() {
+				@Override
+				protected Task<Void> createTask() {
+					// TODO Auto-generated method stub
+					return new Task<Void>() {
+						@Override
+						protected Void call() throws Exception {
+							// TODO Auto-generated method stub
+							try {
+								Mat newMat = mat.clone();
+								newMat = pixelScale.scaling(newMat, red, green, blue);
+								setTheImage(newMat);
+								newMat.copyTo(mat);
+								System.out.println("Hallo");
+							}
+							catch(Exception e) {e.printStackTrace();}
+							return null;
+						}
+					};
+				}
+			};
 			backgroundThread.restart();
 			break;
 		case "Zhang Suen Thinning":
@@ -1525,6 +1552,12 @@ public class FXController implements Initializable{
 					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
 					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
 				}
+			}
+			else if(cbox_filters.getValue().equals("Pixel Scaling")) {
+				draggingButton = createButton(cbox_filters.getValue());
+				draggingButton.setFilterobject(new PixelScaling(round(Double.parseDouble(txtScaleRed.getText()),2),
+							round(Double.parseDouble(txtScaleGreen.getText()),2),
+							round(Double.parseDouble(txtScaleBlue.getText()),2)));
 			}
 
 			if(!timeline.isEmpty() && timeline.getLast().getDst() != null) {

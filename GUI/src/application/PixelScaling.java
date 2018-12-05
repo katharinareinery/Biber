@@ -14,11 +14,18 @@ public class PixelScaling extends ImageMan{
 	private double coeffBlue;
 	
 	
-	public PixelScaling(Mat src, double coeffRed, double coeffGreen, double coeffBlue) {
-		this.src = src;
+	public PixelScaling(double coeffRed, double coeffGreen, double coeffBlue) {
 		this.coeffRed = coeffRed;
 		this.coeffGreen = coeffGreen;
 		this.coeffBlue = coeffBlue;
+	}
+	
+	public void setSrc(Mat src) {
+		this.src= src;
+	}
+	
+	public Mat getDst() {
+		return dst;
 	}
 	
 	public PixelScaling() {
