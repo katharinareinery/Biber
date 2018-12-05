@@ -17,7 +17,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
-
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -64,6 +64,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -93,7 +94,7 @@ public class FXController implements Initializable{
 	@FXML
 	private ComboBox<String> cbox_filters;
 	@FXML
-	private Button anwenden;
+	private Button apply;
 	@FXML
 	private Button preview;
 	@FXML
@@ -303,6 +304,11 @@ public class FXController implements Initializable{
 
 	private SharedObject so = SharedObject.getInstance();
 	private int thumpnailPosition = 0;
+	
+	private PauseTransition holdTimerTreshold = new PauseTransition(Duration.millis(100));
+	private PauseTransition holdTimerZhangSuen = new PauseTransition(Duration.millis(100));
+	private PauseTransition holdTimerSgSpace = new PauseTransition(Duration.millis(100));
+	private PauseTransition holdTimerSgColour = new PauseTransition(Duration.millis(100));
 
 	//get screen size for imageview
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -347,7 +353,7 @@ public class FXController implements Initializable{
 		cbox_filters.setDisable(true);
 		about.setOnAction(this::handleAbout);
 		preview.setOnAction(this::handleWindow);
-		anwenden.setDisable(true);
+		apply.setDisable(true);
 		preview.setDisable(true);
 		srcButton.setDisable(true);
 		deinitRadioButtons();
@@ -363,6 +369,34 @@ public class FXController implements Initializable{
 		deinitZhangSuen();
 		deinitEdge();
 		initToolbar();
+		
+		txtSigmaColour.setText("1.0");
+		txtSigmaSpace.setText("1.0");
+		txtThreshold.setText("1");
+		txtZhangSuen.setText("1");
+		txtGrayRed.setText("0.5");
+		txtGrayGreen.setText("0.5");
+		txtGrayBlue.setText("0.5");
+		
+		buttonSgColourPlus.setOnMousePressed(event -> handleHoldButtonPlusSigmaColour());
+		buttonSgColourPlus.setOnMouseReleased(event -> holdTimerSgColour.stop());
+		buttonSgColourMinus.setOnMousePressed(event -> handleHoldButtonMinusSigmaColour());
+		buttonSgColourMinus.setOnMouseReleased(event -> holdTimerSgColour.stop());
+		
+		buttonSgSpacePlus.setOnMousePressed(event -> handleHoldButtonPlusSigmaSpace());
+		buttonSgSpacePlus.setOnMouseReleased(event -> holdTimerSgSpace.stop());
+		buttonSgSpaceMinus.setOnMousePressed(event -> handleHoldButtonMinusSigmaSpace());
+		buttonSgSpaceMinus.setOnMouseReleased(event -> holdTimerSgSpace.stop());	
+		
+		buttonThreshPlus.setOnMousePressed(event -> handleHoldButtonPlusTreshold());
+		buttonThreshPlus.setOnMouseReleased(event -> holdTimerTreshold.stop());
+		buttonThreshMinus.setOnMousePressed(event -> handleHoldButtonMinusTreshold());
+		buttonThreshMinus.setOnMouseReleased(event -> holdTimerTreshold.stop());
+		
+		buttonZhangSuenPlus.setOnMousePressed(event -> handleHoldButtonPlusZhangSuen());
+		buttonZhangSuenPlus.setOnMouseReleased(event -> holdTimerZhangSuen.stop());
+		buttonZhangSuenMinus.setOnMousePressed(event -> handleHoldButtonMinusZhangSuen());
+		buttonZhangSuenMinus.setOnMouseReleased(event -> holdTimerZhangSuen.stop());
 		
 		/*
 		 * At this point we assign the listener to the radiobuttons for blur and grayscale.
@@ -473,8 +507,8 @@ public class FXController implements Initializable{
 				deinitBlurOptionsBila();
 				deinitZhangSuen();
 				initThreshold();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
-				sc.setPrefWidth(anwenden.getPrefHeight());
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
+				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 				sc.valueProperty().addListener(new ChangeListener<Number>() {
@@ -487,8 +521,8 @@ public class FXController implements Initializable{
 			}
 			else if(newVal!=null && newVal.equals("Grayscale")) {
 				deinitFilter();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
-				sc.setPrefWidth(anwenden.getPrefHeight());
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
+				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 				deinitThreshold();
@@ -501,8 +535,8 @@ public class FXController implements Initializable{
 			}
 			else if (newVal!=null && newVal.equals("Blur")) {
 				deinitFilter();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
-				sc.setPrefWidth(anwenden.getPrefHeight());
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
+				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 				deinitThreshold();
@@ -521,8 +555,8 @@ public class FXController implements Initializable{
 				deinitEdge();
 				deinitGrayOptions();
 				initZhangSuen();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
-				sc.setPrefWidth(anwenden.getPrefHeight());
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
+				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 				sc.valueProperty().addListener(new ChangeListener<Number>() {
@@ -541,7 +575,7 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitEdge();
 				initFilter();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
 				
 			}
 			else if(newVal != null && newVal.equals("Edge Detection")) {
@@ -552,8 +586,8 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitFilter();
 				initEdge();
-				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
-				sc.setPrefWidth(anwenden.getPrefHeight());
+				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
+				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
 			}
@@ -570,7 +604,6 @@ public class FXController implements Initializable{
 	 * This method will open a file.
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
-
 	
 	public void openFile() {
 		PlatformHelper.run(() -> {
@@ -619,7 +652,7 @@ public class FXController implements Initializable{
 
 			btn_movezoom.setDisable(false);
 			btn_cursor.setDisable(false);
-			anwenden.setDisable(false);
+			apply.setDisable(false);
 			preview.setDisable(false);
 			srcButton.setDisable(false);
 			cbox_filters.setDisable(false);
@@ -668,7 +701,7 @@ public class FXController implements Initializable{
 	/**
 	 * This method provides the various controls with functions.
 	 */
-	public void handleAnwenden(ActionEvent event) {
+	public void handleApply(ActionEvent event) {
 		System.out.println(cbox_filters.getValue());
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
 		switch(cbox_filters.getValue().toString()) {
@@ -1331,7 +1364,7 @@ public class FXController implements Initializable{
 				}
 			}
 			else if(cbox_filters.getValue().equals("Edge Detection")) {
-				System.out.println("drag");
+				//System.out.println("drag");
 				RadioButton selectB = (RadioButton)toggleGroupEdge.getSelectedToggle();
 				if(selectB.getText().equals("Roberts Cross")) {
 					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
@@ -1756,8 +1789,7 @@ public class FXController implements Initializable{
 	    	return kernel;
 	    }
 	   
-	    
-	    
+
 	    private void setTheImage(Mat mat) {
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -1774,5 +1806,64 @@ public class FXController implements Initializable{
 	        }
 	    }
 	    
+	    /**
+	     * These methods ensure that the buttons automatically count up when the mouse clicks, 
+	     * until the button is released.
+	     */
+	     
+		public void handleHoldButtonPlusSigmaColour() {
+			this.txtSigmaColour.setText("" + (Double.parseDouble(this.txtSigmaColour.getText())+1));
+			holdTimerSgColour.setOnFinished(event -> handleHoldButtonPlusSigmaColour());
+			holdTimerSgColour.playFromStart();
+		}
 	    
+		public void handleHoldButtonMinusSigmaColour() {
+			if(Double.parseDouble(this.txtSigmaColour.getText()) > 0.0 ) {
+				this.txtSigmaColour.setText("" + (Double.parseDouble(this.txtSigmaColour.getText())-1));
+				holdTimerSgColour.setOnFinished(event -> handleHoldButtonMinusSigmaColour());
+				holdTimerSgColour.playFromStart();
+			}
+		}
+		
+		public void handleHoldButtonPlusSigmaSpace() {
+			this.txtSigmaSpace.setText("" + (Double.parseDouble(this.txtSigmaSpace.getText())+1.0));
+			holdTimerSgSpace.setOnFinished(event -> handleHoldButtonPlusSigmaSpace());
+			holdTimerSgSpace.playFromStart();
+		}
+	    
+		public void handleHoldButtonMinusSigmaSpace() {
+			if(Double.parseDouble(this.txtSigmaSpace.getText()) > 0.0 ) {
+				this.txtSigmaSpace.setText("" + (Double.parseDouble(this.txtSigmaSpace.getText())-1.0));
+				holdTimerSgSpace.setOnFinished(event -> handleHoldButtonMinusSigmaSpace());
+				holdTimerSgSpace.playFromStart();
+			}
+		}
+		
+		public void handleHoldButtonPlusTreshold() {
+			this.txtThreshold.setText("" + (Integer.parseInt(this.txtThreshold.getText())+1));
+			holdTimerTreshold.setOnFinished(event -> handleHoldButtonPlusTreshold());
+			holdTimerTreshold.playFromStart();
+		}
+	    
+		public void handleHoldButtonMinusTreshold() {
+			if(Integer.parseInt(this.txtThreshold.getText()) > 0 ) {
+				this.txtThreshold.setText("" + (Integer.parseInt(this.txtThreshold.getText())-1));
+				holdTimerTreshold.setOnFinished(event -> handleHoldButtonMinusTreshold());
+				holdTimerTreshold.playFromStart();
+			}
+		}
+				
+		public void handleHoldButtonPlusZhangSuen() {
+			this.txtZhangSuen.setText("" + (Integer.parseInt(this.txtZhangSuen.getText())+1));
+			holdTimerZhangSuen.setOnFinished(event -> handleHoldButtonPlusZhangSuen());
+			holdTimerZhangSuen.playFromStart();
+		}
+	    
+		public void handleHoldButtonMinusZhangSuen() {
+			if(Integer.parseInt(this.txtZhangSuen.getText()) > 0 ) {
+				this.txtZhangSuen.setText("" + (Integer.parseInt(this.txtZhangSuen.getText())-1));
+				holdTimerZhangSuen.setOnFinished(event -> handleHoldButtonMinusZhangSuen());
+				holdTimerZhangSuen.playFromStart();
+			}
+		}	    
 }
