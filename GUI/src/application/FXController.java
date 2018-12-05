@@ -604,6 +604,7 @@ public class FXController implements Initializable{
 	 * This method will open a file.
 	 * The file formats available to the user are PNG and JPG2000.
 	 */
+
 	
 	public void openFile() {
 		PlatformHelper.run(() -> {
@@ -1364,7 +1365,7 @@ public class FXController implements Initializable{
 				}
 			}
 			else if(cbox_filters.getValue().equals("Edge Detection")) {
-				//System.out.println("drag");
+				System.out.println("drag");
 				RadioButton selectB = (RadioButton)toggleGroupEdge.getSelectedToggle();
 				if(selectB.getText().equals("Roberts Cross")) {
 					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
@@ -1789,7 +1790,8 @@ public class FXController implements Initializable{
 	    	return kernel;
 	    }
 	   
-
+	    
+	    
 	    private void setTheImage(Mat mat) {
 			BufferedImage neu = imageMan.matToBuffImage(mat);
 			image = SwingFXUtils.toFXImage(neu, null);
@@ -1825,6 +1827,7 @@ public class FXController implements Initializable{
 			}
 		}
 		
+	
 		public void handleHoldButtonPlusSigmaSpace() {
 			this.txtSigmaSpace.setText("" + (Double.parseDouble(this.txtSigmaSpace.getText())+1.0));
 			holdTimerSgSpace.setOnFinished(event -> handleHoldButtonPlusSigmaSpace());
@@ -1853,6 +1856,7 @@ public class FXController implements Initializable{
 			}
 		}
 				
+
 		public void handleHoldButtonPlusZhangSuen() {
 			this.txtZhangSuen.setText("" + (Integer.parseInt(this.txtZhangSuen.getText())+1));
 			holdTimerZhangSuen.setOnFinished(event -> handleHoldButtonPlusZhangSuen());
