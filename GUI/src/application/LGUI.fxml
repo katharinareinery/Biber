@@ -142,7 +142,7 @@
                               <Button fx:id="buttonSgColourPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleSgColourPlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
-                                                <FlowPane fx:id="flowpaneGrayRed" prefHeight="41.0" prefWidth="150.0">
+                        <FlowPane fx:id="flowpaneGrayRed" prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Label fx:id="labelGrayRed" prefHeight="21.0" prefWidth="147.0" text="Red">
                               </Label>
@@ -167,6 +167,33 @@
                               <Button fx:id="buttonGrayBlueMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleGrayBlueMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
                               <TextField fx:id="txtGrayBlue" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
                               <Button fx:id="buttonGrayBluePlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleGrayBluePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane fx:id="flowpaneScaleRed" prefHeight="41.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelScaleRed" prefHeight="21.0" prefWidth="147.0" text="Red">
+                              </Label>
+                              <Button fx:id="buttonScaleRedMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleRedMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtScaleRed" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonScaleRedPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleRedPlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane fx:id="flowpaneScaleGreen" prefHeight="41.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelScaleGreen" prefHeight="21.0" prefWidth="147.0" text="Green">
+                              </Label>
+                              <Button fx:id="buttonScaleGreenMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleGreenMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtScaleGreen" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonScaleGreenPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleGreenPlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane fx:id="flowpaneScaleBlue" prefHeight="41.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelScaleBlue" prefHeight="21.0" prefWidth="147.0" text="Blue">
+                              </Label>
+                              <Button fx:id="buttonScaleBlueMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleBlueMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtScaleBlue" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonScaleBluePlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleBluePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
                         <FlowPane fx:id="flowpaneSigmaSpace" prefHeight="41.0" prefWidth="150.0">

@@ -151,6 +151,18 @@ public class FXController implements Initializable{
 	@FXML
 	private Button buttonGrayBlueMinus;
 	@FXML
+	private Button buttonScaleRedPlus;
+	@FXML
+	private Button buttonScaleRedMinus;
+	@FXML
+	private Button buttonScaleGreenPlus;
+	@FXML
+	private Button buttonScaleGreenMinus;
+	@FXML
+	private Button buttonScaleBluePlus;
+	@FXML
+	private Button buttonScaleBlueMinus;
+	@FXML
 	private TextField txtSigmaColour;
 	@FXML
 	private TextField txtSigmaSpace;
@@ -160,6 +172,12 @@ public class FXController implements Initializable{
 	private TextField txtGrayGreen;
 	@FXML
 	private TextField txtGrayBlue;
+	@FXML
+	private TextField txtScaleRed;
+	@FXML
+	private TextField txtScaleGreen;
+	@FXML
+	private TextField txtScaleBlue;
 	@FXML
 	private Label labelFilerSize;
 	@FXML
@@ -198,6 +216,12 @@ public class FXController implements Initializable{
 	private FlowPane flowpaneGrayBlue;
 	@FXML
 	private FlowPane flowpaneRadioButtonEdge;
+	@FXML
+	private FlowPane flowpaneScaleRed;
+	@FXML
+	private FlowPane flowpaneScaleGreen;
+	@FXML
+	private FlowPane flowpaneScaleBlue;
 	@FXML
 	private HBox workspace_hbox;
 	@FXML
@@ -292,6 +316,7 @@ public class FXController implements Initializable{
 	private ZhangSuen zhangsuen = new ZhangSuen();
 	private CustomFilter customfilter = new CustomFilter();
 	private EdgeDetection edgeDetection = new EdgeDetection();
+	private PixelScaling pixelScale = new PixelScaling();
 	private Mat kernel;
 	
 	private String filepath;
@@ -334,7 +359,7 @@ public class FXController implements Initializable{
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Edge Detection","Threshold","Zhang Suen Thinning","Custom Filter");
+		ObservableList<String> options = FXCollections.observableArrayList("Grayscale","Blur","Pixel Scaling","Edge Detection","Threshold","Zhang Suen Thinning","Custom Filter");
 		cbox_filters.getItems().addAll(options);
 		//cbox_filters.applyCss();
 		//cbox_filters.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -362,6 +387,7 @@ public class FXController implements Initializable{
 		deinitGrayOptions();
 		deinitZhangSuen();
 		deinitEdge();
+		deinitScale();
 		initToolbar();
 		
 		/*
@@ -472,6 +498,7 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitBlurOptionsBila();
 				deinitZhangSuen();
+				deinitScale();
 				initThreshold();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
@@ -496,6 +523,7 @@ public class FXController implements Initializable{
 				deinitBlurOptionsBila();
 				deinitRadioButtons();
 				deinitEdge();
+				deinitScale();
 				deinitZhangSuen();
 				initRadioButtons("average", "luminosity", "lightness", "customized");
 			}
@@ -510,6 +538,7 @@ public class FXController implements Initializable{
 				deinitRadioButtons();
 				deinitGrayOptions();
 				deinitEdge();
+				deinitScale();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
 			}
@@ -520,6 +549,7 @@ public class FXController implements Initializable{
 				deinitThreshold();
 				deinitEdge();
 				deinitGrayOptions();
+				deinitScale();
 				initZhangSuen();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
@@ -540,6 +570,7 @@ public class FXController implements Initializable{
 				deinitZhangSuen();
 				deinitGrayOptions();
 				deinitEdge();
+				deinitScale();
 				initFilter();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				
@@ -551,7 +582,21 @@ public class FXController implements Initializable{
 				deinitZhangSuen();
 				deinitGrayOptions();
 				deinitFilter();
+				deinitScale();
 				initEdge();
+				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
+				sc.setPrefWidth(anwenden.getPrefHeight());
+				sc.setMin(1);
+				sc.setMax(255);
+			}
+			else if(newVal != null && newVal.equals("Pixel Scaling")) {
+				deinitRadioButtons();
+				deinitBlurOptionsBila();
+				deinitThreshold();
+				deinitZhangSuen();
+				deinitGrayOptions();
+				deinitFilter();
+				initScale();
 				txt_fld.setPrefWidth(anwenden.getPrefWidth()/2);
 				sc.setPrefWidth(anwenden.getPrefHeight());
 				sc.setMin(1);
@@ -966,6 +1011,109 @@ public class FXController implements Initializable{
 		}
 		setTheImage(newMat);
 	}
+	
+	@FXML
+	private void handleScaleRedMinusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double red = Double.parseDouble(txtScaleRed.getText());
+		double green = Double.parseDouble(txtScaleGreen.getText());
+		double  blue = Double.parseDouble(txtScaleBlue.getText());
+		if(red >= 0.01) {
+			red=round(red-0.01,2);
+		}		
+		txtScaleRed.setText(Double.toString(red));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scaling(mat, red, green, blue);
+		}else {
+			newMat = pixelScale.scaling(timeline.getLast().getDst(), red, green, blue);
+		}
+		setTheImage(newMat);
+	}
+	
+	@FXML
+	private void handleScaleRedPlusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double red = Double.parseDouble(txtScaleRed.getText());
+		double green = Double.parseDouble(txtScaleGreen.getText());
+		double  blue = Double.parseDouble(txtScaleBlue.getText());
+		red=round(red+0.01,2);
+		txtScaleRed.setText(Double.toString(red));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scaling(mat, red, green, blue);
+		}else {
+			newMat = pixelScale.scaling(timeline.getLast().getDst(), red, green, blue);
+		}
+		setTheImage(newMat);
+	}
+	
+	@FXML
+	private void handleScaleGreenMinusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double red = Double.parseDouble(txtScaleRed.getText());
+		double green = Double.parseDouble(txtScaleGreen.getText());
+		double  blue = Double.parseDouble(txtScaleBlue.getText());
+		if(green >= 0.01) {
+			green=round(green-0.01,2);
+		}
+		txtScaleGreen.setText(Double.toString(green));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scaling(mat, red, green, blue);
+		}else {
+			newMat = pixelScale.scaling(timeline.getLast().getDst(), red, green, blue);
+		}
+		setTheImage(newMat);
+	}
+	
+	@FXML
+	private void handleScaleGreenPlusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double red = Double.parseDouble(txtScaleRed.getText());
+		double green = Double.parseDouble(txtScaleGreen.getText());
+		double  blue = Double.parseDouble(txtScaleBlue.getText());
+		green=round(green+0.01,2);
+		txtScaleGreen.setText(Double.toString(green));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scaling(mat, red, green, blue);
+		}else {
+			newMat = pixelScale.scaling(timeline.getLast().getDst(), red, green, blue);
+		}
+		setTheImage(newMat);
+	}
+	
+	@FXML
+	private void handleScaleBlueMinusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double red = Double.parseDouble(txtScaleRed.getText());
+		double green = Double.parseDouble(txtScaleGreen.getText());
+		double  blue = Double.parseDouble(txtScaleBlue.getText());
+		if(blue >= 0.01) {
+			blue=round(blue-0.01,2);
+		}
+		txtScaleBlue.setText(Double.toString(blue));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scaling(mat, red, green, blue);
+		}else {
+			newMat = pixelScale.scaling(timeline.getLast().getDst(), red, green, blue);
+		}
+		setTheImage(newMat);
+	}
+	
+	@FXML
+	private void handleScaleBluePlusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double red = Double.parseDouble(txtScaleRed.getText());
+		double green = Double.parseDouble(txtScaleGreen.getText());
+		double  blue = Double.parseDouble(txtScaleBlue.getText());
+		blue=round(blue+0.01,2);
+		txtScaleBlue.setText(Double.toString(blue));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scaling(mat, red, green, blue);
+		}else {
+			newMat = pixelScale.scaling(timeline.getLast().getDst(), red, green, blue);
+		}
+		setTheImage(newMat);
+	}
+	
 	
 	/**
 	 * Adds up the sigma color filter via the plus button.
@@ -1647,6 +1795,18 @@ public class FXController implements Initializable{
 		vbox.getChildren().remove(flowpaneRadioButtonEdge);
 	}
 
+	
+	private void deinitScale() {
+		vbox.getChildren().remove(flowpaneScaleRed);
+		vbox.getChildren().remove(flowpaneScaleGreen);
+		vbox.getChildren().remove(flowpaneScaleBlue);
+	}
+	
+	private void initScale() {
+		vbox.getChildren().add(flowpaneScaleRed);
+		vbox.getChildren().add(flowpaneScaleGreen);
+		vbox.getChildren().add(flowpaneScaleBlue);
+	}
 
 	private String getSelectedRadioButtonText() {
 		RadioButton selectedRadioButton = (RadioButton)toggleGroup1.getSelectedToggle();
