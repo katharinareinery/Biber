@@ -27,6 +27,22 @@
 }
 
 /**
+ * Defines the design of the buttons.
+ */
+.toggle-button{
+  -fx-text-fill: #FFFFFF;
+  -fx-font-family: Helvetica, Arial, Geneva, sans-serif;
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+  -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+  -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
+}
+
+.toggle-button:hover{
+  -fx-background-color: linear-gradient(#2A5058,#61a2b1);
+}
+
+/**
  * Defines the design of the combobox.
  */
 .combo-box {
