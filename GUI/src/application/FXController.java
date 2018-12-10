@@ -208,7 +208,7 @@ public class FXController implements Initializable{
 	@FXML
 	private FlowPane flowpaneRadioButton;
 	@FXML
-	private FlowPane thumpnailPane;
+	private FlowPane thumbnailPane;
 	@FXML
 	private FlowPane flowpaneGrayRed;
 	@FXML
@@ -231,6 +231,7 @@ public class FXController implements Initializable{
 	private SplitPane toolbar_split;
 	@FXML
 	private FlowPane toolbar_rightpane;
+	//ZhangSuen
 	@FXML
 	private FlowPane flowpaneZhangSuen;
 	@FXML
@@ -239,6 +240,8 @@ public class FXController implements Initializable{
 	private Button buttonZhangSuenPlus;
 	@FXML
 	private TextField txtZhangSuen;
+	@FXML
+	private ToggleButton toggleZhangSuenInvers;
 	//Own Filter
 	@FXML
 	private FlowPane flowpaneOwnFilter;
@@ -328,7 +331,7 @@ public class FXController implements Initializable{
 	Service<Void> backgroundThread;
 
 	private SharedObject so = SharedObject.getInstance();
-	private int thumpnailPosition = 0;
+	private int thumbnailPosition = 0;
 	
 	private PauseTransition holdTimerTreshold = new PauseTransition(Duration.millis(100));
 	private PauseTransition holdTimerZhangSuen = new PauseTransition(Duration.millis(100));
@@ -635,6 +638,9 @@ public class FXController implements Initializable{
 				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
+				txtScaleBlue.setText("1");
+				txtScaleRed.setText("1");
+				txtScaleGreen.setText("1");
 			}
 		});		
 
@@ -689,7 +695,10 @@ public class FXController implements Initializable{
 			//toolbar_dimensions.setText("["+mat.cols()+";"+mat.rows()+"]");
 			imageView.setImage(image);
 			so.setOriginalImage(image);
-			
+			timeline.clear();
+			thumbnailPosition = 0;
+			thumbnailPane.getChildren().clear();
+			flowpane.getChildren().clear();
 			
 
 			/*************************************
@@ -893,12 +902,20 @@ public class FXController implements Initializable{
 								@Override
 								protected Void call() throws Exception {
 									// TODO Auto-generated method stub
-									try {
-										mat = zhangsuen.zhangSuen(mat,thresh);
-										setTheImage(mat);
+									if(toggleZhangSuenInvers.isSelected()) {
+										try {
+											mat = zhangsuen.zhangSuenInverse(mat,thresh);
+											setTheImage(mat);
+										}
+										catch(Exception e) {e.printStackTrace();}
 									}
-									catch(Exception e) {e.printStackTrace();}
-									return null;
+									else {
+										try {
+											mat = zhangsuen.zhangSuen(mat,thresh);
+											setTheImage(mat);
+										}
+										catch(Exception e) {e.printStackTrace();}
+									}return null;
 								}
 							};
 						}
@@ -1525,7 +1542,7 @@ public class FXController implements Initializable{
 				}
 			}else if(cbox_filters.getValue().equals("Zhang Suen Thinning")){
 				draggingButton = createButton(cbox_filters.getValue().toString());
-				draggingButton.setFilterobject(new ZhangSuen(Integer.parseInt(txtZhangSuen.getText())));
+				draggingButton.setFilterobject(new ZhangSuen(Integer.parseInt(txtZhangSuen.getText()),toggleZhangSuenInvers.isSelected()));
 			}
 			else if(cbox_filters.getValue().equals("Grayscale")){
 				if(getSelectedRadioButtonText().equals("customized")) {
@@ -1618,8 +1635,8 @@ public class FXController implements Initializable{
 					thumb.setFitWidth(image.getWidth()/3);
 					thumb.setFitHeight(image.getHeight()/3);
 					draggingButton.setMinWidth(image.getWidth()/3);
-					thumpnailPane.getChildren().add(thumpnailPosition, thumb);
-					thumpnailPosition++;
+					thumbnailPane.getChildren().add(thumbnailPosition, thumb);
+					thumbnailPosition++;
 				}
 			});
 

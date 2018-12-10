@@ -20,7 +20,7 @@ public class ZhangSuen extends ImageMan{
 	
 	private Mat kernel;
 	
-	
+	private boolean inverse = false;
 	
 	//constructor
 		public ZhangSuen(Mat src,int t){
@@ -28,9 +28,10 @@ public class ZhangSuen extends ImageMan{
 			this.src = src;
 			this.t = t;
 		}
-		public ZhangSuen(int t){
+		public ZhangSuen(int t,boolean inverse){
 			super();
 			this.t = t;
+			this.inverse=inverse;
 		}
 		public ZhangSuen() {
 			super();
@@ -45,10 +46,29 @@ public class ZhangSuen extends ImageMan{
 		public Mat getDst() {
 			return dst;
 		}
+		public void setInverse(boolean inverse) {
+			this.inverse=inverse;
+		}
 		//zhang suen thinning algorith
 		public Mat zhangSuen(Mat src,int t) {
 			dst = new Mat(src.size(),CvType.CV_8UC1);
 			src = Threshold.binarisierenInvers(t, src);
+			Mat prev = Mat.zeros(src.size(), CvType.CV_8UC1);
+			Mat diff = new Mat();
+			do {
+				zhangSuenIterations(src,0);
+				zhangSuenIterations(src, 1);
+				Core.absdiff(src, prev, diff);
+				src.copyTo(prev);
+			}
+			while(Core.countNonZero(diff)>0);
+			Core.bitwise_not(prev,dst);
+			return dst;
+		}
+		
+		public Mat zhangSuenInverse(Mat src,int t) {
+			dst = new Mat(src.size(),CvType.CV_8UC1);
+			src = Threshold.binarisieren(t, src);
 			Mat prev = Mat.zeros(src.size(), CvType.CV_8UC1);
 			Mat diff = new Mat();
 			do {
@@ -136,7 +156,10 @@ public class ZhangSuen extends ImageMan{
 		//method to use within timeline q
 		public void useFilter() {
 			dst = new Mat(src.size(),CvType.CV_8UC1);
-			src = Threshold.binarisierenInvers(t, src);
+			if(!inverse)
+				src = Threshold.binarisierenInvers(t, src);
+			else
+				src = Threshold.binarisieren(t, src);
 			Mat prev = Mat.zeros(src.size(), CvType.CV_8UC1);
 			Mat diff = new Mat();
 			do {
@@ -148,6 +171,7 @@ public class ZhangSuen extends ImageMan{
 			while(Core.countNonZero(diff)>0);
 			Core.bitwise_not(prev,dst);
 		}
+		
 		
 
 		
