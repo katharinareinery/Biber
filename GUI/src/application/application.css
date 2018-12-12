@@ -27,7 +27,7 @@
 }
 
 /**
- * Defines the design of the buttons.
+ * Defines the design of the toggle-buttons.
  */
 .toggle-button{
   -fx-text-fill: #FFFFFF;
@@ -38,8 +38,9 @@
   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0.0, 0, 1);
 }
 
-.toggle-button:hover{
-  -fx-background-color: linear-gradient(#2A5058,#61a2b1);
+.toggle-button:selected{
+  -fx-text-fill: #2A5058;
+  -fx-background-color: linear-gradient(#FFFFFF,#61a2b1);
 }
 
 /**
