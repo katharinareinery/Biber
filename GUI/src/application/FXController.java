@@ -1560,13 +1560,13 @@ public class FXController implements Initializable{
 				System.out.println("drag");
 				RadioButton selectB = (RadioButton)toggleGroupEdge.getSelectedToggle();
 				if(selectB.getText().equals("Roberts Cross")) {
-					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
+					draggingButton = createButton("E. D. : "+selectB.getText());
 					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
 				}else if(selectB.getText().equals("Sobel")) {
-					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
+					draggingButton = createButton("E. D. : "+selectB.getText());
 					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
 				}else if(selectB.getText().equals("Prewitt")) {
-					draggingButton = createButton(cbox_filters.getValue().toString()+": "+selectB.getText());
+					draggingButton = createButton("E. D. : "+selectB.getText());
 					draggingButton.setFilterobject(new EdgeDetection(selectB.getText(),mat));
 				}
 			}
