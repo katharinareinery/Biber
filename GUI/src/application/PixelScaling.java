@@ -9,15 +9,23 @@ import org.opencv.imgproc.Imgproc;
 public class PixelScaling extends ImageMan{
 	private Mat src;
 	private Mat dst;
+	private int channel;
+	private double coeffGray;
 	private double coeffRed;
 	private double coeffGreen;
 	private double coeffBlue;
 	
 	
-	public PixelScaling(double coeffRed, double coeffGreen, double coeffBlue) {
+	public PixelScaling(int channel, double coeffRed, double coeffGreen, double coeffBlue) {
+		this.channel = channel;
 		this.coeffRed = coeffRed;
 		this.coeffGreen = coeffGreen;
 		this.coeffBlue = coeffBlue;
+	}
+	
+	public PixelScaling(int channel, double coeffGray) {
+		this.channel = channel;
+		this.coeffGray = coeffGray;
 	}
 	
 	public void setSrc(Mat src) {
@@ -59,8 +67,31 @@ public class PixelScaling extends ImageMan{
 		return dst;
 	}
 	
+	public Mat scalingGray(Mat src, double coeffGray) {
+		this.src=src.clone();
+		dst = new Mat(this.src.size(),this.src.type());
+		double value[];
+		for(int i = 0; i < this.src.rows(); i++) {
+			for(int j = 0; j < this.src.cols(); j++) {
+				value=this.src.get(i, j);
+				value[0] = value[0]*coeffGray;
+				if(value[0] > 255) {
+					value[0] = 255;
+				}
+				dst.put(i, j, value);
+			}
+		}
+		
+		return dst;
+	}
+	
 	public void useFilter() {
-		dst = scaling(src,coeffRed,coeffGreen,coeffBlue);
+		if(channel == 3) {
+			dst = scaling(src,coeffRed,coeffGreen,coeffBlue);
+		}
+		if(channel == 1) {
+			dst = scalingGray(src, coeffGray);
+		}
 	}
 	
 	public BufferedImage returnImage() {

@@ -176,6 +176,15 @@
                               <Button fx:id="buttonGrayBluePlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleGrayBluePlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
                            </children>
                         </FlowPane>
+                        <FlowPane fx:id="flowpaneScaleGray" prefHeight="41.0" prefWidth="150.0">
+                           <children>
+                              <Label fx:id="labelScaleGray" prefHeight="21.0" prefWidth="147.0" text="Brightness">
+                              </Label>
+                              <Button fx:id="buttonScaleGrayMinus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleGrayMinusButton" prefHeight="35.0" prefWidth="35.0" text="-" translateX="10.0" />
+                              <TextField fx:id="txtScaleGray" alignment="CENTER" prefHeight="35.0" prefWidth="50.0" translateX="15.0" />
+                              <Button fx:id="buttonScaleGrayPlus" alignment="CENTER" mnemonicParsing="false" onAction="#handleScaleGrayPlusButton" prefHeight="35.0" prefWidth="35.0" text="+" translateX="20.0" />
+                           </children>
+                        </FlowPane>
                         <FlowPane fx:id="flowpaneScaleRed" prefHeight="41.0" prefWidth="150.0">
                            <children>
                               <Label fx:id="labelScaleRed" prefHeight="21.0" prefWidth="147.0" text="Red">

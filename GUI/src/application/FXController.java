@@ -10,6 +10,7 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
+import java.util.function.DoubleToLongFunction;
 
 import javax.imageio.ImageIO;
 
@@ -152,6 +153,10 @@ public class FXController implements Initializable{
 	@FXML
 	private Button buttonGrayBlueMinus;
 	@FXML
+	private Button buttonScaleGrayPlus;
+	@FXML
+	private Button buttonScaleGrayMinus;
+	@FXML
 	private Button buttonScaleRedPlus;
 	@FXML
 	private Button buttonScaleRedMinus;
@@ -179,6 +184,8 @@ public class FXController implements Initializable{
 	private TextField txtScaleGreen;
 	@FXML
 	private TextField txtScaleBlue;
+	@FXML
+	private TextField txtScaleGray;
 	@FXML
 	private Label labelFilerSize;
 	@FXML
@@ -223,6 +230,8 @@ public class FXController implements Initializable{
 	private FlowPane flowpaneScaleGreen;
 	@FXML
 	private FlowPane flowpaneScaleBlue;
+	@FXML
+	private FlowPane flowpaneScaleGray;
 	@FXML
 	private HBox workspace_hbox;
 	@FXML
@@ -385,11 +394,6 @@ public class FXController implements Initializable{
 		preview.setDisable(true);
 		srcButton.setDisable(true);
 		deinitRadioButtons();
-		txtFilterPower.setText("1");
-		txtSigmaColour.setText("1");
-		txtSigmaSpace.setText("1");
-		txtThreshold.setText("1");
-		txtZhangSuen.setText("1");
 		deinitFilter();
 		deinitBlurOptionsBila();
 		deinitThreshold();
@@ -397,6 +401,7 @@ public class FXController implements Initializable{
 		deinitZhangSuen();
 		deinitEdge();
 		deinitScale();
+		deinitScaleGray();
 		initToolbar();
 		
 		txtSigmaColour.setText("1.0");
@@ -406,6 +411,11 @@ public class FXController implements Initializable{
 		txtGrayRed.setText("0.5");
 		txtGrayGreen.setText("0.5");
 		txtGrayBlue.setText("0.5");
+		txtFilterPower.setText("1");
+		txtSigmaColour.setText("1");
+		txtSigmaSpace.setText("1");
+		txtThreshold.setText("1");
+		txtZhangSuen.setText("1");
 		
 		buttonSgColourPlus.setOnMousePressed(event -> handleHoldButtonPlusSigmaColour());
 		buttonSgColourPlus.setOnMouseReleased(event -> holdTimerSgColour.stop());
@@ -536,6 +546,7 @@ public class FXController implements Initializable{
 				deinitBlurOptionsBila();
 				deinitZhangSuen();
 				deinitScale();
+				deinitScaleGray();
 				initThreshold();
 				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
 				sc.setPrefWidth(apply.getPrefHeight());
@@ -561,6 +572,7 @@ public class FXController implements Initializable{
 				deinitRadioButtons();
 				deinitEdge();
 				deinitScale();
+				deinitScaleGray();
 				deinitZhangSuen();
 				initRadioButtons("average", "luminosity", "lightness", "customized");
 			}
@@ -576,6 +588,7 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitEdge();
 				deinitScale();
+				deinitScaleGray();
 				initRadioButtons("homogen", "gaussian", "median", "bilateral");
 				deinitBlurOptionsBila();
 			}
@@ -587,6 +600,7 @@ public class FXController implements Initializable{
 				deinitEdge();
 				deinitGrayOptions();
 				deinitScale();
+				deinitScaleGray();
 				initZhangSuen();
 				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
 				sc.setPrefWidth(apply.getPrefHeight());
@@ -608,6 +622,7 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitEdge();
 				deinitScale();
+				deinitScaleGray();
 				initFilter();
 				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
 				
@@ -620,6 +635,7 @@ public class FXController implements Initializable{
 				deinitGrayOptions();
 				deinitFilter();
 				deinitScale();
+				deinitScaleGray();
 				initEdge();
 				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
 				sc.setPrefWidth(apply.getPrefHeight());
@@ -633,14 +649,21 @@ public class FXController implements Initializable{
 				deinitZhangSuen();
 				deinitGrayOptions();
 				deinitFilter();
-				initScale();
 				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
 				sc.setPrefWidth(apply.getPrefHeight());
 				sc.setMin(1);
 				sc.setMax(255);
-				txtScaleBlue.setText("1");
-				txtScaleRed.setText("1");
-				txtScaleGreen.setText("1");
+				
+				if(mat.channels() == 3) {
+					initScale();
+					txtScaleBlue.setText("1");
+					txtScaleRed.setText("1");
+					txtScaleGreen.setText("1");
+				}
+				if(mat.channels() == 1) {
+					initScaleGray();
+					txtScaleGray.setText("1");
+				}
 			}
 		});		
 
@@ -987,6 +1010,36 @@ public class FXController implements Initializable{
 		}
 	}
 
+	
+	@FXML
+	private void handleScaleGrayMinusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double gray = Double.parseDouble(txtScaleGray.getText());
+		if(gray >= 0.01) {
+			gray = round(gray-0.01,2);
+		}
+		txtScaleGray.setText(Double.toString(gray));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scalingGray(mat, gray);
+		}else {
+			newMat = pixelScale.scalingGray(mat, gray);
+		}
+		setTheImage(newMat);
+	}
+	
+	@FXML
+	private void handleScaleGrayPlusButton(ActionEvent event) {
+		Mat newMat = mat.clone();
+		double gray = Double.parseDouble(txtScaleGray.getText());
+		gray = round(gray+0.01,2);
+		txtScaleGray.setText(Double.toString(gray));
+		if(timeline.isEmpty()) {
+			newMat = pixelScale.scalingGray(mat, gray);
+		}else {
+			newMat = pixelScale.scalingGray(mat, gray);
+		}
+		setTheImage(newMat);
+	}
 	
 	@FXML
 	private void handleGrayRedMinusButton(ActionEvent event) {
@@ -1572,9 +1625,15 @@ public class FXController implements Initializable{
 			}
 			else if(cbox_filters.getValue().equals("Pixel Scaling")) {
 				draggingButton = createButton(cbox_filters.getValue());
-				draggingButton.setFilterobject(new PixelScaling(round(Double.parseDouble(txtScaleRed.getText()),2),
+				if(mat.channels() == 3) {
+					draggingButton.setFilterobject(new PixelScaling(mat.channels(),round(Double.parseDouble(txtScaleRed.getText()),2),
 							round(Double.parseDouble(txtScaleGreen.getText()),2),
 							round(Double.parseDouble(txtScaleBlue.getText()),2)));
+				}
+				if(mat.channels() == 1) {
+					draggingButton.setFilterobject(new PixelScaling(mat.channels(), round(Double.parseDouble(txtScaleGray.getText()),2)));
+				}
+
 			}
 
 			if(!timeline.isEmpty() && timeline.getLast().getDst() != null) {
@@ -1853,7 +1912,7 @@ public class FXController implements Initializable{
 		vbox.getChildren().remove(flowpaneGrayGreen); 	
 		vbox.getChildren().remove(flowpaneGrayBlue);
 	}
-
+	
 	private void initBlurOptionsBila() {
 		vbox.getChildren().remove(flowpaneFilterSize);
 		vbox.getChildren().add(flowpaneFilterSize);
@@ -1890,6 +1949,14 @@ public class FXController implements Initializable{
 		vbox.getChildren().add(flowpaneScaleRed);
 		vbox.getChildren().add(flowpaneScaleGreen);
 		vbox.getChildren().add(flowpaneScaleBlue);
+	}
+	
+	private void deinitScaleGray() {
+		vbox.getChildren().remove(flowpaneScaleGray);
+	}
+	
+	private void initScaleGray() {
+		vbox.getChildren().add(flowpaneScaleGray);
 	}
 
 	private String getSelectedRadioButtonText() {
