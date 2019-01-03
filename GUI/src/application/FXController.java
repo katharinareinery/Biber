@@ -30,6 +30,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -1685,6 +1686,8 @@ public class FXController implements Initializable{
 							BufferedImage neu = dragB.getFilterobject().returnImage();
 							image = SwingFXUtils.toFXImage(neu, null);
 							imageView.setImage(image);
+							// TODO
+							//Hier cbox_filters.setValue(value);
 						}
 					});
 					pane.getChildren().add(draggingButton);
