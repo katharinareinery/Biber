@@ -347,6 +347,8 @@ public class FXController implements Initializable{
 	private PauseTransition holdTimerZhangSuen = new PauseTransition(Duration.millis(100));
 	private PauseTransition holdTimerSgSpace = new PauseTransition(Duration.millis(100));
 	private PauseTransition holdTimerSgColour = new PauseTransition(Duration.millis(100));
+	// Bug in FX let's us not separate between clicked and pressed event. This boolean is like a semaphore
+	private static boolean ZhangSuenPressed = false;
 
 	//get screen size for imageview
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -415,8 +417,6 @@ public class FXController implements Initializable{
 		txtFilterPower.setText("1");
 		txtSigmaColour.setText("1");
 		txtSigmaSpace.setText("1");
-		txtThreshold.setText("1");
-		txtZhangSuen.setText("1");
 		
 		buttonSgColourPlus.setOnMousePressed(event -> handleHoldButtonPlusSigmaColour());
 		buttonSgColourPlus.setOnMouseReleased(event -> holdTimerSgColour.stop());
@@ -430,13 +430,17 @@ public class FXController implements Initializable{
 		
 		buttonThreshPlus.setOnMousePressed(event -> handleHoldButtonPlusTreshold());
 		buttonThreshPlus.setOnMouseReleased(event -> holdTimerTreshold.stop());
+		buttonThreshPlus.setOnMouseClicked(event -> handleButtonThreshPlus(event));
 		buttonThreshMinus.setOnMousePressed(event -> handleHoldButtonMinusTreshold());
 		buttonThreshMinus.setOnMouseReleased(event -> holdTimerTreshold.stop());
+		buttonThreshMinus.setOnMouseClicked(event -> handleButtonThreshMinus(event));
 		
 		buttonZhangSuenPlus.setOnMousePressed(event -> handleHoldButtonPlusZhangSuen());
 		buttonZhangSuenPlus.setOnMouseReleased(event -> holdTimerZhangSuen.stop());
+		buttonZhangSuenPlus.setOnMouseClicked(event -> handleButtonzhangThreshPlus(event));
 		buttonZhangSuenMinus.setOnMousePressed(event -> handleHoldButtonMinusZhangSuen());
 		buttonZhangSuenMinus.setOnMouseReleased(event -> holdTimerZhangSuen.stop());
+		buttonZhangSuenMinus.setOnMouseClicked(event -> handleButtonzhangThreshMinus(event));
 		
 		/*
 		 * At this point we assign the listener to the radiobuttons for blur and grayscale.
@@ -867,7 +871,7 @@ public class FXController implements Initializable{
 								// TODO Auto-generated method stub
 								try {
 									Mat newMat = mat.clone();
-									newMat = thold.binarisieren(t, mat);
+									newMat = Threshold.binarisieren(t, mat);
 									setTheImage(newMat);
 									newMat.copyTo(mat);
 								}
@@ -1335,7 +1339,7 @@ public class FXController implements Initializable{
 	 * Subtracts the treshold filter with the minus button.
 	 */
 	@FXML
-	private void handleButtonThreshMinus(ActionEvent event5){
+	private void handleButtonThreshMinus(MouseEvent event){
 		Mat newMat = mat.clone();
 		int threshold = Integer.parseInt(txtThreshold.getText());
 		if(threshold>0) {
@@ -1343,10 +1347,10 @@ public class FXController implements Initializable{
 		}
 		txtThreshold.setText(Integer.toString(threshold));		
 		if(timeline.isEmpty()) {
-			newMat = thold.binarisieren(threshold, mat);
+			newMat = Threshold.binarisieren(threshold, mat);
 		}
 		else {
-			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
+			newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
 		}
 		setTheImage(newMat);
 	}
@@ -1355,9 +1359,9 @@ public class FXController implements Initializable{
 	 * Adds up the threshold filter via the plus button.
 	 */
 	@FXML
-	private void handleButtonThreshPlus(ActionEvent event6) {
+	private void handleButtonThreshPlus(MouseEvent event) {
 		Mat newMat = mat.clone();
-		Button btn=(Button)event6.getSource();
+		Button btn=(Button)event.getSource();
 		System.out.println(btn.getText());
 		while(btn.isPressed()) {
 			System.out.println("Button pressed!!");
@@ -1368,10 +1372,10 @@ public class FXController implements Initializable{
 		}
 		txtThreshold.setText(Integer.toString(threshold));
 		if(timeline.isEmpty()) {
-			newMat = thold.binarisieren(threshold, mat);
+			newMat = Threshold.binarisieren(threshold, mat);
 		}
 		else {
-			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
+			newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
 		}
 		setTheImage(newMat);
 	}
@@ -1379,45 +1383,49 @@ public class FXController implements Initializable{
 	 * Subtracts the zhang suen threshold filter with the minus button.
 	 */
 	@FXML
-	private void handleButtonzhangThreshMinus(ActionEvent event5){
-		Mat newMat = mat.clone();
-		int threshold = Integer.parseInt(txtZhangSuen.getText());
-		if(threshold>0) {
-			threshold -=1;
+	private void handleButtonzhangThreshMinus(MouseEvent event){
+		if (ZhangSuenPressed) {
+			Mat newMat = mat.clone();
+			int threshold = Integer.parseInt(txtZhangSuen.getText());
+			if(threshold>0) {
+				threshold -=1;
+			}
+			txtZhangSuen.setText(Integer.toString(threshold));		
+			if(timeline.isEmpty()) {
+				newMat = Threshold.binarisieren(threshold, newMat);
+			}
+			else {
+				newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
+			}
+			setTheImage(newMat);
 		}
-		txtZhangSuen.setText(Integer.toString(threshold));		
-		if(timeline.isEmpty()) {
-			newMat = thold.binarisieren(threshold, newMat);
-		}
-		else {
-			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
-		}
-		setTheImage(newMat);
 	}
 	
 	/**
 	 * Adds up the zhang suen threshold filter via the plus button.
 	 */
 	@FXML
-	private void handleButtonzhangThreshPlus(ActionEvent event6) {
-		Mat newMat = mat.clone();
-		Button btn=(Button)event6.getSource();
-		System.out.println(btn.getText());
-		while(btn.isPressed()) {
-			System.out.println("Button pressed!!");
+	private void handleButtonzhangThreshPlus(MouseEvent event) {
+		if (ZhangSuenPressed) {
+			Mat newMat = mat.clone();
+			Button btn=(Button)event.getSource();
+			System.out.println(btn.getText());
+			while(btn.isPressed()) {
+				System.out.println("Button pressed!!");
+			}
+			int threshold = Integer.parseInt(txtZhangSuen.getText());
+			if(threshold < 255) {
+				threshold +=1;
+			}
+			txtZhangSuen.setText(Integer.toString(threshold));
+			if(timeline.isEmpty()) {
+				newMat = Threshold.binarisieren(threshold, newMat);
+			}
+			else {
+				newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
+			}
+			setTheImage(newMat);
 		}
-		int threshold = Integer.parseInt(txtZhangSuen.getText());
-		if(threshold < 255) {
-			threshold +=1;
-		}
-		txtZhangSuen.setText(Integer.toString(threshold));
-		if(timeline.isEmpty()) {
-			newMat = thold.binarisieren(threshold, newMat);
-		}
-		else {
-			newMat = thold.binarisieren(threshold, timeline.getLast().getDst());
-		}
-		setTheImage(newMat);
 	}
 	/**
 	 * This method coordinates the application of the different settings 
@@ -2138,16 +2146,40 @@ public class FXController implements Initializable{
 				
 
 		public void handleHoldButtonPlusZhangSuen() {
-			this.txtZhangSuen.setText("" + (Integer.parseInt(this.txtZhangSuen.getText())+1));
-			holdTimerZhangSuen.setOnFinished(event -> handleHoldButtonPlusZhangSuen());
-			holdTimerZhangSuen.playFromStart();
+			ZhangSuenPressed = true;
+			if(Integer.parseInt(this.txtZhangSuen.getText()) < 254) {
+				this.txtZhangSuen.setText("" + (Integer.parseInt(this.txtZhangSuen.getText())+1));
+				holdTimerZhangSuen.setOnFinished(event -> handleHoldButtonPlusZhangSuen());
+				holdTimerZhangSuen.playFromStart();
+				//System.out.println("handleHoldButtonPlusZhangSuen: \t " + this.txtZhangSuen.getText());
+				Mat newMat = mat.clone();
+				if(timeline.isEmpty()) {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtZhangSuen.getText()), newMat);
+				}
+				else {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtZhangSuen.getText()), timeline.getLast().getDst());
+				}
+				setTheImage(newMat);
+			}
+			ZhangSuenPressed = false;
 		}
 	    
 		public void handleHoldButtonMinusZhangSuen() {
+			ZhangSuenPressed = true;
 			if(Integer.parseInt(this.txtZhangSuen.getText()) > 0 ) {
 				this.txtZhangSuen.setText("" + (Integer.parseInt(this.txtZhangSuen.getText())-1));
 				holdTimerZhangSuen.setOnFinished(event -> handleHoldButtonMinusZhangSuen());
 				holdTimerZhangSuen.playFromStart();
+				//System.out.println("handleHoldButtonMinusZhangSuen: \t " + this.txtZhangSuen.getText());
+				Mat newMat = mat.clone();
+				if(timeline.isEmpty()) {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtZhangSuen.getText()), newMat);
+				}
+				else {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtZhangSuen.getText()), timeline.getLast().getDst());
+				}
+				setTheImage(newMat);
 			}
+			ZhangSuenPressed = false;
 		}	    
 }
