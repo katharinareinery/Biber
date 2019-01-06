@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['chooseimage',['chooseImage',['../classapplication_1_1_f_x_controller.html#a723312c2219263bdfadd98d86186a365',1,'application::FXController']]]
+  ['average',['average',['../classapplication_1_1_grayscale.html#a3ef991beb69461c85a1c6bbf706e0605',1,'application::Grayscale']]]
 ];

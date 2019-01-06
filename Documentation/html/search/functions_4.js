@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['savefile',['saveFile',['../classapplication_1_1_f_x_controller.html#af9d560a93b56e46e95d267e0e4b205a2',1,'application::FXController']]]
+  ['gaussianblur',['gaussianBlur',['../classapplication_1_1_blur.html#a445cba49c071e6a84b9ae6d56f208f60',1,'application::Blur']]]
 ];

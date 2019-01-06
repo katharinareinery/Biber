@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['grayscale',['Grayscale',['../classapplication_1_1_grayscale.html',1,'application']]]
+  ['edgedetection',['EdgeDetection',['../classapplication_1_1_edge_detection.html',1,'application']]]
 ];

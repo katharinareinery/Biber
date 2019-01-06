@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['fxcontroller',['FXController',['../classapplication_1_1_f_x_controller.html',1,'application']]],
-  ['fxcontroller2',['FXController2',['../classapplication_1_1_f_x_controller2.html',1,'application']]]
+  ['doexit',['doExit',['../classapplication_1_1_f_x_controller.html#ae830da008c5d032e83dd11b075f4e9bf',1,'application::FXController']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['doexit',['doExit',['../classapplication_1_1_f_x_controller.html#ae830da008c5d032e83dd11b075f4e9bf',1,'application::FXController']]]
+  ['bilateralblur',['bilateralBlur',['../classapplication_1_1_blur.html#af85191ef064d33c47886bc17d6af9ebe',1,'application::Blur']]]
 ];

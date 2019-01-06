@@ -9,19 +9,83 @@ Inheritance diagram for application.\+Blur\+:\begin{figure}[H]
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classapplication_1_1_blur_a445cba49c071e6a84b9ae6d56f208f60}\label{classapplication_1_1_blur_a445cba49c071e6a84b9ae6d56f208f60}} 
-Mat {\bfseries gaussian\+Blur} (Mat src, int filter\+Power)
+\mbox{\Hypertarget{classapplication_1_1_blur_a11b7920603463fd30f12618d1022caaa}\label{classapplication_1_1_blur_a11b7920603463fd30f12618d1022caaa}} 
+{\bfseries Blur} (String ftype, int filterpower)
 \item 
-\mbox{\Hypertarget{classapplication_1_1_blur_a070e2c5803f62149b71ae9bc867a44da}\label{classapplication_1_1_blur_a070e2c5803f62149b71ae9bc867a44da}} 
-Mat {\bfseries median\+Blur} (Mat src, int filter\+Power)
+\mbox{\Hypertarget{classapplication_1_1_blur_afb919280e2244cf0336ab4a07ee847f6}\label{classapplication_1_1_blur_afb919280e2244cf0336ab4a07ee847f6}} 
+{\bfseries Blur} (String ftype, int filterpower, double sigma\+Colour, double sigma\+Space)
 \item 
-\mbox{\Hypertarget{classapplication_1_1_blur_aa26cb7151a1acda73884d3fb9479e971}\label{classapplication_1_1_blur_aa26cb7151a1acda73884d3fb9479e971}} 
-Mat {\bfseries homogen\+Blur} (Mat src, int filter\+Power)
+\mbox{\Hypertarget{classapplication_1_1_blur_aaff487804568cdfa1f42b3427ecbec14}\label{classapplication_1_1_blur_aaff487804568cdfa1f42b3427ecbec14}} 
+{\bfseries Blur} (Mat src, String ftype, int filterpower, double sigma\+Colour, double sigma\+Space)
 \item 
-\mbox{\Hypertarget{classapplication_1_1_blur_af85191ef064d33c47886bc17d6af9ebe}\label{classapplication_1_1_blur_af85191ef064d33c47886bc17d6af9ebe}} 
-Mat {\bfseries bilateral\+Blur} (Mat src, int filter\+Power, double sigma\+Colour, double sigma\+Space)
+\mbox{\Hypertarget{classapplication_1_1_blur_aae56105de62ef267d249903178237592}\label{classapplication_1_1_blur_aae56105de62ef267d249903178237592}} 
+void {\bfseries use\+Filter} ()
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_a73c1dba26db59f9cb006c13b843146c1}\label{classapplication_1_1_blur_a73c1dba26db59f9cb006c13b843146c1}} 
+String {\bfseries to\+String} ()
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_ae21240e5551b397eb32ccf136bb851b5}\label{classapplication_1_1_blur_ae21240e5551b397eb32ccf136bb851b5}} 
+Buffered\+Image {\bfseries return\+Image} ()
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_a8c8b3cadaf7c42b4fdc15080af7fb4d8}\label{classapplication_1_1_blur_a8c8b3cadaf7c42b4fdc15080af7fb4d8}} 
+void {\bfseries set\+Src} (Mat src)
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_ab1533310fb2826fb7ca663e10937101f}\label{classapplication_1_1_blur_ab1533310fb2826fb7ca663e10937101f}} 
+Mat {\bfseries get\+Dst} ()
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_ae17dd6e4aea39a1d7b7b027f597a7f2b}\label{classapplication_1_1_blur_ae17dd6e4aea39a1d7b7b027f597a7f2b}} 
+String {\bfseries get\+Ftype} ()
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_ac1eb14c472923aa1e228f9b7da5e0723}\label{classapplication_1_1_blur_ac1eb14c472923aa1e228f9b7da5e0723}} 
+Mat {\bfseries get\+Src} ()
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_a0bab9619fb6330aa2026f006de3f2257}\label{classapplication_1_1_blur_a0bab9619fb6330aa2026f006de3f2257}} 
+void {\bfseries set\+Dst} (Mat dst)
+\item 
+\mbox{\Hypertarget{classapplication_1_1_blur_a5c8e0528528b0b0dda9aaf9b0980e848}\label{classapplication_1_1_blur_a5c8e0528528b0b0dda9aaf9b0980e848}} 
+void {\bfseries set\+Ftype} (String ftype)
+\item 
+Mat \mbox{\hyperlink{classapplication_1_1_blur_a445cba49c071e6a84b9ae6d56f208f60}{gaussian\+Blur}} (Mat src, int filter\+Power)
+\item 
+Mat \mbox{\hyperlink{classapplication_1_1_blur_a070e2c5803f62149b71ae9bc867a44da}{median\+Blur}} (Mat src, int filter\+Power)
+\item 
+Mat \mbox{\hyperlink{classapplication_1_1_blur_aa26cb7151a1acda73884d3fb9479e971}{homogen\+Blur}} (Mat src, int filter\+Power)
+\item 
+Mat \mbox{\hyperlink{classapplication_1_1_blur_af85191ef064d33c47886bc17d6af9ebe}{bilateral\+Blur}} (Mat src, int filter\+Power, double sigma\+Colour, double sigma\+Space)
 \end{DoxyCompactItemize}
 
+
+\subsection{Detailed Description}
+Blurring (smoothing) is the commonly used image processing operation for reducing the image noise. The process removes high-\/frequency content, like edges, from the image and makes it smooth. In general blurring is achieved by convolving (each element of the image is added to its local neighbors, weighted by the kernel) the image through a low pass filter kernel.
+
+src\+: The source (input image) for this operation. dst\+: The destination (output image) for this operation. sigma\+Color\+: Filter sigma in the color space. sigma\+Space\+: Filter sigma in the coordinate space. Size( w, h )\+: Defines the size of the kernel to be used ( of width w pixels and height h pixels). Point(-\/1, -\/1)\+: Indicates where the anchor point (the pixel evaluated) is located with respect to the neighborhood. If there is a negative value, then the center of the kernel is considered the anchor point. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classapplication_1_1_blur_af85191ef064d33c47886bc17d6af9ebe}\label{classapplication_1_1_blur_af85191ef064d33c47886bc17d6af9ebe}} 
+\index{application\+::\+Blur@{application\+::\+Blur}!bilateral\+Blur@{bilateral\+Blur}}
+\index{bilateral\+Blur@{bilateral\+Blur}!application\+::\+Blur@{application\+::\+Blur}}
+\subsubsection{\texorpdfstring{bilateral\+Blur()}{bilateralBlur()}}
+{\footnotesize\ttfamily Mat application.\+Blur.\+bilateral\+Blur (\begin{DoxyParamCaption}\item[{Mat}]{src,  }\item[{int}]{filter\+Power,  }\item[{double}]{sigma\+Colour,  }\item[{double}]{sigma\+Space }\end{DoxyParamCaption})}
+
+The Bilateral Filter operation applies a bilateral image to a filter. \mbox{\Hypertarget{classapplication_1_1_blur_a445cba49c071e6a84b9ae6d56f208f60}\label{classapplication_1_1_blur_a445cba49c071e6a84b9ae6d56f208f60}} 
+\index{application\+::\+Blur@{application\+::\+Blur}!gaussian\+Blur@{gaussian\+Blur}}
+\index{gaussian\+Blur@{gaussian\+Blur}!application\+::\+Blur@{application\+::\+Blur}}
+\subsubsection{\texorpdfstring{gaussian\+Blur()}{gaussianBlur()}}
+{\footnotesize\ttfamily Mat application.\+Blur.\+gaussian\+Blur (\begin{DoxyParamCaption}\item[{Mat}]{src,  }\item[{int}]{filter\+Power }\end{DoxyParamCaption})}
+
+Gaussian filtering is done by convolving each point in the input array with a Gaussian kernel and then summing them all to produce the output array. The Gaussian filter is a low-\/pass filter that removes the high-\/frequency components are reduced. \mbox{\Hypertarget{classapplication_1_1_blur_aa26cb7151a1acda73884d3fb9479e971}\label{classapplication_1_1_blur_aa26cb7151a1acda73884d3fb9479e971}} 
+\index{application\+::\+Blur@{application\+::\+Blur}!homogen\+Blur@{homogen\+Blur}}
+\index{homogen\+Blur@{homogen\+Blur}!application\+::\+Blur@{application\+::\+Blur}}
+\subsubsection{\texorpdfstring{homogen\+Blur()}{homogenBlur()}}
+{\footnotesize\ttfamily Mat application.\+Blur.\+homogen\+Blur (\begin{DoxyParamCaption}\item[{Mat}]{src,  }\item[{int}]{filter\+Power }\end{DoxyParamCaption})}
+
+Open\+CV offers the function blur to perform smoothing with this filter. \mbox{\Hypertarget{classapplication_1_1_blur_a070e2c5803f62149b71ae9bc867a44da}\label{classapplication_1_1_blur_a070e2c5803f62149b71ae9bc867a44da}} 
+\index{application\+::\+Blur@{application\+::\+Blur}!median\+Blur@{median\+Blur}}
+\index{median\+Blur@{median\+Blur}!application\+::\+Blur@{application\+::\+Blur}}
+\subsubsection{\texorpdfstring{median\+Blur()}{medianBlur()}}
+{\footnotesize\ttfamily Mat application.\+Blur.\+median\+Blur (\begin{DoxyParamCaption}\item[{Mat}]{src,  }\item[{int}]{filter\+Power }\end{DoxyParamCaption})}
+
+The median filter run through each element of the signal (in this case the image) and replace each pixel with the median of its neighboring pixels (located in a square neighborhood around the evaluated pixel). 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

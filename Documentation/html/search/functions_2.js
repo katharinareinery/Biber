@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['handleabout',['handleAbout',['../classapplication_1_1_f_x_controller.html#ac94b73f4dcdad256b2e4d5314dc42d2b',1,'application::FXController']]],
-  ['handlewindow',['handleWindow',['../classapplication_1_1_f_x_controller.html#a4ba7818448465dabfafce77571565fb7',1,'application::FXController']]]
+  ['chooseimage',['chooseImage',['../classapplication_1_1_f_x_controller.html#a723312c2219263bdfadd98d86186a365',1,'application::FXController']]]
 ];

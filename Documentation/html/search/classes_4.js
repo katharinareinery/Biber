@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['main',['Main',['../classapplication_1_1_main.html',1,'application']]]
+  ['grayscale',['Grayscale',['../classapplication_1_1_grayscale.html',1,'application']]]
 ];

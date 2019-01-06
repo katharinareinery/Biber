@@ -84,17 +84,49 @@ Inheritance diagram for application.Blur:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a445cba49c071e6a84b9ae6d56f208f60"><td class="memItemLeft" align="right" valign="top"><a id="a445cba49c071e6a84b9ae6d56f208f60"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>gaussianBlur</b> (Mat src, int filterPower)</td></tr>
+<tr class="memitem:a11b7920603463fd30f12618d1022caaa"><td class="memItemLeft" align="right" valign="top"><a id="a11b7920603463fd30f12618d1022caaa"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Blur</b> (String ftype, int filterpower)</td></tr>
+<tr class="separator:a11b7920603463fd30f12618d1022caaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb919280e2244cf0336ab4a07ee847f6"><td class="memItemLeft" align="right" valign="top"><a id="afb919280e2244cf0336ab4a07ee847f6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Blur</b> (String ftype, int filterpower, double sigmaColour, double sigmaSpace)</td></tr>
+<tr class="separator:afb919280e2244cf0336ab4a07ee847f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaff487804568cdfa1f42b3427ecbec14"><td class="memItemLeft" align="right" valign="top"><a id="aaff487804568cdfa1f42b3427ecbec14"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Blur</b> (Mat src, String ftype, int filterpower, double sigmaColour, double sigmaSpace)</td></tr>
+<tr class="separator:aaff487804568cdfa1f42b3427ecbec14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae56105de62ef267d249903178237592"><td class="memItemLeft" align="right" valign="top"><a id="aae56105de62ef267d249903178237592"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>useFilter</b> ()</td></tr>
+<tr class="separator:aae56105de62ef267d249903178237592"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73c1dba26db59f9cb006c13b843146c1"><td class="memItemLeft" align="right" valign="top"><a id="a73c1dba26db59f9cb006c13b843146c1"></a>
+String&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> ()</td></tr>
+<tr class="separator:a73c1dba26db59f9cb006c13b843146c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae21240e5551b397eb32ccf136bb851b5"><td class="memItemLeft" align="right" valign="top"><a id="ae21240e5551b397eb32ccf136bb851b5"></a>
+BufferedImage&#160;</td><td class="memItemRight" valign="bottom"><b>returnImage</b> ()</td></tr>
+<tr class="separator:ae21240e5551b397eb32ccf136bb851b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c8b3cadaf7c42b4fdc15080af7fb4d8"><td class="memItemLeft" align="right" valign="top"><a id="a8c8b3cadaf7c42b4fdc15080af7fb4d8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSrc</b> (Mat src)</td></tr>
+<tr class="separator:a8c8b3cadaf7c42b4fdc15080af7fb4d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1533310fb2826fb7ca663e10937101f"><td class="memItemLeft" align="right" valign="top"><a id="ab1533310fb2826fb7ca663e10937101f"></a>
+Mat&#160;</td><td class="memItemRight" valign="bottom"><b>getDst</b> ()</td></tr>
+<tr class="separator:ab1533310fb2826fb7ca663e10937101f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae17dd6e4aea39a1d7b7b027f597a7f2b"><td class="memItemLeft" align="right" valign="top"><a id="ae17dd6e4aea39a1d7b7b027f597a7f2b"></a>
+String&#160;</td><td class="memItemRight" valign="bottom"><b>getFtype</b> ()</td></tr>
+<tr class="separator:ae17dd6e4aea39a1d7b7b027f597a7f2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1eb14c472923aa1e228f9b7da5e0723"><td class="memItemLeft" align="right" valign="top"><a id="ac1eb14c472923aa1e228f9b7da5e0723"></a>
+Mat&#160;</td><td class="memItemRight" valign="bottom"><b>getSrc</b> ()</td></tr>
+<tr class="separator:ac1eb14c472923aa1e228f9b7da5e0723"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bab9619fb6330aa2026f006de3f2257"><td class="memItemLeft" align="right" valign="top"><a id="a0bab9619fb6330aa2026f006de3f2257"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setDst</b> (Mat dst)</td></tr>
+<tr class="separator:a0bab9619fb6330aa2026f006de3f2257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c8e0528528b0b0dda9aaf9b0980e848"><td class="memItemLeft" align="right" valign="top"><a id="a5c8e0528528b0b0dda9aaf9b0980e848"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFtype</b> (String ftype)</td></tr>
+<tr class="separator:a5c8e0528528b0b0dda9aaf9b0980e848"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a445cba49c071e6a84b9ae6d56f208f60"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classapplication_1_1_blur.html#a445cba49c071e6a84b9ae6d56f208f60">gaussianBlur</a> (Mat src, int filterPower)</td></tr>
 <tr class="separator:a445cba49c071e6a84b9ae6d56f208f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a070e2c5803f62149b71ae9bc867a44da"><td class="memItemLeft" align="right" valign="top"><a id="a070e2c5803f62149b71ae9bc867a44da"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>medianBlur</b> (Mat src, int filterPower)</td></tr>
+<tr class="memitem:a070e2c5803f62149b71ae9bc867a44da"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classapplication_1_1_blur.html#a070e2c5803f62149b71ae9bc867a44da">medianBlur</a> (Mat src, int filterPower)</td></tr>
 <tr class="separator:a070e2c5803f62149b71ae9bc867a44da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa26cb7151a1acda73884d3fb9479e971"><td class="memItemLeft" align="right" valign="top"><a id="aa26cb7151a1acda73884d3fb9479e971"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>homogenBlur</b> (Mat src, int filterPower)</td></tr>
+<tr class="memitem:aa26cb7151a1acda73884d3fb9479e971"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classapplication_1_1_blur.html#aa26cb7151a1acda73884d3fb9479e971">homogenBlur</a> (Mat src, int filterPower)</td></tr>
 <tr class="separator:aa26cb7151a1acda73884d3fb9479e971"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af85191ef064d33c47886bc17d6af9ebe"><td class="memItemLeft" align="right" valign="top"><a id="af85191ef064d33c47886bc17d6af9ebe"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>bilateralBlur</b> (Mat src, int filterPower, double sigmaColour, double sigmaSpace)</td></tr>
+<tr class="memitem:af85191ef064d33c47886bc17d6af9ebe"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classapplication_1_1_blur.html#af85191ef064d33c47886bc17d6af9ebe">bilateralBlur</a> (Mat src, int filterPower, double sigmaColour, double sigmaSpace)</td></tr>
 <tr class="separator:af85191ef064d33c47886bc17d6af9ebe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classapplication_1_1_image_man"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classapplication_1_1_image_man')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classapplication_1_1_image_man.html">application.ImageMan</a></td></tr>
 <tr class="memitem:aae0baacc6ca5c01021d2045a6cd3b2c7 inherit pub_methods_classapplication_1_1_image_man"><td class="memItemLeft" align="right" valign="top"><a id="aae0baacc6ca5c01021d2045a6cd3b2c7"></a>
@@ -103,7 +135,151 @@ BufferedImage&#160;</td><td class="memItemRight" valign="bottom"><b>matToBuffIma
 <tr class="memitem:aaa60d625c007f0cd250b92359c396287 inherit pub_methods_classapplication_1_1_image_man"><td class="memItemLeft" align="right" valign="top"><a id="aaa60d625c007f0cd250b92359c396287"></a>
 Mat&#160;</td><td class="memItemRight" valign="bottom"><b>buffImageToMat</b> (BufferedImage img)</td></tr>
 <tr class="separator:aaa60d625c007f0cd250b92359c396287 inherit pub_methods_classapplication_1_1_image_man"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a531cf4d9331275f9a1404288b16ea15f inherit pub_methods_classapplication_1_1_image_man"><td class="memItemLeft" align="right" valign="top"><a id="a531cf4d9331275f9a1404288b16ea15f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>useFilter</b> ()</td></tr>
+<tr class="separator:a531cf4d9331275f9a1404288b16ea15f inherit pub_methods_classapplication_1_1_image_man"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b46d728be6df846e37b36aa1c2d18b1 inherit pub_methods_classapplication_1_1_image_man"><td class="memItemLeft" align="right" valign="top"><a id="a1b46d728be6df846e37b36aa1c2d18b1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSrc</b> (Mat src)</td></tr>
+<tr class="separator:a1b46d728be6df846e37b36aa1c2d18b1 inherit pub_methods_classapplication_1_1_image_man"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2f0532092c2a29b19109a5bc75030f8 inherit pub_methods_classapplication_1_1_image_man"><td class="memItemLeft" align="right" valign="top"><a id="ad2f0532092c2a29b19109a5bc75030f8"></a>
+Mat&#160;</td><td class="memItemRight" valign="bottom"><b>getDst</b> ()</td></tr>
+<tr class="separator:ad2f0532092c2a29b19109a5bc75030f8 inherit pub_methods_classapplication_1_1_image_man"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add796580ad43724d16c4922541c0a591 inherit pub_methods_classapplication_1_1_image_man"><td class="memItemLeft" align="right" valign="top"><a id="add796580ad43724d16c4922541c0a591"></a>
+BufferedImage&#160;</td><td class="memItemRight" valign="bottom"><b>returnImage</b> ()</td></tr>
+<tr class="separator:add796580ad43724d16c4922541c0a591 inherit pub_methods_classapplication_1_1_image_man"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Blurring (smoothing) is the commonly used image processing operation for reducing the image noise. The process removes high-frequency content, like edges, from the image and makes it smooth. In general blurring is achieved by convolving (each element of the image is added to its local neighbors, weighted by the kernel) the image through a low pass filter kernel.</p>
+<p>src: The source (input image) for this operation. dst: The destination (output image) for this operation. sigmaColor: Filter sigma in the color space. sigmaSpace: Filter sigma in the coordinate space. Size( w, h ): Defines the size of the kernel to be used ( of width w pixels and height h pixels). Point(-1, -1): Indicates where the anchor point (the pixel evaluated) is located with respect to the neighborhood. If there is a negative value, then the center of the kernel is considered the anchor point. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af85191ef064d33c47886bc17d6af9ebe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af85191ef064d33c47886bc17d6af9ebe">&#9670;&nbsp;</a></span>bilateralBlur()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat application.Blur.bilateralBlur </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>filterPower</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sigmaColour</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sigmaSpace</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The Bilateral Filter operation applies a bilateral image to a filter. </p>
+
+</div>
+</div>
+<a id="a445cba49c071e6a84b9ae6d56f208f60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a445cba49c071e6a84b9ae6d56f208f60">&#9670;&nbsp;</a></span>gaussianBlur()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat application.Blur.gaussianBlur </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>filterPower</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gaussian filtering is done by convolving each point in the input array with a Gaussian kernel and then summing them all to produce the output array. The Gaussian filter is a low-pass filter that removes the high-frequency components are reduced. </p>
+
+</div>
+</div>
+<a id="aa26cb7151a1acda73884d3fb9479e971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa26cb7151a1acda73884d3fb9479e971">&#9670;&nbsp;</a></span>homogenBlur()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat application.Blur.homogenBlur </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>filterPower</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>OpenCV offers the function blur to perform smoothing with this filter. </p>
+
+</div>
+</div>
+<a id="a070e2c5803f62149b71ae9bc867a44da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a070e2c5803f62149b71ae9bc867a44da">&#9670;&nbsp;</a></span>medianBlur()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat application.Blur.medianBlur </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>filterPower</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The median filter run through each element of the signal (in this case the image) and replace each pixel with the median of its neighboring pixels (located in a square neighborhood around the evaluated pixel). </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>D:/Git/SWPraktSS18/GUI/src/application/Blur.java</li>
 </ul>

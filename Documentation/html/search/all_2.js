@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['doexit',['doExit',['../classapplication_1_1_f_x_controller.html#ae830da008c5d032e83dd11b075f4e9bf',1,'application::FXController']]]
+  ['chooseimage',['chooseImage',['../classapplication_1_1_f_x_controller.html#a723312c2219263bdfadd98d86186a365',1,'application::FXController']]],
+  ['customfilter',['CustomFilter',['../classapplication_1_1_custom_filter.html',1,'application']]]
 ];
