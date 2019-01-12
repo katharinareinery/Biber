@@ -54,6 +54,13 @@ public class Threshold extends ImageMan{
 		public Mat getDst() {
 			return dst;
 		}
+		
+		public int getT() {
+			return t;
+		}
+		public void setT(int t) {
+			this.t = t;
+		}
 		//thresholding method
 		public static Mat binarisieren(int t, Mat src) {
 			if(src.channels() > 1) {

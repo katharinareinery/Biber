@@ -56,6 +56,7 @@ public class Grayscale extends ImageMan{
 	public void setBlue(double blue) {
 		this.blue = blue;
 	}
+	
 	//constructor
 	public Grayscale() {
 		super();

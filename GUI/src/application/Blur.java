@@ -69,7 +69,7 @@ public class Blur extends ImageMan{
 	//toString() override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "BlurMethod:"+ftype+"\tMat:["+src.rows()+","+src.cols()+":"+src.channels()+"]";
+		return "Blur:"+ftype+"\tMat:["+src.rows()+","+src.cols()+":"+src.channels()+"]";
 	}
 	//returns buffered Image
 	public BufferedImage returnImage() {
@@ -131,5 +131,23 @@ public class Blur extends ImageMan{
 	public Mat bilateralBlur(Mat src,int filterPower, double sigmaColour,double sigmaSpace) {
 		Imgproc.bilateralFilter(src, dst, filterPower, sigmaColour, sigmaSpace);
 		return dst;
+	}
+	public int getFilterpower() {
+		return filterpower;
+	}
+	public double getSigmaColour() {
+		return sigmaColour;
+	}
+	public double getSigmaSpace() {
+		return sigmaSpace;
+	}
+	public void setFilterpower(int filterpower) {
+		this.filterpower = filterpower;
+	}
+	public void setSigmaColour(double sigmaColour) {
+		this.sigmaColour = sigmaColour;
+	}
+	public void setSigmaSpace(double sigmaSpace) {
+		this.sigmaSpace = sigmaSpace;
 	}
 }

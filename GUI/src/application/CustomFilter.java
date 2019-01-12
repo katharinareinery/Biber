@@ -19,6 +19,39 @@ public class CustomFilter extends ImageMan{
 		
 		Mat dst = new Mat();
 	
+		public Point getAnchor() {
+			return anchor;
+		}
+		public void setAnchor(Point anchor) {
+			this.anchor = anchor;
+		}
+		public int getDdepth() {
+			return ddepth;
+		}
+		public void setDdepth(int ddepth) {
+			this.ddepth = ddepth;
+		}
+		public Mat getKernel() {
+			return kernel;
+		}
+		public void setKernel(Mat kernel) {
+			this.kernel = kernel;
+		}
+		public double getCoef() {
+			return coef;
+		}
+		public void setCoef(double coef) {
+			this.coef = coef;
+		}
+		public double getDelta() {
+			return delta;
+		}
+		public void setDelta(double delta) {
+			this.delta = delta;
+		}
+		public void setDst(Mat dst) {
+			this.dst = dst;
+		}
 		public CustomFilter(Mat src,int t){
 			super();
 		}
@@ -64,6 +97,6 @@ public class CustomFilter extends ImageMan{
 		@Override
 		public String toString() {
 			// TODO Auto-generated method stub
-			return "OwnFilter:\tMat:["+src.rows()+","+src.cols()+":"+src.channels()+"]";
+			return "Custom Filter:\tMat:["+src.rows()+","+src.cols()+":"+src.channels()+"]";
 		}
 }

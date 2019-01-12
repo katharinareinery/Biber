@@ -48,6 +48,22 @@ public class EdgeDetection extends ImageMan {
 		this.fType = fType;
 	}
 
+	public Point getAnchor() {
+		return anchor;
+	}
+
+	public void setAnchor(Point anchor) {
+		this.anchor = anchor;
+	}
+
+	public int getDdepth() {
+		return ddepth;
+	}
+
+	public void setDdepth(int ddepth) {
+		this.ddepth = ddepth;
+	}
+
 	public EdgeDetection() {
 		super();
 	}

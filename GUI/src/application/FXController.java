@@ -264,7 +264,7 @@ public class FXController implements Initializable{
 	@FXML
 	private ToggleGroup toggleOwnKernelSize;
 	@FXML
-	private TextField coef;
+	private TextField custom_coef;
 	@FXML
 	private TextField zero_zero;
 	@FXML
@@ -349,6 +349,7 @@ public class FXController implements Initializable{
 	private PauseTransition holdTimerSgColour = new PauseTransition(Duration.millis(100));
 	// Bug in FX let's us not separate between clicked and pressed event. This boolean is like a semaphore
 	private static boolean ZhangSuenPressed = false;
+	private static boolean ThresholdPressed = false;
 
 	//get screen size for imageview
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -430,17 +431,17 @@ public class FXController implements Initializable{
 		
 		buttonThreshPlus.setOnMousePressed(event -> handleHoldButtonPlusTreshold());
 		buttonThreshPlus.setOnMouseReleased(event -> holdTimerTreshold.stop());
-		buttonThreshPlus.setOnMouseClicked(event -> handleButtonThreshPlus(event));
+		//buttonThreshPlus.setOnMouseClicked(event -> handleButtonThreshPlus(event));
 		buttonThreshMinus.setOnMousePressed(event -> handleHoldButtonMinusTreshold());
 		buttonThreshMinus.setOnMouseReleased(event -> holdTimerTreshold.stop());
-		buttonThreshMinus.setOnMouseClicked(event -> handleButtonThreshMinus(event));
+		//buttonThreshMinus.setOnMouseClicked(event -> handleButtonThreshMinus(event));
 		
 		buttonZhangSuenPlus.setOnMousePressed(event -> handleHoldButtonPlusZhangSuen());
 		buttonZhangSuenPlus.setOnMouseReleased(event -> holdTimerZhangSuen.stop());
-		buttonZhangSuenPlus.setOnMouseClicked(event -> handleButtonzhangThreshPlus(event));
+		//buttonZhangSuenPlus.setOnMouseClicked(event -> handleButtonzhangThreshPlus(event));
 		buttonZhangSuenMinus.setOnMousePressed(event -> handleHoldButtonMinusZhangSuen());
 		buttonZhangSuenMinus.setOnMouseReleased(event -> holdTimerZhangSuen.stop());
-		buttonZhangSuenMinus.setOnMouseClicked(event -> handleButtonzhangThreshMinus(event));
+		//buttonZhangSuenMinus.setOnMouseClicked(event -> handleButtonzhangThreshMinus(event));
 		
 		/*
 		 * At this point we assign the listener to the radiobuttons for blur and grayscale.
@@ -652,6 +653,7 @@ public class FXController implements Initializable{
 				deinitBlurOptionsBila();
 				deinitThreshold();
 				deinitZhangSuen();
+				deinitEdge();
 				deinitGrayOptions();
 				deinitFilter();
 				txt_fld.setPrefWidth(apply.getPrefWidth()/2);
@@ -971,7 +973,7 @@ public class FXController implements Initializable{
 							@Override
 							protected Void call() throws Exception {
 								try {
-									mat = customfilter.customKernel(mat, kernel, Double.parseDouble(coef.getText()),Double.parseDouble(custom_delta.getText()));
+									mat = customfilter.customKernel(mat, kernel, Double.parseDouble(custom_coef.getText()),Double.parseDouble(custom_delta.getText()));
 									setTheImage(mat);
 								}catch(Exception e) {e.printStackTrace();}
 								return null;
@@ -1338,51 +1340,55 @@ public class FXController implements Initializable{
 	/**
 	 * Subtracts the treshold filter with the minus button.
 	 */
-	@FXML
+	/*@FXML
 	private void handleButtonThreshMinus(MouseEvent event){
-		Mat newMat = mat.clone();
-		int threshold = Integer.parseInt(txtThreshold.getText());
-		if(threshold>0) {
-			threshold -=1;
+		if (ThresholdPressed) {
+			Mat newMat = mat.clone();
+			int threshold = Integer.parseInt(txtThreshold.getText());
+			if(threshold>0) {
+				threshold -=1;
+			}
+			txtThreshold.setText(Integer.toString(threshold));		
+			if(timeline.isEmpty()) {
+				newMat = Threshold.binarisieren(threshold, mat);
+			}
+			else {
+				newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
+			}
+			setTheImage(newMat);
 		}
-		txtThreshold.setText(Integer.toString(threshold));		
-		if(timeline.isEmpty()) {
-			newMat = Threshold.binarisieren(threshold, mat);
-		}
-		else {
-			newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
-		}
-		setTheImage(newMat);
-	}
+	}*/
 
 	/**
 	 * Adds up the threshold filter via the plus button.
 	 */
-	@FXML
+	/*@FXML
 	private void handleButtonThreshPlus(MouseEvent event) {
-		Mat newMat = mat.clone();
-		Button btn=(Button)event.getSource();
-		System.out.println(btn.getText());
-		while(btn.isPressed()) {
-			System.out.println("Button pressed!!");
+		if (ThresholdPressed) {
+			Mat newMat = mat.clone();
+			Button btn=(Button)event.getSource();
+			System.out.println(btn.getText());
+			while(btn.isPressed()) {
+				System.out.println("Button pressed!!");
+			}
+			int threshold = Integer.parseInt(txtThreshold.getText());
+			if(threshold < 255) {
+				threshold +=1;
+			}
+			txtThreshold.setText(Integer.toString(threshold));
+			if(timeline.isEmpty()) {
+				newMat = Threshold.binarisieren(threshold, mat);
+			}
+			else {
+				newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
+			}
+			setTheImage(newMat);
 		}
-		int threshold = Integer.parseInt(txtThreshold.getText());
-		if(threshold < 255) {
-			threshold +=1;
-		}
-		txtThreshold.setText(Integer.toString(threshold));
-		if(timeline.isEmpty()) {
-			newMat = Threshold.binarisieren(threshold, mat);
-		}
-		else {
-			newMat = Threshold.binarisieren(threshold, timeline.getLast().getDst());
-		}
-		setTheImage(newMat);
-	}
+	}*/
 	/**
 	 * Subtracts the zhang suen threshold filter with the minus button.
 	 */
-	@FXML
+	/*@FXML
 	private void handleButtonzhangThreshMinus(MouseEvent event){
 		if (ZhangSuenPressed) {
 			Mat newMat = mat.clone();
@@ -1399,12 +1405,12 @@ public class FXController implements Initializable{
 			}
 			setTheImage(newMat);
 		}
-	}
+	}/*
 	
 	/**
 	 * Adds up the zhang suen threshold filter via the plus button.
 	 */
-	@FXML
+	/*@FXML
 	private void handleButtonzhangThreshPlus(MouseEvent event) {
 		if (ZhangSuenPressed) {
 			Mat newMat = mat.clone();
@@ -1426,7 +1432,7 @@ public class FXController implements Initializable{
 			}
 			setTheImage(newMat);
 		}
-	}
+	}*/
 	/**
 	 * This method coordinates the application of the different settings 
 	 * of the blur filter via the plus button.
@@ -1589,7 +1595,7 @@ public class FXController implements Initializable{
 				RadioButton selected = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
 				draggingButton = createButton(cbox_filters.getValue().toString());
 				draggingButton.setFilterobject(new CustomFilter(fillKernel(selected.getText())
-						,Double.parseDouble(coef.getText())
+						,Double.parseDouble(custom_coef.getText())
 						,Double.parseDouble(custom_delta.getText())));
 			}else if(cbox_filters.getValue().equals("Blur")){
 				if(selectedRadioButton.getText().equals("bilateral")) {
@@ -1688,14 +1694,134 @@ public class FXController implements Initializable{
 						@Override 
 						public void handle(ActionEvent e) {
 							System.out.println(" EventHandler of Biber Button");
-							BiberButton dragB = (BiberButton)e.getSource();
+							BiberButton dragB = (BiberButton) e.getSource();
 							System.out.println(dragB.getFilterobject());
-							dragB.getFilterobject().useFilter();
 							BufferedImage neu = dragB.getFilterobject().returnImage();
 							image = SwingFXUtils.toFXImage(neu, null);
 							imageView.setImage(image);
-							// TODO
-							//Hier cbox_filters.setValue(value);
+							String value = dragB.getFilterobject().getClass().toString();
+							value = value.substring(value.indexOf(".")+1);
+							if(value.indexOf(":") != -1)
+								value = value.substring(0,value.indexOf(":"));
+							System.out.println(value);
+							//cbox_filters.setValue(value);
+							//click on timeline opens filtermenu
+							//TODO: editable filters(i.e setters)
+							switch(value) {
+								case "Blur":
+									cbox_filters.setValue(value);
+									Blur bf = (Blur)dragB.getFilterobject();
+									String ftypeB = bf.getFtype();
+									if(ftypeB.equals("homogen"))
+										radioButton1.setSelected(true);
+									else if(ftypeB.equals("gaussian"))
+										radioButton2.setSelected(true);
+									else if(ftypeB.equals("median"))
+										radioButton3.setSelected(true);
+									else {
+										radioButton4.setSelected(true);
+										txtSigmaColour.setText(Double.toString(bf.getSigmaColour()));
+										txtSigmaSpace.setText(Double.toString(bf.getSigmaSpace()));
+									}
+									txtFilterPower.setText(Integer.toString(bf.getFilterpower()));
+									break;
+								case "CustomFilter":
+									cbox_filters.setValue("Custom Filter");
+									CustomFilter cf = (CustomFilter)dragB.getFilterobject();
+									RadioButton selectedCf = (RadioButton)toggleOwnKernelSize.getSelectedToggle();
+									Mat krnl = cf.getKernel();
+									String coef = Double.toString(cf.getCoef());
+									String delta = Double.toString(cf.getDelta());
+									custom_coef.setText(coef);
+									custom_delta.setText(delta);
+									if(selectedCf.getText().equals("2")) {
+										zero_zero.setText(Double.toString(krnl.get(0,0)[0]));
+										zero_one.setText(Double.toString(krnl.get(0,1)[0]));
+										one_zero.setText(Double.toString(krnl.get(1,0)[0]));
+										one_one.setText(Double.toString(krnl.get(1,1)[0]));
+									}
+									else if(selectedCf.getText().equals("3")) {
+										zero_zero.setText(Double.toString(krnl.get(0,0)[0]));
+										zero_one.setText(Double.toString(krnl.get(0,1)[0]));
+										zero_two.setText(Double.toString(krnl.get(0,2)[0]));
+										one_zero.setText(Double.toString(krnl.get(1,0)[0]));
+										one_one.setText(Double.toString(krnl.get(1,1)[0]));
+										one_two.setText(Double.toString(krnl.get(1,2)[0]));
+										two_zero.setText(Double.toString(krnl.get(2,0)[0]));
+										two_one.setText(Double.toString(krnl.get(2,1)[0]));
+										two_two.setText(Double.toString(krnl.get(2,2)[0]));
+									}
+									else if(selectedCf.getText().equals("4")) {
+										zero_zero.setText(Double.toString(krnl.get(0,0)[0]));
+										zero_one.setText(Double.toString(krnl.get(0,1)[0]));
+										zero_two.setText(Double.toString(krnl.get(0,2)[0]));
+										zero_three.setText(Double.toString(krnl.get(0,3)[0]));
+										one_zero.setText(Double.toString(krnl.get(1,0)[0]));
+										one_one.setText(Double.toString(krnl.get(1,1)[0]));
+										one_two.setText(Double.toString(krnl.get(1,2)[0]));
+										one_three.setText(Double.toString(krnl.get(1,3)[0]));
+										two_zero.setText(Double.toString(krnl.get(2,0)[0]));
+										two_one.setText(Double.toString(krnl.get(2,1)[0]));
+										two_two.setText(Double.toString(krnl.get(2,2)[0]));
+										two_three.setText(Double.toString(krnl.get(2,3)[0]));
+									}
+									break;
+								case "EdgeDetection":
+									cbox_filters.setValue("Edge Detection");
+									EdgeDetection ed = (EdgeDetection)dragB.getFilterobject();
+									String fTypeEd = ed.getfType();
+									if(fTypeEd.equals("Prewitt")) {
+										toggleGroupEdge.selectToggle(radioButtonPrewitt);
+									}
+									else if(fTypeEd.equals("Sobel")) {
+										toggleGroupEdge.selectToggle(radioButtonSobel);
+									}
+									else if(fTypeEd.equals("Roberts Cross")) {
+										toggleGroupEdge.selectToggle(radioButtonRobert);
+									}
+									break;
+								case "Grayscale":
+									cbox_filters.setValue("Grayscale");
+									Grayscale gs = (Grayscale)dragB.getFilterobject();
+									String ftypeGs = gs.getFtype();
+									
+									if(ftypeGs.equals("customized")) {
+										radioButton4.setSelected(true);
+										txtGrayRed.setText(Double.toString(gs.getRed()));
+										txtGrayGreen.setText(Double.toString(gs.getGreen()));
+										txtGrayBlue.setText(Double.toString(gs.getBlue()));
+									}
+									else if(ftypeGs.equals("lightness")) {
+										radioButton3.setSelected(true);
+									}
+									else if(ftypeGs.equals("luminosity")) {
+										radioButton2.setSelected(true);
+									}
+									else {
+										radioButton1.setSelected(true);
+									}
+									break;
+								case "PixelScaling":
+								/*	cbox_filters.setValue("Pixel Scaling");
+									PixelScaling ps = (PixelScaling)dragB.getFilterobject();
+									txtScaleRed.setText(Double.toString(ps.getCoeffRed()));
+									txtScaleGreen.setText(Double.toString(ps.getCoeffGreen()));
+									txtScaleBlue.setText(Double.toString(ps.getCoeffBlue()));
+									txtScaleGray.setText(Double.toString(ps.getCoeffGray()));
+									*/
+									break;
+								case "Threshold":
+									cbox_filters.setValue("Threshold");
+									Threshold th = (Threshold)dragB.getFilterobject();
+									txtThreshold.setText(Integer.toString(th.getT()));
+									break;
+								case "ZhangSuen":
+									cbox_filters.setValue("Zhang Suen Thinning");
+									ZhangSuen zs = (ZhangSuen)dragB.getFilterobject();
+									txtZhangSuen.setText(Integer.toString(zs.getT()));
+									toggleZhangSuenInvers.setSelected(zs.isInverse());
+									break;
+							}
 						}
 					});
 					pane.getChildren().add(draggingButton);
@@ -2131,17 +2257,39 @@ public class FXController implements Initializable{
 		}
 		
 		public void handleHoldButtonPlusTreshold() {
-			this.txtThreshold.setText("" + (Integer.parseInt(this.txtThreshold.getText())+1));
-			holdTimerTreshold.setOnFinished(event -> handleHoldButtonPlusTreshold());
-			holdTimerTreshold.playFromStart();
+			ThresholdPressed = true;
+			if(Integer.parseInt(this.txtThreshold.getText()) < 254) {
+				this.txtThreshold.setText("" + (Integer.parseInt(this.txtThreshold.getText())+1));
+				holdTimerTreshold.setOnFinished(event -> handleHoldButtonPlusTreshold());
+				holdTimerTreshold.playFromStart();
+				Mat newMat = mat.clone();
+				if(timeline.isEmpty()) {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtThreshold.getText()), mat);
+				}
+				else {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtThreshold.getText()), timeline.getLast().getDst());
+				}
+				setTheImage(newMat);
+			}
+			ThresholdPressed = false;
 		}
 	    
 		public void handleHoldButtonMinusTreshold() {
+			ThresholdPressed = true;
 			if(Integer.parseInt(this.txtThreshold.getText()) > 0 ) {
 				this.txtThreshold.setText("" + (Integer.parseInt(this.txtThreshold.getText())-1));
 				holdTimerTreshold.setOnFinished(event -> handleHoldButtonMinusTreshold());
 				holdTimerTreshold.playFromStart();
+				Mat newMat = mat.clone();
+				if(timeline.isEmpty()) {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtThreshold.getText()), mat);
+				}
+				else {
+					newMat = Threshold.binarisieren(Integer.parseInt(this.txtThreshold.getText()), timeline.getLast().getDst());
+				}
+				setTheImage(newMat);
 			}
+			ThresholdPressed = false;
 		}
 				
 
@@ -2182,4 +2330,5 @@ public class FXController implements Initializable{
 			}
 			ZhangSuenPressed = false;
 		}	    
+		
 }

@@ -36,6 +36,46 @@ public class PixelScaling extends ImageMan{
 		return dst;
 	}
 	
+	public int getChannel() {
+		return channel;
+	}
+
+	public void setChannel(int channel) {
+		this.channel = channel;
+	}
+
+	public double getCoeffGray() {
+		return coeffGray;
+	}
+
+	public void setCoeffGray(double coeffGray) {
+		this.coeffGray = coeffGray;
+	}
+
+	public double getCoeffRed() {
+		return coeffRed;
+	}
+
+	public void setCoeffRed(double coeffRed) {
+		this.coeffRed = coeffRed;
+	}
+
+	public double getCoeffGreen() {
+		return coeffGreen;
+	}
+
+	public void setCoeffGreen(double coeffGreen) {
+		this.coeffGreen = coeffGreen;
+	}
+
+	public double getCoeffBlue() {
+		return coeffBlue;
+	}
+
+	public void setCoeffBlue(double coeffBlue) {
+		this.coeffBlue = coeffBlue;
+	}
+
 	public PixelScaling() {
 		super();
 	}

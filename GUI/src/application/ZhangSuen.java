@@ -178,7 +178,22 @@ public class ZhangSuen extends ImageMan{
 		public BufferedImage returnImage() {
 			return matToBuffImage(dst);
 		}
-
+		
+		public int getT() {
+			return t;
+		}
+		public void setT(int t) {
+			this.t = t;
+		}
+		public Mat getKernel() {
+			return kernel;
+		}
+		public void setKernel(Mat kernel) {
+			this.kernel = kernel;
+		}
+		public boolean isInverse() {
+			return inverse;
+		}
 		//overriden toString for debugging purpose
 		@Override
 		public String toString() {
