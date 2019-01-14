@@ -194,32 +194,36 @@ public class Grayscale extends ImageMan{
 	 */
 	public Mat luminosity(Mat src) {
 		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		srcCopy = src.clone();
-		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
-		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
-		double grayValue;
-		double[] data;
-		for(int i = 0; i<srcCopy.rows();i++) {
-			for(int j = 0; j <srcCopy.cols();j++) {
-				data = srcCopy.get(i, j);	
-				grayValue=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-				dst.put(i, j, grayValue);	
+		if(src.channels()>1) {
+			srcCopy = src.clone();
+			Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double grayValue;
+			double[] data;
+			for(int i = 0; i<srcCopy.rows();i++) {
+				for(int j = 0; j <srcCopy.cols();j++) {
+					data = srcCopy.get(i, j);	
+					grayValue=(data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+					dst.put(i, j, grayValue);	
+				}
 			}
 		}
 		return dst;
 	}
 	
 	public Mat grayOwn(Mat src,double red, double green, double blue) {
-		srcCopy=src.clone();
-		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
-		double[] data;
-		double grayValue;
-		Imgproc.cvtColor(srcCopy,srcCopy,Imgproc.COLOR_BGR2RGB);
-		for(int i = 0; i < srcCopy.rows();i++) {
-			for(int j = 0; j < srcCopy.cols();j++ ) {
-				data=srcCopy.get(i, j);
-				grayValue = (data[0]*red)+(data[1]*green)+(data[2]*blue);
-				dst.put(i, j, grayValue);
+		if(src.channels()>1) {
+			srcCopy=src.clone();
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double[] data;
+			double grayValue;
+			Imgproc.cvtColor(srcCopy,srcCopy,Imgproc.COLOR_BGR2RGB);
+			for(int i = 0; i < srcCopy.rows();i++) {
+				for(int j = 0; j < srcCopy.cols();j++ ) {
+					data=srcCopy.get(i, j);
+					grayValue = (data[0]*red)+(data[1]*green)+(data[2]*blue);
+					dst.put(i, j, grayValue);
+				}
 			}
 		}
 		//System.out.println("row: "+row+"\tcol: "+col)
@@ -227,16 +231,18 @@ public class Grayscale extends ImageMan{
 	}
 	
 	public Mat grayPixelFor(Mat src) {
-		srcCopy=src.clone();
-		double[] data;
-		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
-		double grayValue;
-		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
-		for(int i = 0; i <srcCopy.rows();i++) {
-			for(int j = 0; j < srcCopy.cols(); j++) {
-				data=srcCopy.get(i,j);
-				grayValue =  (data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
-				dst.put(i, j, grayValue);
+		if(src.channels()>1) {
+			srcCopy=src.clone();
+			double[] data;
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double grayValue;
+			Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			for(int i = 0; i <srcCopy.rows();i++) {
+				for(int j = 0; j < srcCopy.cols(); j++) {
+					data=srcCopy.get(i,j);
+					grayValue =  (data[0]*0.21)+(data[1]*0.72)+(data[2]*0.07);
+					dst.put(i, j, grayValue);
+				}
 			}
 		}
 		return dst;
@@ -247,16 +253,18 @@ public class Grayscale extends ImageMan{
 	 * simply averages the values: (R + G + B) / 3.
 	*/
 	public Mat average(Mat src) {
-		srcCopy=src.clone();
-		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
-		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
-		double[] data;
-		double grayValue;
-		for(int i = 0; i<srcCopy.rows(); i++) {
-			for(int j = 0; j<srcCopy.cols(); j++) {
-				data = srcCopy.get(i, j);
-				grayValue=((data[0]+data[1]+data[2])/3);
-				dst.put(i, j, grayValue);
+		if(src.channels()>1) {
+			srcCopy=src.clone();
+			Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double[] data;
+			double grayValue;
+			for(int i = 0; i<srcCopy.rows(); i++) {
+				for(int j = 0; j<srcCopy.cols(); j++) {
+					data = srcCopy.get(i, j);
+					grayValue=((data[0]+data[1]+data[2])/3);
+					dst.put(i, j, grayValue);
+				}
 			}
 		}
 		return dst;
@@ -269,38 +277,41 @@ public class Grayscale extends ImageMan{
 	 * 
 	*/
 	public Mat lightness(Mat src) {
-		srcCopy=src.clone();
-		//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
-		Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
-		dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
-		double[] data;
-		double grayValue;
-		double max,min;
-		for(int i = 0; i < srcCopy.rows(); i++) {
-			for(int j = 0; j < srcCopy.cols(); j++) {
-				data = srcCopy.get(i, j);
-				if(data[0]>data[1] && data[0]>data[2]) {
-					max = data[0];
-				}else {
-					if(data[1]>data[0] && data[1]>data[2]) {
-						max = data[1];
+		if(src.channels()>1) {
+			srcCopy=src.clone();
+			//Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2RGB);
+			Imgproc.cvtColor(srcCopy, srcCopy, Imgproc.COLOR_BGR2RGB);
+			dst = new Mat(srcCopy.size(),CvType.CV_8UC1);
+			double[] data;
+			double grayValue;
+			double max,min;
+			for(int i = 0; i < srcCopy.rows(); i++) {
+				for(int j = 0; j < srcCopy.cols(); j++) {
+					data = srcCopy.get(i, j);
+					if(data[0]>data[1] && data[0]>data[2]) {
+						max = data[0];
 					}else {
-						max = data[2];
+						if(data[1]>data[0] && data[1]>data[2]) {
+							max = data[1];
+						}else {
+							max = data[2];
+						}
 					}
-				}
-				if(data[0]<data[1] && data[0]<data[2]) {
-					min = data[0];
-				}else {
-					if(data[1]<data[0] && data[1]<data[2]) {
-						min = data[1];
+					if(data[0]<data[1] && data[0]<data[2]) {
+						min = data[0];
 					}else {
-						min = data[2];
+						if(data[1]<data[0] && data[1]<data[2]) {
+							min = data[1];
+						}else {
+							min = data[2];
+						}
 					}
+					grayValue = ((max+min)/2);
+					dst.put(i, j, grayValue);
 				}
-				grayValue = ((max+min)/2);
-				dst.put(i, j, grayValue);
 			}
 		}
+		
 		return dst;
 	}
 }
